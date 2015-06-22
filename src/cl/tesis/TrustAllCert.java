@@ -24,4 +24,8 @@ public class TrustAllCert implements X509TrustManager{
     public X509Certificate[] getAcceptedIssuers() {
         return null;
     }
+
+    public static  TrustManager[] getManager(){
+        return new TrustManager[]{new TrustAllCert()};
+    }
 }
