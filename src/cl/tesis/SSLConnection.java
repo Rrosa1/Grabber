@@ -42,7 +42,7 @@ public class SSLConnection {
     }
 
     public void connect() throws IOException {
-        if (this.timeout <= 0) {
+        if (this.timeout >= 0) {
             this.socket.connect(this.address, this.timeout * MILLISECONDS);
         } else {
             this.socket.connect(this.address);
