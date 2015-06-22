@@ -19,21 +19,26 @@ public class SSLConnection {
     private SocketAddress address;
     private int timeout;
 
-    public SSLConnection(String host, int port, boolean validate) throws IOException, NoSuchAlgorithmException, KeyManagementException {
+    public SSLConnection(String host, int port, boolean validate) throws SSLConnectionException {
         this(host, port, validate, DEFAULT_TIMEOUT);
     }
 
-    public SSLConnection(String host, int port, boolean validate, int timeout) throws IOException, NoSuchAlgorithmException, KeyManagementException {
-        if (validate) {
-            this.factory = HttpsURLConnection.getDefaultSSLSocketFactory();
-        } else {
-            SSLContext sslContext = SSLContext.getInstance("SSL");
-            sslContext.init(null, TrustAllCert.getManager(), new java.security.SecureRandom());
-            this.factory = sslContext.getSocketFactory();
+    public SSLConnection(String host, int port, boolean validate, int timeout) throws SSLConnectionException {
+        try {
+            if (validate) {
+                this.factory = HttpsURLConnection.getDefaultSSLSocketFactory();
+            } else {
+                SSLContext sslContext = SSLContext.getInstance("SSL");
+                sslContext.init(null, TrustAllCert.getManager(), new java.security.SecureRandom());
+                this.factory = sslContext.getSocketFactory();
+            }
+            this.socket = (SSLSocket) this.factory.createSocket();
+            this.address = new InetSocketAddress(host, port);
+            this.timeout = timeout;
+        } catch (IOException | NoSuchAlgorithmException | KeyManagementException  e) {
+            throw new SSLConnectionException();
         }
-        this.socket = (SSLSocket) this.factory.createSocket();
-        this.address = new InetSocketAddress(host, port);
-        this.timeout = timeout;
+
     }
 
     public void connect() throws IOException {
