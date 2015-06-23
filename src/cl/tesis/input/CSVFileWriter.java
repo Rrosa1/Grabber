@@ -18,9 +18,12 @@ public class CSVFileWriter implements FileWriter {
 
     @Override
     public void writeLine(ListWritable writable) throws IOException {
-        if (!header) {
-            writer.write(toCSV(writable.getParameterList()));
+        if (!this.header) {
+            this.writer.write(toCSV(writable.getParameterList()));
+            this.header = true;
         }
+
+        this.writer.write(toCSV(writable.getValueList()));
     }
 
     private String toCSV(List<String> list) {
