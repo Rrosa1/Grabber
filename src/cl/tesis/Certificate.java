@@ -1,15 +1,15 @@
 package cl.tesis;
 
+import cl.tesis.input.ListWritable;
+
 import javax.security.auth.x500.X500Principal;
 import java.security.cert.X509Certificate;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class Certificate {
+public class Certificate implements ListWritable{
     private String ip;
     private boolean validation;
     private String sigantureAlgorithm;
@@ -73,5 +73,38 @@ public class Certificate {
                 ", certificateAuthority='" + certificateAuthority + '\'' +
                 ", keyBits='" + keyBits + '\'' +
                 '}';
+    }
+
+    @Override
+    public List<String> getParameterList() {
+        ArrayList<String> parameters = new ArrayList<>();
+
+        parameters.add("Ip");
+        parameters.add("Validation");
+        parameters.add("Signature Algorithm");
+        parameters.add("Expired Time");
+        parameters.add("Organization Name");
+        parameters.add("Organization URL");
+        parameters.add("Certificate Authority");
+        parameters.add("Key Bits");
+
+        return parameters;
+    }
+
+    @Override
+    public List<String> getValueList() {
+        ArrayList<String> values = new ArrayList<>();
+
+        values.add(this.ip);
+        values.add(this.validation + "");
+        values.add(this.sigantureAlgorithm);
+        values.add(this.expiredTime.toString());
+        values.add(this.organizationName);
+        values.add(this.organizationURL);
+        values.add(this.certificateAuthority);
+        values.add(this.keyBits + "");
+
+        return values;
+
     }
 }
