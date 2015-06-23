@@ -10,7 +10,7 @@ import java.security.cert.Certificate;
 
 
 public class SSLConnection {
-    private static final int DEFAULT_TIMEOUT = 120;
+    private static final int DEFAULT_TIMEOUT = 15;
     private static final int MILLISECONDS = 1000;
 
     private SSLSocketFactory factory;
@@ -49,6 +49,10 @@ public class SSLConnection {
         }
         this.socket.startHandshake();
         this.session = this.socket.getSession();
+    }
+
+    public void close() throws IOException {
+        this.socket.close();
     }
 
     public Certificate getServerCertificate() throws SSLPeerUnverifiedException {
