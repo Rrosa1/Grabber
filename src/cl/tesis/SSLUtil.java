@@ -8,12 +8,13 @@ public class SSLUtil {
     public static Certificate getServerCertificate(String ip, boolean validate) throws SSLConnectionException, IOException{
         SSLConnection sslConnection = null;
         X509Certificate certificate;
+
         try {
             sslConnection =  new SSLConnection(ip, 443, validate);
             sslConnection.connect();
             certificate = (X509Certificate) sslConnection.getServerCertificate();
         } catch (SSLConnectionException e) {
-            System.out.println("SSLConnectionException");
+            System.out.println("Socket Problems");
             throw e;
         } finally {
             if (sslConnection != null) {

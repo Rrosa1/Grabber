@@ -22,7 +22,7 @@ public class ConnectionThreads extends  Thread{
                 Certificate certificate = SSLUtil.getServerCertificate(columns[0], false);
                 System.out.println(certificate.toString());
             } catch (SSLConnectionException e){
-                System.out.println("Problem to create the socket");
+                System.out.println("Problem to create the socket " + e.getMessage());
             } catch (SSLHandshakeException e) {
                 System.out.println("HandShake");
             } catch (SocketTimeoutException e) {
