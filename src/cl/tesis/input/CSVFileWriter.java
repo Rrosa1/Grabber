@@ -1,7 +1,6 @@
 package cl.tesis.input;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 
 public class CSVFileWriter implements FileWriter {
@@ -14,6 +13,15 @@ public class CSVFileWriter implements FileWriter {
     public CSVFileWriter(String fileName) {
         this.fileName = fileName;
         this.header = false;
+        try {
+            this.writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.fileName), "utf-8"));
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found");
+            System.exit(0);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            System.exit(0);
+        }
     }
 
     @Override
