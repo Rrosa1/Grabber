@@ -1,6 +1,7 @@
 package cl.tesis;
 
 import cl.tesis.exception.SSLConnectionException;
+import cl.tesis.exception.SSLHandshakeTimeoutException;
 
 import javax.net.ssl.*;
 import java.io.IOException;
@@ -41,37 +42,35 @@ public class SSLConnection {
             this.address = new InetSocketAddress(host, port);
             this.timeout = timeout;
         } catch (IOException | NoSuchAlgorithmException | KeyManagementException  e) {
-            throw new SSLConnectionException();
+            throw new SSLConnectionException("Problems to create the socket");
         }
 
     }
 
-    public void connect() throws IOException, SSLConnectionException {
+    public void connect() throws IOException, SSLConnectionException, SSLHandshakeTimeoutException, ExecutionException, InterruptedException {
         if (this.timeout >= 0) {
             this.socket.connect(this.address, this.timeout * MILLISECONDS);
         } else {
             this.socket.connect(this.address);
         }
 
-//        this.socket.startHandshake();
-        Date date =  new Date();
-        System.out.println(date.toString());
-
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Future<Boolean> future = executor.submit(new TimeoutHandshake(this.socket));
 
         try {
             future.get(HANDSHAKE_TIMEOUT, TimeUnit.SECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+        } catch (InterruptedException | ExecutionException e) {
             future.cancel(true);
             executor.shutdownNow();
-            Date date1 =  new Date();
-            System.out.println(date1.toString());
-            throw new SSLConnectionException("HandShake Timeout" + this.address);
+            throw e;
+
+        } catch (TimeoutException e) {
+            future.cancel(true);
+            executor.shutdownNow();
+            throw new SSLHandshakeTimeoutException(this.address.toString());
         }
+
         executor.shutdownNow();
-        Date date1 =  new Date();
-        System.out.println(date1.toString());
 
         this.session = this.socket.getSession();
     }
