@@ -1,5 +1,7 @@
 package cl.tesis;
 
+import cl.tesis.exception.SSLConnectionException;
+
 import javax.net.ssl.*;
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -7,6 +9,7 @@ import java.net.SocketAddress;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.Certificate;
+import java.util.Date;
 import java.util.concurrent.*;
 
 
@@ -51,6 +54,8 @@ public class SSLConnection {
         }
 
 //        this.socket.startHandshake();
+        Date date =  new Date();
+        System.out.println(date.toString());
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Future<Boolean> future = executor.submit(new TimeoutHandshake(this.socket));
@@ -60,9 +65,13 @@ public class SSLConnection {
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             future.cancel(true);
             executor.shutdownNow();
+            Date date1 =  new Date();
+            System.out.println(date1.toString());
             throw new SSLConnectionException("HandShake Timeout" + this.address);
         }
         executor.shutdownNow();
+        Date date1 =  new Date();
+        System.out.println(date1.toString());
 
         this.session = this.socket.getSession();
     }

@@ -1,5 +1,6 @@
 package cl.tesis;
 
+import cl.tesis.exception.SSLConnectionException;
 import cl.tesis.input.FileReader;
 
 import javax.net.ssl.SSLHandshakeException;

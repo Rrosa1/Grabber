@@ -1,5 +1,7 @@
 package cl.tesis;
 
+import cl.tesis.exception.SSLConnectionException;
+
 import java.io.IOException;
 import java.security.cert.X509Certificate;
 
