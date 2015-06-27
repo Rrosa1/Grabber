@@ -10,7 +10,6 @@ import java.net.SocketAddress;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.Certificate;
-import java.util.Date;
 import java.util.concurrent.*;
 
 
@@ -47,7 +46,7 @@ public class SSLConnection {
 
     }
 
-    public void connect() throws IOException, SSLConnectionException, SSLHandshakeTimeoutException, ExecutionException, InterruptedException {
+    public void connect() throws Throwable {
         if (this.timeout >= 0) {
             this.socket.connect(this.address, this.timeout * MILLISECONDS);
         } else {
@@ -62,12 +61,11 @@ public class SSLConnection {
         } catch (InterruptedException | ExecutionException e) {
             future.cancel(true);
             executor.shutdownNow();
-            throw e;
-
+            throw e.getCause();
         } catch (TimeoutException e) {
             future.cancel(true);
             executor.shutdownNow();
-            throw new SSLHandshakeTimeoutException(this.address.toString());
+            throw new SSLHandshakeTimeoutException("Handshake timed out");
         }
 
         executor.shutdownNow();

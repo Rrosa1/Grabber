@@ -1,6 +1,7 @@
 package cl.tesis;
 
 import cl.tesis.exception.SSLConnectionException;
+import cl.tesis.exception.SSLHandshakeTimeoutException;
 import cl.tesis.input.FileReader;
 
 import javax.net.ssl.SSLHandshakeException;
@@ -22,16 +23,21 @@ public class ConnectionThreads extends  Thread{
             try {
                 Certificate certificate = SSLUtil.getServerCertificate(columns[0], false);
                 System.out.println(certificate.toString());
-            } catch (SSLConnectionException e){
+            } catch (SSLHandshakeException e) { // Untrusted Certificate
+                e.printStackTrace();
+                System.out.println("HandShake " + columns[0]);
+            } catch (SSLConnectionException e) { // Problem creating the socket
+                e.printStackTrace();
                 System.out.println("Problem to create the socket " + e.getMessage());
-            } catch (SSLHandshakeException e) {
-                System.out.println("HandShake");
-            } catch (SocketTimeoutException e) {
-                System.out.println("TimeOut");
-            } catch (ConnectException e) {
-                System.out.println("Connect Exception");
-            } catch (Exception e) {
-                System.out.println("Exception");
+            } catch (SocketTimeoutException | SSLHandshakeTimeoutException e) { // Timeout
+                e.printStackTrace();
+                System.out.println("TimeOut " + columns[0]);
+            } catch (ConnectException e) { // Problem in the connection
+                e.printStackTrace();
+                System.out.println("Connect Exception " + columns[0]);
+            } catch (Throwable e) { // Other errors
+                e.printStackTrace();
+                System.out.println("Exception " + columns[0]);
             }
 
         }
