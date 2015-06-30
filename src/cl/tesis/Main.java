@@ -1,28 +1,26 @@
 package cl.tesis;
 
-import cl.tesis.exception.SSLConnectionException;
 import cl.tesis.input.CSVFileReader;
 
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 public class Main {
 
-    public static void main(String[] args) throws NoSuchAlgorithmException, IOException, KeyManagementException, SSLConnectionException, InterruptedException {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Date date = new Date();
-        System.out.println(dateFormat.format(date));
+    private static final Logger logger = Logger.getLogger(Main.class.getName());
 
-        String fileName = "/home/eduardo/IdeaProjects/Grabber/src/cl/tesis/input/test.csv";
+    public static void main(String[] args) throws InterruptedException, IOException {
+        LogManager.getLogManager().readConfiguration(new FileInputStream("src/cl/tesis/logger.properties"));
+        logger.info("Start Scanning" );
+
+        String fileName = "src/cl/tesis/input/test.csv";
         CSVFileReader reader = new CSVFileReader(fileName);
         List<Thread> lista = new ArrayList<>();
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 5; i++) {
             Thread t = new ConnectionThreads(reader);
             t.start();
             lista.add(t);
@@ -32,8 +30,7 @@ public class Main {
             thread.join();
         }
 
-        Date date1 = new Date();
-        System.out.println(dateFormat.format(date1));
+       logger.info("End Scanning");
 
     }
 }
