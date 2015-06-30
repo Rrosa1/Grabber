@@ -1,5 +1,6 @@
 package cl.tesis;
 
+import cl.tesis.SSLProbe.ConnectionThreads;
 import cl.tesis.input.CSVFileReader;
 
 import java.io.FileInputStream;

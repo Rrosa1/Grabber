@@ -1,4 +1,4 @@
-package cl.tesis;
+package cl.tesis.SSLProbe;
 
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;

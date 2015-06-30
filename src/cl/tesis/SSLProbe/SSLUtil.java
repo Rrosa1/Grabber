@@ -1,4 +1,4 @@
-package cl.tesis;
+package cl.tesis.SSLProbe;
 
 import java.security.cert.X509Certificate;
 

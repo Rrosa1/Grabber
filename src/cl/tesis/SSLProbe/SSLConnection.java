@@ -1,4 +1,4 @@
-package cl.tesis;
+package cl.tesis.SSLProbe;
 
 import cl.tesis.exception.SSLConnectionException;
 import cl.tesis.exception.SSLHandshakeTimeoutException;
