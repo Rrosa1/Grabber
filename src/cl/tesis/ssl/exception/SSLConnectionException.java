@@ -1,4 +1,4 @@
-package cl.tesis.exception;
+package cl.tesis.ssl.exception;
 
 public class SSLConnectionException extends Exception {
 
