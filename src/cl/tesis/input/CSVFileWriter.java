@@ -2,10 +2,15 @@ package cl.tesis.input;
 
 import java.io.*;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CSVFileWriter implements FileWriter {
+    private static final Logger logger = Logger.getLogger(CSVFileWriter.class.getName());
+
     private static final String CSV_SEPARATOR = ",";
     private static final String NEW_LINE = "\n";
+
     private String fileName;
     private BufferedWriter writer;
     private boolean header;
@@ -16,7 +21,7 @@ public class CSVFileWriter implements FileWriter {
         try {
             this.writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.fileName), "utf-8"));
         } catch (FileNotFoundException e) {
-            System.out.println("File not found");
+            logger.log(Level.INFO, "File not found {0}", this.fileName);
             System.exit(0);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();

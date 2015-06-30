@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
@@ -16,7 +17,7 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException, IOException {
         LogManager.getLogManager().readConfiguration(new FileInputStream("src/cl/tesis/logger.properties"));
-        logger.info("Start Scanning" );
+        logger.info("Start Scanning");
 
         String fileName = "src/cl/tesis/input/test.csv";
         CSVFileReader reader = new CSVFileReader(fileName);
