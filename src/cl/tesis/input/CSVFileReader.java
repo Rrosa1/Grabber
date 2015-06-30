@@ -3,9 +3,13 @@ package cl.tesis.input;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 public class CSVFileReader implements  FileReader{
     private static final String CSV_SEPARATOR = ",";
+
+    private static final Logger logger = Logger.getLogger(CSVFileReader.class.getName());
+
     private String fileName;
     private BufferedReader reader;
 
@@ -14,7 +18,7 @@ public class CSVFileReader implements  FileReader{
         try {
             this.reader = new BufferedReader(new java.io.FileReader(this.fileName));
         } catch (FileNotFoundException e) {
-            System.out.println("File not found");
+            logger.info("File not found");
             System.exit(0);
         }
 
