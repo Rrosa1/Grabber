@@ -5,6 +5,7 @@ import cl.tesis.ssl.ConnectionThreads;
 import cl.tesis.input.CSVFileReader;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,26 +20,28 @@ public class Main {
         LogManager.getLogManager().readConfiguration(new FileInputStream("src/cl/tesis/logger.properties"));
         logger.info("Start Scanning");
 
-        String fileName = "src/cl/tesis/input/test.csv";
-        CSVFileReader reader = new CSVFileReader(fileName);
-        CSVFileWriter writer =  new CSVFileWriter("src/cl/tesis/out.csv");
+        String readFile = "src/cl/tesis/input/test.csv",
+               writeFile = "src/cl/tesis/out.csv";
 
-        List<Thread> lista = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            Thread t = new ConnectionThreads(reader, writer);
-            t.start();
-            lista.add(t);
-        }
+        try (CSVFileReader reader = new CSVFileReader(readFile);
+             CSVFileWriter writer =  new CSVFileWriter(writeFile)) {
 
-        for (Thread thread : lista) {
-            thread.join();
+            List<Thread> lista = new ArrayList<>();
+            for (int i = 0; i < 5; i++) {
+                Thread t = new ConnectionThreads(reader, writer);
+                t.start();
+                lista.add(t);
+            }
+
+            for (Thread thread : lista) {
+                thread.join();
+            }
+
+        } catch (IOException e) {
+            logger.info("Problems to close read or write files");
         }
 
         logger.info("End Scanning");
-
-        reader.close();
-        writer.close();
-
 
     }
 }
