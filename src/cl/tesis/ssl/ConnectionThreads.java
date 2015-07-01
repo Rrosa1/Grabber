@@ -35,22 +35,16 @@ public class ConnectionThreads extends  Thread{
                 this.writer.writeLine(certificate);
             } catch (SSLHandshakeException e) { // Untrusted Certificate
                 logger.log(Level.INFO, "Untrusted certificate {0}", columns[IP]);
-//                System.out.println("HandShake " + columns[IP]);
             } catch (SSLConnectionException e) { // Problem creating the socket
                 logger.log(Level.INFO, "Problem creating the soceket {0}", columns[IP]);
-//                System.out.println("Problem to create the socket " + e.getMessage());
             } catch (SocketTimeoutException e) { // Connection timeout
                 logger.log(Level.INFO, "Connection timeout {0}", columns[IP]);
-//                System.out.println("TimeOut " + columns[IP]);
             } catch (SSLHandshakeTimeoutException e) {
                 logger.log(Level.INFO, "Handshake timeout {0}", columns[IP]);
-//                System.out.println("TimeOut " + columns[IP]);
             } catch (ConnectException e) { // Problem in the connection
                 logger.log(Level.INFO, "Connection exception {0}", columns[IP]);
-//                System.out.println("Connect Exception " + columns[IP]);
             } catch (Throwable e) { // Other errors
                 logger.log(Level.INFO, "Other exception {0}", columns[IP]);
-//                System.out.println("Exception " + columns[IP]);
             }
 
         }
