@@ -51,13 +51,8 @@ public class CSVFileReader implements  FileReader{
     }
 
     @Override
-    public void close() {
-        try {
-            this.reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+    public void close() throws IOException {
+        this.reader.close();
     }
 
 }

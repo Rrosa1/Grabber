@@ -1,11 +1,9 @@
 package cl.tesis.input;
 
-import java.io.IOException;
+import java.io.Closeable;
 
-public interface FileReader {
+public interface FileReader extends Closeable {
 
     String[] nextLine();
-
-    void close();
 
 }

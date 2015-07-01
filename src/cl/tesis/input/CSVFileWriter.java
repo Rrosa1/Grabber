@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class CSVFileWriter implements FileWriter {
+public class CSVFileWriter implements FileWriter{
     private static final Logger logger = Logger.getLogger(CSVFileWriter.class.getName());
 
     private static final String CSV_SEPARATOR = ",";
@@ -30,7 +30,7 @@ public class CSVFileWriter implements FileWriter {
     }
 
     @Override
-    public void writeLine(ListWritable writable) throws IOException {
+    public synchronized void writeLine(ListWritable writable) throws IOException {
         if (!this.header) {
             this.writer.write(toCSV(writable.getParameterList()));
             this.header = true;
@@ -47,5 +47,10 @@ public class CSVFileWriter implements FileWriter {
         }
 
         return csv.substring(0, csv.length() - 1) + NEW_LINE;
+    }
+
+    @Override
+    public void close() throws IOException {
+        this.writer.close();
     }
 }

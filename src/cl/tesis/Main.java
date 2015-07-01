@@ -1,5 +1,6 @@
 package cl.tesis;
 
+import cl.tesis.input.CSVFileWriter;
 import cl.tesis.ssl.ConnectionThreads;
 import cl.tesis.input.CSVFileReader;
 
@@ -7,7 +8,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
@@ -21,9 +21,11 @@ public class Main {
 
         String fileName = "src/cl/tesis/input/test.csv";
         CSVFileReader reader = new CSVFileReader(fileName);
+        CSVFileWriter writer =  new CSVFileWriter("src/cl/tesis/out.csv");
+
         List<Thread> lista = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            Thread t = new ConnectionThreads(reader);
+            Thread t = new ConnectionThreads(reader, writer);
             t.start();
             lista.add(t);
         }
@@ -32,7 +34,11 @@ public class Main {
             thread.join();
         }
 
-       logger.info("End Scanning");
+        logger.info("End Scanning");
+
+        reader.close();
+        writer.close();
+
 
     }
 }

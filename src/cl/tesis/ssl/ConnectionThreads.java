@@ -1,5 +1,6 @@
 package cl.tesis.ssl;
 
+import cl.tesis.input.FileWriter;
 import cl.tesis.ssl.exception.SSLConnectionException;
 import cl.tesis.ssl.exception.SSLHandshakeTimeoutException;
 import cl.tesis.input.FileReader;
@@ -16,9 +17,12 @@ public class ConnectionThreads extends  Thread{
     private static final int IP = 0;
 
     private FileReader reader;
+    private FileWriter writer;
 
-    public ConnectionThreads(FileReader reader) {
+    public ConnectionThreads(FileReader reader, FileWriter writer) {
+
         this.reader = reader;
+        this.writer = writer;
     }
 
     @Override
@@ -28,7 +32,7 @@ public class ConnectionThreads extends  Thread{
         while ((columns = this.reader.nextLine()) != null) {
             try {
                 Certificate certificate = SSLUtil.getServerCertificate(columns[IP], false);
-                System.out.println(certificate.toString());
+                this.writer.writeLine(certificate);
             } catch (SSLHandshakeException e) { // Untrusted Certificate
                 logger.log(Level.INFO, "Untrusted certificate {0}", columns[IP]);
 //                System.out.println("HandShake " + columns[IP]);
