@@ -17,16 +17,18 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException, IOException {
         LogManager.getLogManager().readConfiguration(new FileInputStream("src/cl/tesis/logger.properties"));
+
+        // Parse the command arguments
+        CommandLine commandLine = new CommandLine();
+        commandLine.parse(args);
+
         logger.info("Start Scanning");
 
-        String readFile = "src/cl/tesis/input/test.csv",
-               writeFile = "src/cl/tesis/out.csv";
-
-        try (CSVFileReader reader = new CSVFileReader(readFile);
-             CSVFileWriter writer =  new CSVFileWriter(writeFile)) {
+        try (CSVFileReader reader = new CSVFileReader(commandLine.getInput());
+             CSVFileWriter writer =  new CSVFileWriter(commandLine.getOutput())) {
 
             List<Thread> lista = new ArrayList<>();
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < commandLine.getThreads(); i++) {
                 Thread t = new ConnectionThreads(reader, writer);
                 t.start();
                 lista.add(t);
