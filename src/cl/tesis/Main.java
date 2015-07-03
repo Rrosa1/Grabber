@@ -1,7 +1,7 @@
 package cl.tesis;
 
 import cl.tesis.input.CSVFileWriter;
-import cl.tesis.ssl.ConnectionThreads;
+import cl.tesis.ssl.SSLCertificateThreads;
 import cl.tesis.input.CSVFileReader;
 
 import java.io.FileInputStream;
@@ -28,10 +28,19 @@ public class Main {
              CSVFileWriter writer =  new CSVFileWriter(commandLine.getOutput())) {
 
             List<Thread> lista = new ArrayList<>();
-            for (int i = 0; i < commandLine.getThreads(); i++) {
-                Thread t = new ConnectionThreads(reader, writer);
-                t.start();
-                lista.add(t);
+
+            switch (commandLine.getModule()){
+                case "SSLCertificate":
+                    for (int i = 0; i < commandLine.getThreads(); i++) {
+                        Thread t = new SSLCertificateThreads(reader, writer);
+                        t.start();
+                        lista.add(t);
+                    }
+                    break;
+                default:
+                    logger.info("Probe module not found");
+                    System.exit(0);
+
             }
 
             for (Thread thread : lista) {

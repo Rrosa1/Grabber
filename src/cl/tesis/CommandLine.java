@@ -3,30 +3,21 @@ package cl.tesis;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
+import org.kohsuke.args4j.spi.Messages;
 
 public class CommandLine {
 
-    @Option(name = "-i", aliases = {"--input"}, metaVar = "File",usage = "Input file", help = true, required = true)
-    private String input = "";
+    @Option(name = "-i", aliases = {"--input"}, usage = "Input file", metaVar = "File" , required = true, help = true)
+    private String input;
 
-    @Option(name = "-o", aliases = {"--output"}, metaVar = "File", usage = "Output file", help = true, required = true)
-    private String output = "";
+    @Option(name = "-o", aliases = {"--output"}, usage = "Output file", metaVar = "File", required = true, help = true)
+    private String output;
 
-    @Option(name = "-t", aliases = {"--threads"}, metaVar = "Int", usage = "Number of threads", help = true)
+    @Option(name = "-m", aliases = {"--module"}, usage = "Set the probe module", metaVar = "String", required = true, help = true)
+    private String module;
+
+    @Option(name = "-t", aliases = {"--threads"}, metaVar = "Int", usage = "Threads used to send probes", help = true)
     private int threads = 1;
-
-    public void parse(String[] args) {
-        CmdLineParser parser = new CmdLineParser(this);
-
-        try {
-            parser.parseArgument(args);
-
-        } catch (CmdLineException e) {
-            parser.printUsage(System.out);
-            System.exit(0);
-        }
-
-    }
 
     public String getInput() {
         return input;
@@ -36,8 +27,30 @@ public class CommandLine {
         return output;
     }
 
-    public int getThreads() {
-        return threads;
+    public int getThreads() { return threads; }
+
+    public String getModule() {
+        return module;
+    }
+
+    public void parse(String[] args) {
+        CmdLineParser parser = new CmdLineParser(this);
+
+        try {
+            parser.parseArgument(args);
+            if (getInput() == null || getOutput() == null || getModule() == null) {
+                throw new CmdLineException(parser, Messages.FORMAT_ERROR_FOR_MAP, "Require options");
+            }
+
+        } catch (CmdLineException e) {
+            parser.printUsage(System.out);
+            System.exit(0);
+        }
+
+    }
+
+    public static void main(String[] args) {
+        new CommandLine().parse(args);
     }
 
 }
