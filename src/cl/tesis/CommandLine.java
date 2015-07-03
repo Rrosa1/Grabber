@@ -38,15 +38,19 @@ public class CommandLine {
 
         try {
             parser.parseArgument(args);
-            if (getInput() == null || getOutput() == null || getModule() == null) {
-                throw new CmdLineException(parser, Messages.FORMAT_ERROR_FOR_MAP, "Require options");
-            }
+            this.required(parser);
 
         } catch (CmdLineException e) {
             parser.printUsage(System.out);
             System.exit(0);
         }
 
+    }
+
+    public void required(CmdLineParser parser) throws CmdLineException {
+        if (getInput() == null || getOutput() == null || getModule() == null) {
+            throw new CmdLineException(parser, Messages.FORMAT_ERROR_FOR_MAP, "Require options");
+        }
     }
 
     public static void main(String[] args) {
