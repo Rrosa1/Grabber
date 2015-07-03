@@ -12,14 +12,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-public class ConnectionThreads extends  Thread{
-    private static final Logger logger = Logger.getLogger(ConnectionThreads.class.getName());
+public class SSLCertificateThreads extends  Thread{
+    private static final Logger logger = Logger.getLogger(SSLCertificateThreads.class.getName());
     private static final int IP = 0;
 
     private FileReader reader;
     private FileWriter writer;
 
-    public ConnectionThreads(FileReader reader, FileWriter writer) {
+    public SSLCertificateThreads(FileReader reader, FileWriter writer) {
 
         this.reader = reader;
         this.writer = writer;
