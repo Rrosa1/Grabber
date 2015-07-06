@@ -41,7 +41,10 @@ public class Certificate implements ListWritable{
 
         for (String value : values) {
             String[] elements = value.split("=");
-            principalMap.put(elements[0], elements[1]);
+
+            if (elements.length >= 2) {
+                principalMap.put(elements[0], elements[1]);
+            }
         }
 
         return principalMap;
