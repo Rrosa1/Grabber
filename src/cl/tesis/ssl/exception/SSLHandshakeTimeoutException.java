@@ -8,4 +8,8 @@ public class SSLHandshakeTimeoutException extends Exception {
     public SSLHandshakeTimeoutException(String message) {
         super(message);
     }
+
+    public SSLHandshakeTimeoutException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

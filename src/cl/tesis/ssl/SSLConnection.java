@@ -53,6 +53,8 @@ public class SSLConnection {
             this.socket.connect(this.address);
         }
 
+//        this.socket.startHandshake();
+
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Future<Boolean> future = executor.submit(new TimeoutHandshake(this.socket));
 
@@ -65,7 +67,7 @@ public class SSLConnection {
         } catch (TimeoutException e) {
             future.cancel(true);
             executor.shutdownNow();
-            throw new SSLHandshakeTimeoutException("Handshake timed out");
+            throw new SSLHandshakeTimeoutException("Handshake timed out", e);
         }
 
         executor.shutdownNow();
