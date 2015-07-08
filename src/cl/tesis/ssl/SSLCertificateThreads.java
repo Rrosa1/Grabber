@@ -31,20 +31,28 @@ public class SSLCertificateThreads extends  Thread{
 
         while ((columns = this.reader.nextLine()) != null) {
             try {
-                Certificate certificate = SSLUtil.getServerCertificate(columns[IP], false);
+                Certificate certificate = SSLUtil.getServerCertificate(columns[IP], true);
                 this.writer.writeLine(certificate);
             } catch (SSLHandshakeException e) { // Untrusted Certificate
                 logger.log(Level.INFO, "Untrusted certificate {0}", columns[IP]);
+                try {
+                    Certificate certificate = SSLUtil.getServerCertificate(columns[IP], false);
+                    this.writer.writeLine(certificate);
+                } catch (Throwable throwable) {
+                    logger.log(Level.INFO, "Other exception {0}", columns[IP]);
+                }
             } catch (SSLConnectionException e) { // Problem creating the socket
                 logger.log(Level.INFO, "Problem creating the soceket {0}", columns[IP]);
             } catch (SocketTimeoutException e) { // Connection timeout
                 logger.log(Level.INFO, "Connection timeout {0}", columns[IP]);
             } catch (SSLHandshakeTimeoutException e) {
                 logger.log(Level.INFO, "Handshake timeout {0}", columns[IP]);
+                e.printStackTrace();
             } catch (ConnectException e) { // Problem in the connection
                 logger.log(Level.INFO, "Connection exception {0}", columns[IP]);
             } catch (Throwable e) { // Other errors
                 logger.log(Level.INFO, "Other exception {0}", columns[IP]);
+                e.printStackTrace();
             }
 
         }
