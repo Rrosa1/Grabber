@@ -47,12 +47,10 @@ public class SSLCertificateThreads extends  Thread{
                 logger.log(Level.INFO, "Connection timeout {0}", columns[IP]);
             } catch (SSLHandshakeTimeoutException e) {
                 logger.log(Level.INFO, "Handshake timeout {0}", columns[IP]);
-                e.printStackTrace();
             } catch (ConnectException e) { // Problem in the connection
                 logger.log(Level.INFO, "Connection exception {0}", columns[IP]);
             } catch (Throwable e) { // Other errors
                 logger.log(Level.INFO, "Other exception {0}", columns[IP]);
-                e.printStackTrace();
             }
 
         }
