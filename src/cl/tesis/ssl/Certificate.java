@@ -1,6 +1,6 @@
 package cl.tesis.ssl;
 
-import cl.tesis.input.ListWritable;
+import cl.tesis.output.ListWritable;
 
 import javax.security.auth.x500.X500Principal;
 import java.security.cert.X509Certificate;

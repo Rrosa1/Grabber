@@ -1,11 +1,11 @@
-package cl.tesis.input;
+package cl.tesis.output;
 
 import java.io.*;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class CSVFileWriter implements FileWriter{
+public class CSVFileWriter implements cl.tesis.output.FileWriter {
     private static final Logger logger = Logger.getLogger(CSVFileWriter.class.getName());
 
     private static final String CSV_SEPARATOR = ",";

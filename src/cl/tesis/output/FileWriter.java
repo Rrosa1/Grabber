@@ -1,4 +1,4 @@
-package cl.tesis.input;
+package cl.tesis.output;
 
 import java.io.Closeable;
 import java.io.IOException;

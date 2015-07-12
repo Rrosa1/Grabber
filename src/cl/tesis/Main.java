@@ -1,6 +1,6 @@
 package cl.tesis;
 
-import cl.tesis.input.CSVFileWriter;
+import cl.tesis.output.CSVFileWriter;
 import cl.tesis.ssl.SSLCertificateThreads;
 import cl.tesis.input.CSVFileReader;
 

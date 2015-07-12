@@ -1,6 +1,6 @@
 package cl.tesis.ssl;
 
-import cl.tesis.input.FileWriter;
+import cl.tesis.output.FileWriter;
 import cl.tesis.ssl.exception.SSLConnectionException;
 import cl.tesis.ssl.exception.SSLHandshakeTimeoutException;
 import cl.tesis.input.FileReader;

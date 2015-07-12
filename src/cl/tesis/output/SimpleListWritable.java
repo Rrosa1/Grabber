@@ -1,4 +1,4 @@
-package cl.tesis.input;
+package cl.tesis.output;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
