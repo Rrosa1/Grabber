@@ -16,7 +16,8 @@ public class Main {
     private static final Logger logger = Logger.getLogger(Main.class.getName());
 
     public static void main(String[] args) throws InterruptedException, IOException {
-        LogManager.getLogManager().readConfiguration(new FileInputStream("src/cl/tesis/logger.properties"));
+//        LogManager.getLogManager().readConfiguration(new FileInputStream("src/cl/tesis/logger.properties"));
+        LogManager.getLogManager().readConfiguration(Main.class.getResourceAsStream("/logger.properties"));
 
         // Parse the command arguments
         CommandLine commandLine = new CommandLine();

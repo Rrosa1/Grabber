@@ -7,7 +7,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class CSVFileReader implements  FileReader{
-    private static final int TICKS = 1;
+    private static final int TICKS = 100;
     private static final String CSV_SEPARATOR = ",";
     private static final Logger logger = Logger.getLogger(CSVFileReader.class.getName());
 
