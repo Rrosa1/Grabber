@@ -118,7 +118,6 @@ public class DnsHeader {
                 ", aa=" + aa +
                 ", tc=" + tc +
                 ", rd=" + rd +
-
                 ", ra=" + ra +
                 ", z=" + z +
                 ", ad=" + ad +
