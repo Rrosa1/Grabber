@@ -3,7 +3,7 @@ package cl.tesis.dns;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-public class DnsPacket {
+public class DnsDatagramParser {
 
     private InetAddress address;
     private int port;
@@ -12,7 +12,7 @@ public class DnsPacket {
     private DnsQuestion question;
 //    private DnsAnswer answer;
 
-    public DnsPacket(InetAddress address, int port, byte[] data) throws UnknownHostException {
+    public DnsDatagramParser(InetAddress address, int port, byte[] data) throws UnknownHostException {
         this.address = address;
         this.port = port;
 
@@ -24,7 +24,7 @@ public class DnsPacket {
 
     @Override
     public String toString() {
-        return "DnsPacket{" +
+        return "DnsDatagramParser{" +
                 "address=" + address +
                 ", port=" + port +
                 ", header=" + header +
@@ -33,7 +33,7 @@ public class DnsPacket {
     }
 
     public static void main(String[] args) throws UnknownHostException {
-        DnsPacket packet = new DnsPacket(InetAddress.getLocalHost(), 80, new byte[]{10, 10, -1, -81, -128, 1, -128, 1, -128, 1, -128, 1});
+        DnsDatagramParser packet = new DnsDatagramParser(InetAddress.getLocalHost(), 80, new byte[]{10, 10, -1, -81, -128, 1, -128, 1, -128, 1, -128, 1});
         System.out.println(packet.toString());
     }
 }
