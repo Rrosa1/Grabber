@@ -10,7 +10,7 @@ public class DnsPacket {
 
     private DnsHeader header;
     private DnsQuestion question;
-    private DnsAnswer answer;
+//    private DnsAnswer answer;
 
     public DnsPacket(InetAddress address, int port, byte[] data) throws UnknownHostException {
         this.address = address;
@@ -18,7 +18,7 @@ public class DnsPacket {
 
         this.header = new DnsHeader(data);
         this.question = new DnsQuestion(data);
-        this.answer =  new DnsAnswer(data, this.question.getFinishQuestion());
+//        this.answer =  new DnsAnswer(data, this.question.getFinishQuestion());
 
     }
 
@@ -29,7 +29,6 @@ public class DnsPacket {
                 ", port=" + port +
                 ", header=" + header +
                 ", question=" + question +
-                ", answer=" + answer +
                 '}';
     }
 
