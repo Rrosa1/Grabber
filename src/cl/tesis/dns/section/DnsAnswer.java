@@ -1,4 +1,6 @@
-package cl.tesis.dns;
+package cl.tesis.dns.section;
+
+import cl.tesis.dns.DnsUtil;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;

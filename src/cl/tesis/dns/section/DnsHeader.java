@@ -1,7 +1,7 @@
-package cl.tesis.dns;
+package cl.tesis.dns.section;
 
 
-import java.net.InetAddress;
+import cl.tesis.dns.DnsUtil;
 
 public class DnsHeader {
 

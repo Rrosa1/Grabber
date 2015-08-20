@@ -1,4 +1,6 @@
-package cl.tesis.dns;
+package cl.tesis.dns.section;
+
+import cl.tesis.dns.DnsUtil;
 
 public class DnsQuestion {
 
