@@ -49,66 +49,6 @@ public class DnsHeader {
 
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setQr(int qr) {
-        this.qr = qr;
-    }
-
-    public void setOpcode(int opcode) {
-        this.opcode = opcode;
-    }
-
-    public void setAa(int aa) {
-        this.aa = aa;
-    }
-
-    public void setTc(int tc) {
-        this.tc = tc;
-    }
-
-    public void setRd(int rd) {
-        this.rd = rd;
-    }
-
-    public void setRa(int ra) {
-        this.ra = ra;
-    }
-
-    public void setZ(int z) {
-        this.z = z;
-    }
-
-    public void setAd(int ad) {
-        this.ad = ad;
-    }
-
-    public void setCd(int cd) {
-        this.cd = cd;
-    }
-
-    public void setRcode(int rcode) {
-        this.rcode = rcode;
-    }
-
-    public void setQdcount(int qdcount) {
-        this.qdcount = qdcount;
-    }
-
-    public void setAncount(int ancount) {
-        this.ancount = ancount;
-    }
-
-    public void setNscount(int nscount) {
-        this.nscount = nscount;
-    }
-
-    public void setArcount(int arcount) {
-        this.arcount = arcount;
-    }
-
     @Override
     public String toString() {
         return "DnsHeader{" +
@@ -130,8 +70,4 @@ public class DnsHeader {
                 '}';
     }
 
-    public static void main(String[] args) {
-        DnsHeader header = new DnsHeader(new byte[]{10, 10, -1, -81, -128, 1, -128, 1, -128, 1, -128, 1});
-        System.out.println(header.toString());
-    }
 }

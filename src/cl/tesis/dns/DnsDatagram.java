@@ -39,7 +39,7 @@ public class DnsDatagram {
      */
     private static byte[] STANDARD_QUESTION = DnsUtil.hexStringToByteArray("0366666606756368696c6502636c0000010001");
 
-    public static byte[] defaultDatagram() {
+    public static byte[] getDefaultDatagram() {
         byte [] res =  new byte[HEADER.length + STANDARD_QUESTION.length];
         System.arraycopy(HEADER, 0, res, 0, HEADER.length);
         System.arraycopy(STANDARD_QUESTION, 0, res, HEADER.length, STANDARD_QUESTION.length);

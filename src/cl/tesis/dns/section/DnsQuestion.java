@@ -49,10 +49,4 @@ public class DnsQuestion {
                 '}';
     }
 
-//    public static void main(String[] args) {
-//        byte[] STANDARD_QUESTION = DnsUtil.hexStringToByteArray("0377777706756368696c6502636c0000010001");
-//        DnsQuestion question =  new DnsQuestion(STANDARD_QUESTION);
-//        System.out.println(question.toString());
-//    }
-
 }
