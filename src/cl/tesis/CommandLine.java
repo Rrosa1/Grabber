@@ -19,6 +19,11 @@ public class CommandLine {
     @Option(name = "-t", aliases = {"--threads"}, metaVar = "Int", usage = "Threads used to send probes", help = true)
     private int threads = 1;
 
+    @Option(name = "--list-probe-modules", usage = "Print all probe modules", required = false, help = true)
+    private boolean listProbeModules;
+
+    private String[] probeModule = {"SSLCertificate", "UDP_DNS"};
+
     public String getInput() {
         return input;
     }
@@ -45,10 +50,27 @@ public class CommandLine {
             System.exit(0);
         }
 
+        if (listProbeModules) {
+            System.out.println("Probe Modules:");
+
+            for (String m : probeModule)
+                System.out.println(m);
+
+            System.exit(0);
+        }
+
+    }
+
+    private boolean runningArgs() {
+        return getInput() == null || getOutput() == null || getModule() == null;
+    }
+
+    private boolean infoArgs() {
+        return !listProbeModules;
     }
 
     public void required(CmdLineParser parser) throws CmdLineException {
-        if (getInput() == null || getOutput() == null || getModule() == null) {
+        if (runningArgs() && infoArgs()) {
             throw new CmdLineException(parser, Messages.FORMAT_ERROR_FOR_MAP, "Require options");
         }
     }
