@@ -1,5 +1,6 @@
 package cl.tesis;
 
+import cl.tesis.dns.DnsThreads;
 import cl.tesis.output.CSVFileWriter;
 import cl.tesis.ssl.SSLCertificateThreads;
 import cl.tesis.input.CSVFileReader;
@@ -16,7 +17,6 @@ public class Main {
     private static final Logger logger = Logger.getLogger(Main.class.getName());
 
     public static void main(String[] args) throws InterruptedException, IOException {
-//        LogManager.getLogManager().readConfiguration(new FileInputStream("src/cl/tesis/logger.properties"));
         LogManager.getLogManager().readConfiguration(Main.class.getResourceAsStream("/logger.properties"));
 
         // Parse the command arguments
@@ -28,14 +28,21 @@ public class Main {
         try (CSVFileReader reader = new CSVFileReader(commandLine.getInput());
              CSVFileWriter writer =  new CSVFileWriter(commandLine.getOutput())) {
 
-            List<Thread> lista = new ArrayList<>();
+            List<Thread>  threadsList = new ArrayList<>();
 
             switch (commandLine.getModule()){
                 case "SSLCertificate":
                     for (int i = 0; i < commandLine.getThreads(); i++) {
                         Thread t = new SSLCertificateThreads(reader, writer);
                         t.start();
-                        lista.add(t);
+                        threadsList.add(t);
+                    }
+                    break;
+                case "DNS":
+                    for (int i = 0; i < commandLine.getThreads(); i++) {
+                        Thread t = new DnsThreads(reader, writer);
+                        t.start();
+                        threadsList.add(t);
                     }
                     break;
                 default:
@@ -44,7 +51,7 @@ public class Main {
 
             }
 
-            for (Thread thread : lista) {
+            for (Thread thread : threadsList) {
                 thread.join();
             }
 
