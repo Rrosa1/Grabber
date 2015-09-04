@@ -21,7 +21,7 @@ public class TestDns {
         DatagramSocket socket = new DatagramSocket(8080);
         socket.setSoTimeout(30000);
 
-        byte[] data = DnsDatagram.getDefaultDatagram();
+        byte[] data = DefaultDnsDatagram.getDefaultDatagram();
 
         for (int i = 0; i < hosts.length; i++) {
             System.out.println(i);

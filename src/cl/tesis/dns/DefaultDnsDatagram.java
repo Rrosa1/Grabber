@@ -1,6 +1,6 @@
 package cl.tesis.dns;
 
-public class DnsDatagram {
+public class DefaultDnsDatagram {
 
     /*
         Dns Header:
