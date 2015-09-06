@@ -1,8 +1,11 @@
 package cl.tesis.ssl;
 
 import cl.tesis.output.ListWritable;
+import sun.misc.BASE64Encoder;
+import sun.security.provider.X509Factory;
 
 import javax.security.auth.x500.X500Principal;
+import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -18,6 +21,7 @@ public class Certificate implements ListWritable{
     private String organizationURL;
     private String certificateAuthority;
     private String keyBits;
+    private String PemCert;
 
 
     public Certificate(X509Certificate x509Certificate, String ip, boolean validation) {
@@ -32,6 +36,7 @@ public class Certificate implements ListWritable{
         this.organizationURL = subjectMap.get("CN");
         this.certificateAuthority = issuerMap.get("CN");
         this.keyBits = parserPublicKeyBits(x509Certificate);
+        this.PemCert = toPemFormat(x509Certificate);
     }
 
     public String getOrganizationURL() {
@@ -67,6 +72,22 @@ public class Certificate implements ListWritable{
 
     }
 
+    private String toPemFormat(X509Certificate x509Certificate) {
+        String pemFormat = "";
+        BASE64Encoder encoder = new BASE64Encoder();
+
+        try {
+            pemFormat += X509Factory.BEGIN_CERT + "\n";
+            pemFormat += encoder.encode(x509Certificate.getEncoded());
+            pemFormat += "\n" + X509Factory.END_CERT;
+        }catch (CertificateEncodingException e) {
+            pemFormat = "";
+        }
+
+        return pemFormat;
+
+    }
+
     @Override
     public String toString() {
         return "Certificate{" +
@@ -78,6 +99,7 @@ public class Certificate implements ListWritable{
                 ", organizationURL='" + organizationURL + '\'' +
                 ", certificateAuthority='" + certificateAuthority + '\'' +
                 ", keyBits='" + keyBits + '\'' +
+                ", PemCert='" + PemCert + '\'' +
                 '}';
     }
 
