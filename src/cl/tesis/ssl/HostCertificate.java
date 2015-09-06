@@ -12,14 +12,26 @@ public class HostCertificate extends Certificate implements ListWritable{
     private String ip;
     private boolean validation;
     private String certificateAuthority;
+    private List<Certificate> chainAuthority;
 
-    public HostCertificate(X509Certificate x509Certificate, String ip, boolean validation) {
+    public HostCertificate(X509Certificate x509Certificate, String ip, boolean validation, X509Certificate[] chain) {
         super(x509Certificate);
         Map<String, String> issuerMap = parserX500Principal(x509Certificate.getIssuerX500Principal());
 
         this.ip = ip;
         this.validation = validation;
         this.certificateAuthority = issuerMap.get("CN");
+        this.chainAuthority = parseChain(chain);
+    }
+
+    private List<Certificate> parseChain(X509Certificate[] chain) {
+        ArrayList<Certificate> chainAuthority = new ArrayList<>();
+
+        for (X509Certificate cert: chain) {
+            chainAuthority.add(new Certificate(cert));
+        }
+
+        return chainAuthority;
     }
 
     @Override
@@ -54,6 +66,16 @@ public class HostCertificate extends Certificate implements ListWritable{
         values.add(this.getPemCert());
 
         return values;
+    }
+
+    @Override
+    public String toString() {
+        return "HostCertificate{" +
+                "ip='" + ip + '\'' +
+                ", validation=" + validation +
+                ", certificateAuthority='" + certificateAuthority + '\'' +
+                ", chainAuthority=" + chainAuthority +
+                '}';
     }
 
     public String getIp() {
