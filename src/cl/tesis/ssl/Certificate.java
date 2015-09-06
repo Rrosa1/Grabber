@@ -115,6 +115,7 @@ public class Certificate implements ListWritable{
         parameters.add("Organization URL");
         parameters.add("Certificate Authority");
         parameters.add("Key Bits");
+        parameters.add("PEM Certificate");
 
         return parameters;
     }
@@ -131,6 +132,7 @@ public class Certificate implements ListWritable{
         values.add(this.organizationURL);
         values.add(this.certificateAuthority);
         values.add(this.keyBits + "");
+        values.add(this.PemCert);
 
         return values;
 

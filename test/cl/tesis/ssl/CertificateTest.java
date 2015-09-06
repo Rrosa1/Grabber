@@ -36,19 +36,19 @@ public class CertificateTest extends TestCase {
         assertEquals(parameters.get(5), "Organization URL");
         assertEquals(parameters.get(6), "Certificate Authority");
         assertEquals(parameters.get(7), "Key Bits");
+        assertEquals(parameters.get(8), "PEM Certificate");
 
     }
 
     public void testGetValueList() throws Exception {
-        List<String> parameters = cert2048.getValueList();
-        assertEquals(parameters.get(0), "1.1.1.1");
-        assertEquals(parameters.get(1), "true");
-        assertEquals(parameters.get(2), "SHA1withRSA");
-        assertEquals(parameters.get(3), "Mon Aug 21 02:27:41 CLT 2017");
-        assertEquals(parameters.get(4), "Frank4DD");
-        assertEquals(parameters.get(5), "www.example.com");
-        assertEquals(parameters.get(6), "Frank4DD Web CA");
-        assertEquals(parameters.get(7), "2048");
-
+        List<String> values = cert2048.getValueList();
+        assertEquals(values.get(0), "1.1.1.1");
+        assertEquals(values.get(1), "true");
+        assertEquals(values.get(2), "SHA1withRSA");
+        assertEquals(values.get(3), "Mon Aug 21 02:27:41 CLT 2017");
+        assertEquals(values.get(4), "Frank4DD");
+        assertEquals(values.get(5), "www.example.com");
+        assertEquals(values.get(6), "Frank4DD Web CA");
+        assertEquals(values.get(7), "2048");
     }
 }
