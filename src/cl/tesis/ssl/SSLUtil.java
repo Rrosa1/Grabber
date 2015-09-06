@@ -4,7 +4,7 @@ import java.security.cert.X509Certificate;
 
 public class SSLUtil {
 
-    public static Certificate getServerCertificate(String ip, boolean validate) throws Throwable {
+    public static HostCertificate getServerCertificate(String ip, boolean validate) throws Throwable {
         SSLConnection sslConnection = null;
         X509Certificate certificate;
 
@@ -18,6 +18,6 @@ public class SSLUtil {
             }
         }
 
-        return new Certificate(certificate, ip, validate);
+        return new HostCertificate(certificate, ip, validate);
     }
 }

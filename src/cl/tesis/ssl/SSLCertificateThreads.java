@@ -31,12 +31,12 @@ public class SSLCertificateThreads extends  Thread{
 
         while ((columns = this.reader.nextLine()) != null) {
             try {
-                Certificate certificate = SSLUtil.getServerCertificate(columns[IP], true);
+                HostCertificate certificate = SSLUtil.getServerCertificate(columns[IP], true);
                 this.writer.writeLine(certificate);
-            } catch (SSLHandshakeException e) { // Untrusted Certificate
+            } catch (SSLHandshakeException e) { // Untrusted HostCertificate
                 logger.log(Level.INFO, "Untrusted certificate {0}", columns[IP]);
                 try {
-                    Certificate certificate = SSLUtil.getServerCertificate(columns[IP], false);
+                    HostCertificate certificate = SSLUtil.getServerCertificate(columns[IP], false);
                     this.writer.writeLine(certificate);
                 } catch (Throwable throwable) {
                     logger.log(Level.INFO, "Other exception {0}", columns[IP]);

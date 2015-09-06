@@ -9,9 +9,9 @@ import java.security.cert.X509Certificate;
 import java.util.List;
 
 
-public class CertificateTest extends TestCase {
+public class HostCertificateTest extends TestCase {
 
-    private Certificate cert2048;
+    private HostCertificate cert2048;
     private X509Certificate x509Cert;
 
     @Override
@@ -22,7 +22,7 @@ public class CertificateTest extends TestCase {
 
         CertificateFactory cf = CertificateFactory.getInstance("X.509");
         x509Cert = (X509Certificate) cf.generateCertificate(buffered);
-        cert2048 = new Certificate(x509Cert, "1.1.1.1", true);
+        cert2048 = new HostCertificate(x509Cert, "1.1.1.1", true);
 
     }
 
@@ -34,9 +34,9 @@ public class CertificateTest extends TestCase {
         assertEquals(parameters.get(3), "Expired Time");
         assertEquals(parameters.get(4), "Organization Name");
         assertEquals(parameters.get(5), "Organization URL");
-        assertEquals(parameters.get(6), "Certificate Authority");
+        assertEquals(parameters.get(6), "HostCertificate Authority");
         assertEquals(parameters.get(7), "Key Bits");
-        assertEquals(parameters.get(8), "PEM Certificate");
+        assertEquals(parameters.get(8), "PEM HostCertificate");
 
     }
 
