@@ -75,14 +75,14 @@ public class HostCertificate extends Certificate implements ListWritable{
                 ", validation=" + validation +
                 ", certificateAuthority='" + certificateAuthority + '\'' +
                 ", chainAuthority=" + chainAuthority +
-                '}';
+                "} " + super.toString();
     }
 
     public String getIp() {
         return ip;
     }
 
-    public boolean isValidation() {
+    public boolean getValidation() {
         return validation;
     }
 
