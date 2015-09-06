@@ -34,6 +34,10 @@ public class Certificate implements ListWritable{
         this.keyBits = parserPublicKeyBits(x509Certificate);
     }
 
+    public String getOrganizationURL() {
+        return organizationURL;
+    }
+
     private Map<String, String> parserX500Principal(X500Principal x500Principal) {
         String[] values = x500Principal.getName().split(",");
 
@@ -60,7 +64,6 @@ public class Certificate implements ListWritable{
             return matcher.group(2);
         }
         return null;
-
 
     }
 

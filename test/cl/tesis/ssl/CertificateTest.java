@@ -26,21 +26,6 @@ public class CertificateTest extends TestCase {
 
     }
 
-    public void testToString() throws Exception {
-        String expected = "Certificate{" +
-                "ip='" + "1.1.1.1" + '\'' +
-                ", validation=" + "true" +
-                ", sigantureAlgorithm='" + "SHA1withRSA" + '\'' +
-                ", expiredTime=" + "Mon Aug 21 02:27:41 CLT 2017" +
-                ", organizationName='" + "Frank4DD" + '\'' +
-                ", organizationURL='" + "www.example.com" + '\'' +
-                ", certificateAuthority='" + "Frank4DD Web CA" + '\'' +
-                ", keyBits='" + "2048" + '\'' +
-                '}';
-
-        assertEquals(expected, cert2048.toString());
-    }
-
     public void testGetParameterList() throws Exception {
         List<String> parameters = cert2048.getParameterList();
         assertEquals(parameters.get(0), "Ip");
