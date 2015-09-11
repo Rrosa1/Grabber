@@ -83,7 +83,8 @@ public class HttpHeader implements ListWritable{
         values.add(this.response);
         values.add(this.server);
         values.add(this.contentType);
-        values.add(this.cookies.toString());
+        values.add(this.domain);
+        values.add(this.cookies + "");
 
         return values;
     }
