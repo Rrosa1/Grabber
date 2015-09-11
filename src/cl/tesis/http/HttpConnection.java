@@ -30,9 +30,6 @@ public class HttpConnection {
     public void getHeader() {
         Map<String, List<String>> header = this.connection.getHeaderFields();
 
-//        for(Map.Entry<String, List<String>> entry: header.entrySet()) {
-//            System.out.println("Key : " +entry.getKey() + " , Value : " + entry.getValue());
-//        }
-        System.out.println(new HttpHeader(header));
+        System.out.println(new HttpHeader(this.url.getHost(), header));
     }
 }

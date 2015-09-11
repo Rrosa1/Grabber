@@ -5,13 +5,15 @@ import java.util.Map;
 
 public class HttpHeader {
 
+    private String ip;
     private String response;
     private String server;
     private String contentType;
     private String domain;
     private List<String> cookie;
 
-    public HttpHeader(Map<String, List<String>> header) {
+    public HttpHeader(String ip, Map<String, List<String>> header) {
+        this.ip = ip;
         this.response =  getKey(header, null);
         this.server = getKey(header, "Server");
         this.contentType =  getKey(header, "Content-Type");
@@ -45,11 +47,17 @@ public class HttpHeader {
     @Override
     public String toString() {
         return "HttpHeader{" +
-                "response='" + response + '\'' +
+                "ip='" + ip + '\'' +
+                ", response='" + response + '\'' +
                 ", server='" + server + '\'' +
                 ", contentType='" + contentType + '\'' +
                 ", domain='" + domain + '\'' +
                 ", cookie=" + cookie +
                 '}';
+    }
+
+    // TODO implement json and csv methods
+    public String toJson() {
+        return null;
     }
 }
