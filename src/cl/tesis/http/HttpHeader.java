@@ -1,23 +1,28 @@
 package cl.tesis.http;
 
+import cl.tesis.output.ListWritable;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class HttpHeader {
+public class HttpHeader implements ListWritable{
 
     private String ip;
     private String response;
     private String server;
     private String contentType;
     private String domain;
-    private List<String> cookie;
+    private List<String> cookies;
 
     public HttpHeader(String ip, Map<String, List<String>> header) {
         this.ip = ip;
         this.response =  getKey(header, null);
         this.server = getKey(header, "Server");
         this.contentType =  getKey(header, "Content-Type");
-        this.cookie = header.get("Set-Cookie");
+        this.cookies = header.get("Set-Cookie");
         this.domain = this.getDomain();
     }
 
@@ -31,10 +36,10 @@ public class HttpHeader {
     }
 
     private String getDomain() {
-        if (this.cookie == null)
+        if (this.cookies == null)
             return null;
 
-        for(String s : this.cookie) {
+        for(String s : this.cookies) {
             if (s.contains("domain")) {
                 int start = s.indexOf("domain=") + 7; // 7 for "domain=" string length
                 return s.substring(start);
@@ -52,12 +57,39 @@ public class HttpHeader {
                 ", server='" + server + '\'' +
                 ", contentType='" + contentType + '\'' +
                 ", domain='" + domain + '\'' +
-                ", cookie=" + cookie +
+                ", cookies=" + cookies +
                 '}';
     }
 
-    // TODO implement json and csv methods
+    @Override
+    public List<String> getParameterList() {
+        ArrayList<String> parameters = new ArrayList<>();
+
+        parameters.add("ip");
+        parameters.add("response");
+        parameters.add("server");
+        parameters.add("content type");
+        parameters.add("domain");
+        parameters.add("cookies");
+
+        return parameters;
+    }
+
+    @Override
+    public List<String> getValueList() {
+        ArrayList<String> values =  new ArrayList<>();
+
+        values.add(this.ip);
+        values.add(this.response);
+        values.add(this.server);
+        values.add(this.contentType);
+        values.add(this.cookies.toString());
+
+        return values;
+    }
+
     public String toJson() {
-        return null;
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+        return gson.toJson(this);
     }
 }
