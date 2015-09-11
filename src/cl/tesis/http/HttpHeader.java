@@ -1,6 +1,7 @@
 package cl.tesis.http;
 
 import cl.tesis.output.CSVWritable;
+import cl.tesis.output.JsonWritable;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -8,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class HttpHeader implements CSVWritable {
+public class HttpHeader implements CSVWritable, JsonWritable{
 
     private String ip;
     private String response;
@@ -89,6 +90,7 @@ public class HttpHeader implements CSVWritable {
         return values;
     }
 
+    @Override
     public String toJson() {
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         return gson.toJson(this);
