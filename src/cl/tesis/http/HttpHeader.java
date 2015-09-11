@@ -1,6 +1,6 @@
 package cl.tesis.http;
 
-import cl.tesis.output.ListWritable;
+import cl.tesis.output.CSVWritable;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class HttpHeader implements ListWritable{
+public class HttpHeader implements CSVWritable {
 
     private String ip;
     private String response;

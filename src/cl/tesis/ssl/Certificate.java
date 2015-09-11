@@ -1,6 +1,6 @@
 package cl.tesis.ssl;
 
-import cl.tesis.output.ListWritable;
+import cl.tesis.output.CSVWritable;
 import sun.misc.BASE64Encoder;
 import sun.security.provider.X509Factory;
 
@@ -12,7 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class Certificate implements ListWritable{
+public class Certificate implements CSVWritable {
     private String ip;
     private boolean validation;
     private String sigantureAlgorithm;

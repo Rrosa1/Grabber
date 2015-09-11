@@ -5,5 +5,5 @@ import java.io.IOException;
 
 public interface FileWriter extends Closeable{
 
-    void writeLine(ListWritable writable) throws IOException;
+    void writeLine(CSVWritable writable) throws IOException;
 }
