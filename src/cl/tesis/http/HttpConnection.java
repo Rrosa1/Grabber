@@ -27,9 +27,8 @@ public class HttpConnection {
         this.connection.setReadTimeout(TIMEOUT);
     }
 
-    public void getHeader() {
+    public HttpHeader getHeader() {
         Map<String, List<String>> header = this.connection.getHeaderFields();
-
-        System.out.println(new HttpHeader(this.url.getHost(), header));
+        return new HttpHeader(this.url.getHost(), header);
     }
 }
