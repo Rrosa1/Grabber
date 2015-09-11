@@ -1,5 +1,6 @@
 package cl.tesis;
 
+import cl.tesis.http.HttpThread;
 import cl.tesis.output.CSVFileWriter;
 import cl.tesis.ssl.SSLCertificateThreads;
 import cl.tesis.input.CSVFileReader;
@@ -25,7 +26,7 @@ public class Main {
         logger.info("Start Scanning");
 
         try (CSVFileReader reader = new CSVFileReader(commandLine.getInput());
-             CSVFileWriter writer =  new CSVFileWriter(commandLine.getOutput())) {
+             CSVFileWriter writer = new CSVFileWriter(commandLine.getOutput())) {
 
             List<Thread> lista = new ArrayList<>();
 
@@ -33,6 +34,13 @@ public class Main {
                 case "SSLCertificate":
                     for (int i = 0; i < commandLine.getThreads(); i++) {
                         Thread t = new SSLCertificateThreads(reader, writer);
+                        t.start();
+                        lista.add(t);
+                    }
+                    break;
+                case "HTTPHeader":
+                    for (int i = 0; i < commandLine.getThreads(); i++) {
+                        Thread t = new HttpThread(reader, writer);
                         t.start();
                         lista.add(t);
                     }

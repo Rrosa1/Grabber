@@ -15,7 +15,7 @@ public class HttpThread extends Thread {
     private FileWriter writer;
 
     public HttpThread(FileReader reader, FileWriter writer) {
-        this.reader =  reader;
+        this.reader = reader;
         this.writer = writer;
     }
 
