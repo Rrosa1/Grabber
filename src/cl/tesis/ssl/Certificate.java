@@ -1,6 +1,9 @@
 package cl.tesis.ssl;
 
 import cl.tesis.output.CSVWritable;
+import cl.tesis.output.JsonWritable;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import sun.misc.BASE64Encoder;
 import sun.security.provider.X509Factory;
 
@@ -12,7 +15,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class Certificate implements CSVWritable {
+public class Certificate implements CSVWritable, JsonWritable {
     private String ip;
     private boolean validation;
     private String sigantureAlgorithm;
@@ -136,5 +139,11 @@ public class Certificate implements CSVWritable {
 
         return values;
 
+    }
+
+    @Override
+    public String toJson() {
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+        return gson.toJson(this);
     }
 }
