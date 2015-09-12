@@ -2,6 +2,8 @@ package cl.tesis;
 
 import cl.tesis.http.HttpThread;
 import cl.tesis.output.CSVFileWriter;
+import cl.tesis.output.FileWriter;
+import cl.tesis.output.FileWriterFactory;
 import cl.tesis.ssl.SSLCertificateThreads;
 import cl.tesis.input.CSVFileReader;
 
@@ -23,10 +25,13 @@ public class Main {
         CommandLine commandLine = new CommandLine();
         commandLine.parse(args);
 
+        // Define Output Factory
+        FileWriterFactory writerFactory = new FileWriterFactory();
+
         logger.info("Start Scanning");
 
         try (CSVFileReader reader = new CSVFileReader(commandLine.getInput());
-             CSVFileWriter writer = new CSVFileWriter(commandLine.getOutput())) {
+             FileWriter writer = writerFactory.getFileWriter("CSV", commandLine.getOutput())) {
 
             List<Thread> lista = new ArrayList<>();
 
