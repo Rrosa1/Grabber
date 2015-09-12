@@ -1,13 +1,11 @@
 package cl.tesis;
 
 import cl.tesis.http.HttpThread;
-import cl.tesis.output.CSVFileWriter;
+import cl.tesis.input.CSVFileReader;
 import cl.tesis.output.FileWriter;
 import cl.tesis.output.FileWriterFactory;
 import cl.tesis.ssl.SSLCertificateThreads;
-import cl.tesis.input.CSVFileReader;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +29,7 @@ public class Main {
         logger.info("Start Scanning");
 
         try (CSVFileReader reader = new CSVFileReader(commandLine.getInput());
-             FileWriter writer = writerFactory.getFileWriter("CSV", commandLine.getOutput())) {
+             FileWriter writer = writerFactory.getFileWriter(commandLine.getOutputModule(), commandLine.getOutput())) {
 
             List<Thread> lista = new ArrayList<>();
 
