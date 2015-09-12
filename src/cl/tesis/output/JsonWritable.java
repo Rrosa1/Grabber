@@ -1,6 +1,6 @@
 package cl.tesis.output;
 
-public interface JsonWritable {
+public interface JsonWritable extends Writable{
 
     String toJson();
 
