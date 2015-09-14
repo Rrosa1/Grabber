@@ -7,17 +7,19 @@ public class SSLUtil {
     public static HostCertificate getServerCertificate(String ip, boolean validate) throws Throwable {
         SSLConnection sslConnection = null;
         X509Certificate certificate;
+        X509Certificate[] chain;
 
         try {
             sslConnection =  new SSLConnection(ip, 443, validate);
             sslConnection.connect();
-            certificate = (X509Certificate) sslConnection.getServerCertificate();
+            certificate = sslConnection.getServerCertificate();
+            chain = sslConnection.getChainCertificates();
         } finally {
             if (sslConnection != null) {
                 sslConnection.close();
             }
         }
 
-        return new HostCertificate(certificate, ip, validate);
+        return new HostCertificate(certificate, ip, validate, chain);
     }
 }

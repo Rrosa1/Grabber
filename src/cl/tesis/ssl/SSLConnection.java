@@ -9,7 +9,8 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.security.cert.Certificate;
+import java.security.cert.*;
+import java.util.Arrays;
 import java.util.concurrent.*;
 
 
@@ -79,8 +80,13 @@ public class SSLConnection {
         this.socket.close();
     }
 
-    public Certificate getServerCertificate() throws SSLPeerUnverifiedException {
-        return this.session.getPeerCertificates()[0];
+    public X509Certificate getServerCertificate() throws SSLPeerUnverifiedException {
+        return (X509Certificate) this.session.getPeerCertificates()[0];
+    }
+
+    public X509Certificate[] getChainCertificates() throws SSLPeerUnverifiedException {
+        java.security.cert.Certificate[] chain = this.session.getPeerCertificates();
+        return (X509Certificate[]) Arrays.copyOfRange(chain, 1, chain.length);
     }
 
     class TimeoutHandshake implements Callable<Boolean> {
