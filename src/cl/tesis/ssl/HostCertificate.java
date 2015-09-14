@@ -77,16 +77,4 @@ public class HostCertificate extends Certificate implements ListWritable{
                 ", chainAuthority=" + chainAuthority +
                 "} " + super.toString();
     }
-
-    public String getIp() {
-        return ip;
-    }
-
-    public boolean getValidation() {
-        return validation;
-    }
-
-    public String getCertificateAuthority() {
-        return certificateAuthority;
-    }
 }
