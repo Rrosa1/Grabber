@@ -4,6 +4,7 @@ import cl.tesis.http.HttpThread;
 import cl.tesis.input.CSVFileReader;
 import cl.tesis.output.FileWriter;
 import cl.tesis.output.FileWriterFactory;
+import cl.tesis.ssh.SshThread;
 import cl.tesis.ssl.SSLCertificateThreads;
 
 import java.io.IOException;
@@ -48,10 +49,15 @@ public class Main {
                         lista.add(t);
                     }
                     break;
+                case "SSHVersion":
+                    for (int i = 0; i < commandLine.getThreads(); i++) {
+                        Thread t = new SshThread(reader, writer);
+                        t.start();
+                        lista.add(t);
+                    }
                 default:
                     logger.info("Probe module not found");
                     System.exit(0);
-
             }
 
             for (Thread thread : lista) {
