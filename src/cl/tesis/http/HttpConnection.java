@@ -1,6 +1,5 @@
 package cl.tesis.http;
 
-import javax.net.SocketFactory;
 import java.io.IOException;
 import java.net.*;
 import java.util.List;
