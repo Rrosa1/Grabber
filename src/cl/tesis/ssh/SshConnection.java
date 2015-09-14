@@ -23,4 +23,8 @@ public class SshConnection {
     public String getSSHVersion() throws IOException {
         return this.in.readLine();
     }
+
+    public void close() throws IOException {
+        this.socket.close();
+    }
 }

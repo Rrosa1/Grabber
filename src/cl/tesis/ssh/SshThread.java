@@ -33,6 +33,7 @@ public class SshThread extends Thread {
                 SshConnection connection = new SshConnection(columns[IP], PORT);
                 SshHost host = new SshHost(columns[IP], connection.getSSHVersion());
                 this.writer.writeLine(host);
+                connection.close();
             } catch (IOException e) {
                 logger.log(Level.INFO, "IOException {0}", columns[IP]);
             }
