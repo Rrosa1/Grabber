@@ -1,6 +1,7 @@
 package cl.tesis.ssl;
 
-import cl.tesis.output.ListWritable;
+import cl.tesis.output.CSVWritable;
+import cl.tesis.output.JsonWritable;
 
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
@@ -8,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class HostCertificate extends Certificate implements ListWritable{
+public class HostCertificate extends Certificate implements CSVWritable, JsonWritable{
     private String ip;
     private boolean validation;
     private String certificateAuthority;
@@ -25,6 +26,10 @@ public class HostCertificate extends Certificate implements ListWritable{
     }
 
     private List<Certificate> parseChain(X509Certificate[] chain) {
+        if (chain == null) {
+            return null;
+        }
+
         ArrayList<Certificate> chainAuthority = new ArrayList<>();
 
         for (X509Certificate cert: chain) {
@@ -57,7 +62,7 @@ public class HostCertificate extends Certificate implements ListWritable{
 
         values.add(this.ip);
         values.add(this.validation + "");
-        values.add(this.getSigantureAlgorithm());
+        values.add(this.getSignatureAlgorithm());
         values.add(this.getExpiredTime().toString());
         values.add(this.getOrganizationName());
         values.add(this.getOrganizationURL());

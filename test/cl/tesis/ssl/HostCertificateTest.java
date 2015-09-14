@@ -22,7 +22,7 @@ public class HostCertificateTest extends TestCase {
 
         CertificateFactory cf = CertificateFactory.getInstance("X.509");
         x509Cert = (X509Certificate) cf.generateCertificate(buffered);
-        cert2048 = new HostCertificate(x509Cert, "1.1.1.1", true);
+        cert2048 = new HostCertificate(x509Cert, "1.1.1.1", true, null);
 
     }
 
@@ -34,9 +34,9 @@ public class HostCertificateTest extends TestCase {
         assertEquals(parameters.get(3), "Expired Time");
         assertEquals(parameters.get(4), "Organization Name");
         assertEquals(parameters.get(5), "Organization URL");
-        assertEquals(parameters.get(6), "HostCertificate Authority");
+        assertEquals(parameters.get(6), "Certificate Authority");
         assertEquals(parameters.get(7), "Key Bits");
-        assertEquals(parameters.get(8), "PEM HostCertificate");
+        assertEquals(parameters.get(8), "PEM Certificate");
 
     }
 
