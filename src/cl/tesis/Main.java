@@ -1,10 +1,11 @@
 package cl.tesis;
 
-import cl.tesis.output.CSVFileWriter;
-import cl.tesis.ssl.SSLCertificateThreads;
+import cl.tesis.http.HttpThread;
 import cl.tesis.input.CSVFileReader;
+import cl.tesis.output.FileWriter;
+import cl.tesis.output.FileWriterFactory;
+import cl.tesis.ssl.SSLCertificateThreads;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +23,13 @@ public class Main {
         CommandLine commandLine = new CommandLine();
         commandLine.parse(args);
 
+        // Define Output Factory
+        FileWriterFactory writerFactory = new FileWriterFactory();
+
         logger.info("Start Scanning");
 
         try (CSVFileReader reader = new CSVFileReader(commandLine.getInput());
-             CSVFileWriter writer =  new CSVFileWriter(commandLine.getOutput())) {
+             FileWriter writer = writerFactory.getFileWriter(commandLine.getOutputModule(), commandLine.getOutput())) {
 
             List<Thread> lista = new ArrayList<>();
 
@@ -33,6 +37,13 @@ public class Main {
                 case "SSLCertificate":
                     for (int i = 0; i < commandLine.getThreads(); i++) {
                         Thread t = new SSLCertificateThreads(reader, writer);
+                        t.start();
+                        lista.add(t);
+                    }
+                    break;
+                case "HTTPHeader":
+                    for (int i = 0; i < commandLine.getThreads(); i++) {
+                        Thread t = new HttpThread(reader, writer);
                         t.start();
                         lista.add(t);
                     }

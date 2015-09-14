@@ -1,6 +1,9 @@
 package cl.tesis.ssl;
 
-import cl.tesis.output.ListWritable;
+import cl.tesis.output.CSVWritable;
+import cl.tesis.output.JsonWritable;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import sun.misc.BASE64Encoder;
 import sun.security.provider.X509Factory;
 
@@ -11,8 +14,8 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Certificate implements ListWritable {
-    private String sigantureAlgorithm;
+public class Certificate implements CSVWritable, JsonWritable {
+    private String signatureAlgorithm;
     private Date expiredTime;
     private String organizationName;
     private String organizationURL;
@@ -22,7 +25,7 @@ public class Certificate implements ListWritable {
     public Certificate(X509Certificate x509Certificate) {
         Map<String, String> subjectMap = parserX500Principal(x509Certificate.getSubjectX500Principal());
 
-        this.sigantureAlgorithm = x509Certificate.getSigAlgName();
+        this.signatureAlgorithm = x509Certificate.getSigAlgName();
         this.expiredTime = x509Certificate.getNotAfter();
         this.organizationName = subjectMap.get("O");
         this.organizationURL = subjectMap.get("CN");
@@ -93,7 +96,7 @@ public class Certificate implements ListWritable {
     public List<String> getValueList() {
         ArrayList<String> values = new ArrayList<>();
 
-        values.add(this.sigantureAlgorithm);
+        values.add(this.signatureAlgorithm);
         values.add(this.expiredTime.toString());
         values.add(this.organizationName);
         values.add(this.organizationURL);
@@ -106,7 +109,7 @@ public class Certificate implements ListWritable {
     @Override
     public String toString() {
         return "Certificate{" +
-                "sigantureAlgorithm='" + sigantureAlgorithm + '\'' +
+                "signatureAlgorithm='" + signatureAlgorithm + '\'' +
                 ", expiredTime=" + expiredTime +
                 ", organizationName='" + organizationName + '\'' +
                 ", organizationURL='" + organizationURL + '\'' +
@@ -115,8 +118,14 @@ public class Certificate implements ListWritable {
                 '}';
     }
 
-    public String getSigantureAlgorithm() {
-        return sigantureAlgorithm;
+    @Override
+    public String toJson() {
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+        return gson.toJson(this);
+    }
+
+    public String getSignatureAlgorithm() {
+        return signatureAlgorithm;
     }
 
     public Date getExpiredTime() {

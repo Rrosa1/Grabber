@@ -4,7 +4,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SimpleListWritable implements ListWritable{
+public class SimpleListWritable implements CSVWritable {
 
     @Override
     public List<String> getParameterList() {

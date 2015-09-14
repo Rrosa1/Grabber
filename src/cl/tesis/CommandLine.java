@@ -13,6 +13,9 @@ public class CommandLine {
     @Option(name = "-o", aliases = {"--output"}, usage = "Output file", metaVar = "File", required = true, help = true)
     private String output;
 
+    @Option(name = "-om", aliases = {"--outputModule"}, usage = "Output file format", metaVar = "String", required = false, help = true)
+    private String outputModule = "CSV";
+
     @Option(name = "-m", aliases = {"--module"}, usage = "Set the probe module", metaVar = "String", required = true, help = true)
     private String module;
 
@@ -25,6 +28,10 @@ public class CommandLine {
 
     public String getOutput() {
         return output;
+    }
+
+    public String getOutputModule() {
+        return outputModule;
     }
 
     public int getThreads() { return threads; }

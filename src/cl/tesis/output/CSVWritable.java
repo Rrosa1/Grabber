@@ -2,7 +2,7 @@ package cl.tesis.output;
 
 import java.util.List;
 
-public interface ListWritable {
+public interface CSVWritable extends Writable{
 
     List<String> getParameterList();
 
