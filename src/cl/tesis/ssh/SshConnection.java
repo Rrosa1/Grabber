@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
-public class SSHConnection {
+public class SshConnection {
 
     private static final int TIMEOUT = 60000;
     private static SocketFactory socketFactory = SocketFactory.getDefault();
@@ -14,7 +14,7 @@ public class SSHConnection {
     private Socket socket;
     private BufferedReader in;
 
-    public SSHConnection(String host, int port) throws IOException {
+    public SshConnection(String host, int port) throws IOException {
         this.socket = socketFactory.createSocket(host, port);
         this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         socket.setSoTimeout(TIMEOUT);
