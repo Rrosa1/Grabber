@@ -26,8 +26,8 @@ public class HttpThread extends Thread {
         while((columns = this.reader.nextLine()) != null) {
             try {
                 HttpConnection connection = new HttpConnection(columns[IP]);
-                HttpHeader header = connection.getHeader();
-                this.writer.writeLine(header);
+                HttpResponse response = new HttpResponse(columns[IP], connection.getHeader() , connection.getIndex());
+                this.writer.writeLine(response);
             } catch (IOException e) {
                 logger.log(Level.INFO, "IOException {0}", columns[IP]);
             }
