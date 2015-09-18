@@ -49,10 +49,4 @@ public class HttpConnection {
 
         return response.toString();
     }
-
-    public static void main(String[] args) throws IOException {
-        HttpConnection con = new HttpConnection("www.google.cl");
-        HttpResponse response =  new HttpResponse("www.google.cl", con.getHeader(), con.getIndex());
-        System.out.println(response.toJson());
-    }
 }
