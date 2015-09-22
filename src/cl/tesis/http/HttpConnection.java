@@ -6,8 +6,11 @@ import java.io.InputStreamReader;
 import java.net.*;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class HttpConnection {
+    private static final Logger logger = Logger.getLogger(HttpConnection.class.getName());
 
     private final static String HTTP = "http";
     private final static String GET = "GET";
@@ -37,15 +40,21 @@ public class HttpConnection {
         return this.connection.getHeaderFields();
     }
 
-    public String getIndex() throws IOException {
-        BufferedReader in = new BufferedReader(new InputStreamReader(this.connection.getInputStream()));
-        String inputLine;
+    public String getIndex() {
         StringBuilder response = new StringBuilder();
 
-        while ((inputLine = in.readLine()) != null) {
-            response.append(inputLine);
+        try {
+            BufferedReader in = new BufferedReader(new InputStreamReader(this.connection.getInputStream()));
+            String inputLine;
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+        } catch (IOException e) {
+            logger.log(Level.INFO, "Error getting index {0}", this.url.getHost());
+            return null;
         }
-        in.close();
 
         return response.toString();
     }
