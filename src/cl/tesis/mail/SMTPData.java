@@ -11,15 +11,19 @@ import java.util.List;
 public class SMTPData implements CSVWritable, JsonWritable{
 
     private String ip;
-    private String header;
+    private String start;
     private String help;
     private String ehlo;
 
-    public SMTPData(String ip, String header, String help, String ehlo) {
+    public SMTPData(String ip, String start, String help, String ehlo) {
         this.ip = ip;
-        this.header = header;
+        this.start = start;
         this.help = help;
         this.ehlo = ehlo;
+    }
+
+    public boolean supportTLS() {
+        return this.ehlo.contains("STARTTLS");
     }
 
     @Override
@@ -27,7 +31,7 @@ public class SMTPData implements CSVWritable, JsonWritable{
         ArrayList<String> parameters = new ArrayList<>();
 
         parameters.add("ip");
-        parameters.add("header");
+        parameters.add("start");
         parameters.add("help");
         parameters.add("ehlo");
 
@@ -39,7 +43,7 @@ public class SMTPData implements CSVWritable, JsonWritable{
         ArrayList<String> values =  new ArrayList<>();
 
         values.add(this.ip);
-        values.add(this.header);
+        values.add(this.start);
         values.add(this.help);
         values.add(this.ehlo);
 

@@ -57,9 +57,9 @@ public class SMTP {
 
     public static void main(String[] args) throws IOException {
         SMTP smtp =  new SMTP("192.80.24.2");
-        System.out.println(smtp.startSMTP());
-        System.out.println(smtp.sendHELP());
-        System.out.println(smtp.sendEHLO());
+        SMTPData data = new SMTPData("192.80.24.2", smtp.startSMTP(), smtp.sendHELP(), smtp.sendEHLO());
+        System.out.println(data.toJson());
+        System.out.println(data.supportTLS());
     }
 
 }
