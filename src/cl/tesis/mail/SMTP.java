@@ -22,8 +22,7 @@ public class SMTP {
         this.in = socket.getInputStream();
         this.out = new DataOutputStream(socket.getOutputStream());
 
-//        this.socket.setSoTimeout(30000);
-
+//  TODO set timeout
     }
 
     public SMTP(String host) throws IOException {
