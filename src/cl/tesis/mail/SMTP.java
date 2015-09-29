@@ -1,15 +1,20 @@
 package cl.tesis.mail;
 
+import cl.tesis.tls.TLS;
+import cl.tesis.tls.exception.HandshakeHeaderException;
+import cl.tesis.tls.exception.StartTLSException;
+import cl.tesis.tls.exception.TLSHeaderException;
+
 import java.io.*;
 import java.net.Socket;
 
-
 public class SMTP {
+
+    public static final String STARTTLS = "STARTTLS\r\n";
 
     private static final int DEFAULT_PORT = 25;
     private static final String HELP = "HELP\r\n";
     private static final String EHLO = "EHLO example.cl\r\n";
-
 
     private String host;
     private Socket socket;
@@ -55,11 +60,24 @@ public class SMTP {
         return new String(buffer, 0, readBytes);
     }
 
-    public static void main(String[] args) throws IOException {
+    public Socket getSocket() {
+        return socket;
+    }
+
+    public InputStream getIn() {
+        return in;
+    }
+
+    public DataOutputStream getOut() {
+        return out;
+    }
+
+    public static void main(String[] args) throws IOException, StartTLSException, HandshakeHeaderException, TLSHeaderException {
         SMTP smtp =  new SMTP("192.80.24.2");
         SMTPData data = new SMTPData("192.80.24.2", smtp.startSMTP(), smtp.sendHELP(), smtp.sendEHLO());
-        System.out.println(data.toJson());
-        System.out.println(data.supportTLS());
+
+        TLS tls = new TLS(smtp.getSocket(), smtp.getIn(), smtp.getOut(), SMTP.STARTTLS);
+        tls.doHandshake();
     }
 
 }
