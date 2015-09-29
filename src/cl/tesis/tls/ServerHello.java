@@ -27,12 +27,12 @@ public class ServerHello {
         /* Parsing headers */
         this.tlsHeader = Arrays.copyOfRange(array, 0, TLS_HEADER_LENGTH);
         int tlsBodyLength = this.tlsHeader[3] << 8 | this.tlsHeader[4];
-        if (!checkTLSHeader(tlsHeader)) {
+        if (!checkTLSHeader()) {
             throw new TLSHeaderException("Error in Server Hello header");
         }
 
         this.handshakeHeader = Arrays.copyOfRange(array, TLS_HEADER_LENGTH, TLS_HEADER_LENGTH + HANDSHAKE_HEADER_LENGTH);
-        if (!checkHandshakeHeader(handshakeHeader))
+        if (!checkHandshakeHeader())
             throw new HandshakeHeaderException("Error in Server Hello header");
         this.handshakeBody = Arrays.copyOfRange(array, TLS_HEADER_LENGTH + HANDSHAKE_HEADER_LENGTH, tlsBodyLength + TLS_HEADER_LENGTH);
 
@@ -44,12 +44,12 @@ public class ServerHello {
         this.extension =  this.handshakeBody[this.handshakeBody.length - 1];
     }
 
-    private boolean checkTLSHeader(byte[] tlsHeader) {
-        return tlsHeader[0] == 0x16;
+    private boolean checkTLSHeader() {
+        return this.tlsHeader[0] == 0x16;
     }
 
-    private boolean checkHandshakeHeader(byte[] handshakeHeader) {
-        return handshakeHeader[0] == 0x02;
+    private boolean checkHandshakeHeader() {
+        return this.handshakeHeader[0] == 0x02;
     }
 
     public int endOfServerHello() {
