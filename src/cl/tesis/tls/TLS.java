@@ -48,7 +48,6 @@ public class TLS {
         System.out.println(certificateMessage);
     }
 
-//  TODO handle the errors
     public boolean startHandshake() throws IOException {
         this.out.write(this.startTLS.getBytes());
         int readBytes = this.in.read(buffer);
