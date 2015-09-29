@@ -1,6 +1,7 @@
 package cl.tesis.tls;
 
 import cl.tesis.tls.exception.StartTLSException;
+import cl.tesis.tls.exception.TLSHeaderException;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -27,7 +28,7 @@ public class TLS {
     }
 
 
-    public void doHandshake() throws IOException, StartTLSException {
+    public void doHandshake() throws IOException, StartTLSException, TLSHeaderException {
 
         /* start handshake */
         if (!this.startHandshake()) {
