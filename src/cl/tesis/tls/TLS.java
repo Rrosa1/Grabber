@@ -1,5 +1,7 @@
 package cl.tesis.tls;
 
+import cl.tesis.tls.exception.StartTLSException;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,12 +27,11 @@ public class TLS {
     }
 
 
-    public void doHandshake() throws IOException {
+    public void doHandshake() throws IOException, StartTLSException {
 
         /* start handshake */
         if (!this.startHandshake()) {
-//            TODO throw an exception
-            return;
+            throw new StartTLSException();
         }
 
         /* client hello */
