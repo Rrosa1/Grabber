@@ -22,7 +22,7 @@ public class CertificateMessage {
         /* TLS */
         this.tlsHeader = Arrays.copyOfRange(array, startMessage, startMessage + TLS_HEADER_LENGTH);
         int tlsBodyLength = this.tlsHeader[3] << 8 | this.tlsHeader[4];
-        if (!checkHandshakeHeader())
+        if (!checkTLSHeader())
             throw new TLSHeaderException("Error in Certificate header");
 
         /* Handshake */

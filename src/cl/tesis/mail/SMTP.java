@@ -10,8 +10,6 @@ import java.net.Socket;
 
 public class SMTP {
 
-    public static final String STARTTLS = "STARTTLS\r\n";
-
     private static final int DEFAULT_PORT = 25;
     private static final String HELP = "HELP\r\n";
     private static final String EHLO = "EHLO example.cl\r\n";
@@ -76,8 +74,8 @@ public class SMTP {
         SMTP smtp =  new SMTP("192.80.24.2");
         SMTPData data = new SMTPData("192.80.24.2", smtp.startSMTP(), smtp.sendHELP(), smtp.sendEHLO());
 
-        TLS tls = new TLS(smtp.getSocket(), smtp.getIn(), smtp.getOut(), SMTP.STARTTLS);
-        tls.doHandshake();
+        TLS tls = new TLS(smtp.getSocket(), smtp.getIn(), smtp.getOut());
+        tls.doMailHandshake(StartTLS.SMTP);
     }
 
 }

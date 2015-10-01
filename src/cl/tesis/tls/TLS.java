@@ -1,5 +1,6 @@
 package cl.tesis.tls;
 
+import cl.tesis.mail.StartTLS;
 import cl.tesis.tls.exception.HandshakeHeaderException;
 import cl.tesis.tls.exception.StartTLSException;
 import cl.tesis.tls.exception.TLSHeaderException;
@@ -13,28 +14,20 @@ public class TLS {
 
     private static final int BUFFER_SIZE = 4098;
 
-
     private Socket socket;
     private InputStream in;
     private DataOutputStream out;
-    private String startTLS;
     private byte[] buffer;
 
-    public TLS(Socket socket, InputStream in, DataOutputStream out, String startTLS) {
+    public TLS(Socket socket, InputStream in, DataOutputStream out) {
         this.socket = socket;
         this.in = in;
         this.out = out;
-        this.startTLS = startTLS;
         this.buffer = new byte[BUFFER_SIZE];
     }
 
 
-    public void doHandshake() throws IOException, StartTLSException, TLSHeaderException, HandshakeHeaderException {
-
-        /* start handshake */
-        if (!this.startHandshake()) {
-            throw new StartTLSException();
-        }
+    public void doHandshake() throws IOException, TLSHeaderException, HandshakeHeaderException {
 
         /* client hello */
         this.out.write(new ClientHello(TLSVersion.TLS_11, TLSCipherSuites.test).toByte());
@@ -50,11 +43,21 @@ public class TLS {
         System.out.println(certificateMessage);
     }
 
-    public boolean startHandshake() throws IOException {
-        this.out.write(this.startTLS.getBytes());
+    public void doMailHandshake(StartTLS start) throws IOException, StartTLSException, TLSHeaderException, HandshakeHeaderException {
+           /* start handshake */
+        if (!this.startHandshake(start)) {
+            throw new StartTLSException();
+        }
+
+        this.doHandshake();
+
+    }
+
+    public boolean startHandshake(StartTLS start) throws IOException {
+        this.out.write(start.getMessage().getBytes());
         int readBytes = this.in.read(buffer);
         String responce = new String(buffer,0,readBytes);
 
-        return responce.contains("220");
+        return responce.contains(start.getResponce());
     }
 }
