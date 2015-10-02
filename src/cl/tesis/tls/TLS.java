@@ -35,6 +35,7 @@ public class TLS {
         /* client hello */
         this.out.write(new ClientHello(TLSVersion.TLS_11, TLSCipherSuites.test).toByte());
         int readBytes = this.readAllAvailable();
+        System.out.println(readBytes);
         TLSUtil.printHexByte(buffer, readBytes);
 
         /* server hello */
