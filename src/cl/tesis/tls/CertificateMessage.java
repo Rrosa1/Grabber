@@ -21,7 +21,7 @@ public class CertificateMessage {
     public CertificateMessage(byte[] array, int startMessage) throws TLSHeaderException, HandshakeHeaderException {
         /* TLS */
         this.tlsHeader = Arrays.copyOfRange(array, startMessage, startMessage + TLS_HEADER_LENGTH);
-        int tlsBodyLength = this.tlsHeader[3] << 8 | this.tlsHeader[4];
+        int tlsBodyLength = (this.tlsHeader[3] & 0xFF) << 8 | (this.tlsHeader[4] & 0xFF);
         if (!checkTLSHeader())
             throw new TLSHeaderException("Error in Certificate header");
 
@@ -31,12 +31,13 @@ public class CertificateMessage {
             throw new HandshakeHeaderException("Error in Certificate header");
         this.handshakeBody =  Arrays.copyOfRange(array, startMessage + TLS_HEADER_LENGTH + HANDSHAKE_HEADER_LENGTH, startMessage + tlsBodyLength + TLS_HEADER_LENGTH);
 
-        int certificateLengthList = this.handshakeBody[0] << 16 | this.handshakeBody[1] << 8 | this.handshakeBody[2];
+        /* Certificate List */
+        int certificateLengthList = (this.handshakeBody[0] & 0xFF) << 16 | (this.handshakeBody[1] & 0xFF) << 8 | (this.handshakeBody[2] & 0xFF);
         this.certificateList = Arrays.copyOfRange(this.handshakeBody, 3, certificateLengthList + 3);
 
         this.certificates = new ArrayList<>();
-        for (int i = 0; i < certificateList.length;) {
-            int certLength = this.certificateList[i] << 16 | this.certificateList[i + 1] << 8 | this.certificateList[i + 2];
+        for (int i = 0; i < certificateLengthList;) {
+            int certLength = (this.certificateList[i] & 0xFF) << 16 | (this.certificateList[i + 1] & 0xFF) << 8 | (this.certificateList[i + 2] & 0xFF);
             byte[] certificate = Arrays.copyOfRange(this.certificateList, i + 3, i + certLength + 3);
             certificates.add(certificate);
             i += certLength + 3;

@@ -74,7 +74,7 @@ public class SMTP {
         SMTP smtp =  new SMTP("192.80.24.2");
         SMTPData data = new SMTPData("192.80.24.2", smtp.startSMTP(), smtp.sendHELP(), smtp.sendEHLO());
 
-        TLS tls = new TLS(smtp.getSocket(), smtp.getIn(), smtp.getOut());
+        TLS tls = new TLS(smtp.getSocket());
         tls.doMailHandshake(StartTLS.SMTP);
     }
 
