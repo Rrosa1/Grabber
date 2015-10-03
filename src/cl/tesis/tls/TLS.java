@@ -33,7 +33,7 @@ public class TLS {
     public void doHandshake() throws IOException, TLSHeaderException, HandshakeHeaderException {
 
         /* client hello */
-        this.out.write(new ClientHello(TLSVersion.TLS_11, TLSCipherSuites.test).toByte());
+        this.out.write(new ClientHello(TLSVersion.TLS_11.getStringVersion(), TLSCipherSuites.test).toByte());
         int readBytes = this.readAllAvailable();
         System.out.println(readBytes);
         TLSUtil.printHexByte(buffer, readBytes);
