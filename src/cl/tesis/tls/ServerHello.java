@@ -26,7 +26,7 @@ public class ServerHello {
     public ServerHello(byte[] array) throws TLSHeaderException, HandshakeHeaderException {
         /* Parsing headers */
         this.tlsHeader = Arrays.copyOfRange(array, 0, TLS_HEADER_LENGTH);
-        int tlsBodyLength = this.tlsHeader[3] << 8 | this.tlsHeader[4];
+        int tlsBodyLength = (this.tlsHeader[3] & 0xFF) << 8 | (this.tlsHeader[4] & 0xFF);
         if (!checkTLSHeader()) {
             throw new TLSHeaderException("Error in Server Hello header");
         }
@@ -55,6 +55,10 @@ public class ServerHello {
 
     public int endOfServerHello() {
         return TLS_HEADER_LENGTH + HANDSHAKE_HEADER_LENGTH + this.handshakeBody.length;
+    }
+
+    public byte[] getProtocolVersion() {
+        return protocolVersion;
     }
 
     @Override

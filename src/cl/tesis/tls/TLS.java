@@ -8,9 +8,10 @@ import cl.tesis.tls.exception.TLSHeaderException;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetAddress;
 import java.net.Socket;
-import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.util.Arrays;
 
 public class TLS {
 
@@ -54,7 +55,40 @@ public class TLS {
         }
 
         this.doHandshake();
+    }
 
+    public void checkTLSVersions(StartTLS start) throws IOException, StartTLSException {
+        InetAddress address = this.socket.getInetAddress();
+        int port = this.socket.getPort();
+
+        for (TLSVersion tls : TLSVersion.values()) {
+            this.socket = new Socket(address, port);
+            this.socket.setSoTimeout(3000);
+            this.in = socket.getInputStream();
+            this.out =  new DataOutputStream(socket.getOutputStream());
+
+            ServerHello serverHello;
+
+            this.in.read(buffer);
+            out.write(start.getMessage().getBytes());
+            this.in.read(buffer);
+
+            out.write(new ClientHello(tls.getStringVersion(), TLSCipherSuites.test).toByte());
+
+            try {
+                this.readAllAvailable();
+                serverHello = new ServerHello(buffer);
+            } catch (TLSHeaderException | HandshakeHeaderException e) {
+                System.out.println(tls.toString() + " : No");
+                continue;
+            }
+
+            if (Arrays.equals(tls.getByteVersion(), serverHello.getProtocolVersion())) {
+                System.out.println(tls.getName() + " : Yes");
+            } else {
+                System.out.println(tls.getName() + " : No");
+            }
+        }
     }
 
     private boolean startHandshake(StartTLS start) throws IOException {
@@ -79,4 +113,9 @@ public class TLS {
         return totalRead;
     }
 
+    public static void main(String[] args) throws IOException, StartTLSException {
+        Socket s =  new Socket("64.64.18.120", 110);
+        TLS tls = new TLS(s);
+        tls.checkTLSVersions(StartTLS.POP3);
+    }
 }

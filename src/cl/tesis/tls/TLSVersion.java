@@ -3,7 +3,7 @@ package cl.tesis.tls;
 import java.util.Arrays;
 
 public enum TLSVersion {
-    SSL_30("SSL 3.0", "0300", new byte[]{0x03, 0x00}),
+//    SSL_30("SSL 3.0", "0300", new byte[]{0x03, 0x00}),
     TLS_10("TLS 1.0", "0301", new byte[]{0x03, 0x01}),
     TLS_11("TLS 1.1", "0302", new byte[]{0x03, 0x02}),
     TLS_12("TLS 1.2", "0303", new byte[]{0x03, 0x03});
@@ -28,6 +28,11 @@ public enum TLSVersion {
 
     public byte[] getByteVersion() {
         return byteVersion;
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
     }
 
     public static String getNameByByte(byte[] version) {
