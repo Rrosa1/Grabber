@@ -2,6 +2,7 @@ package cl.tesis.mail;
 
 import cl.tesis.output.CSVWritable;
 import cl.tesis.output.JsonWritable;
+import cl.tesis.ssl.HostCertificate;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -14,6 +15,7 @@ public class SMTPData implements CSVWritable, JsonWritable{
     private String start;
     private String help;
     private String ehlo;
+//    private HostCertificate certificate;
 
     public SMTPData(String ip, String start, String help, String ehlo) {
         this.ip = ip;
