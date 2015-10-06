@@ -19,7 +19,7 @@ public class TLSCipherSuites {
 
 
 
-    /* The following cipher suite definitions are used fro server-authenticate */
+    /* The following cipher suite definitions are used from server-authenticate */
     public static final String TLS_DH_DSS_WITH_3DES_EDE_CBC_SHA = "000D";
     public static final String TLS_DH_RSA_WITH_3DES_EDE_CBC_SHA = "0010";
     public static final String TLS_DHE_DSS_WITH_3DES_EDE_CBC_SHA = "0013";
@@ -53,6 +53,10 @@ public class TLSCipherSuites {
     public static final String TLS_ECDHE_RSA_WITH_RC4_128_SHA = "C011";
 
 
-    public static final String test = TLS_DHE_RSA_WITH_AES_128_CBC_SHA + TLS_ECDHE_RSA_WITH_RC4_128_SHA;
+    public static final String test = TLS_DHE_RSA_WITH_AES_128_CBC_SHA + TLS_ECDHE_RSA_WITH_RC4_128_SHA + TLS_RSA_WITH_NULL_MD5 + TLS_RSA_WITH_NULL_SHA + TLS_RSA_WITH_NULL_SHA256 +
+            TLS_RSA_WITH_RC4_128_MD5 + TLS_RSA_WITH_RC4_128_SHA + TLS_RSA_WITH_3DES_EDE_CBC_SHA + TLS_RSA_WITH_AES_128_CBC_SHA + TLS_RSA_WITH_AES_256_CBC_SHA;
+
+
+
 
 }

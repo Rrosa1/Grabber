@@ -63,7 +63,7 @@ public class TLS {
 
         for (TLSVersion tls : TLSVersion.values()) {
             this.socket = new Socket(address, port);
-            this.socket.setSoTimeout(3000);
+            this.socket.setSoTimeout(10000);
             this.in = socket.getInputStream();
             this.out =  new DataOutputStream(socket.getOutputStream());
 
@@ -76,9 +76,9 @@ public class TLS {
             out.write(new ClientHello(tls.getStringVersion(), TLSCipherSuites.test).toByte());
 
             try {
-                this.readAllAvailable();
+                this.in.read(buffer);
                 serverHello = new ServerHello(buffer);
-            } catch (TLSHeaderException | HandshakeHeaderException e) {
+            } catch (TLSHeaderException | HandshakeHeaderException | SocketTimeoutException e) {
                 System.out.println(tls.toString() + " : No");
                 continue;
             }
@@ -114,7 +114,7 @@ public class TLS {
     }
 
     public static void main(String[] args) throws IOException, StartTLSException {
-        Socket s =  new Socket("64.64.18.120", 110);
+        Socket s =  new Socket("64.64.18.121", 110);
         TLS tls = new TLS(s);
         tls.checkTLSVersions(StartTLS.POP3);
     }
