@@ -11,22 +11,24 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
 
-public class POP3 {
+public class POP3 extends Mail{
+
+    private static final int DEFAULT_PORT = 110;
+
+    public POP3(String host, int port) throws IOException {
+        super(host, port);
+    }
+
+    public POP3(String host) throws IOException {
+        this(host, DEFAULT_PORT);
+    }
 
     public static void main(String[] args) throws IOException, StartTLSException, HandshakeHeaderException, TLSHeaderException {
-        Socket socket =  new Socket("64.64.18.121", 110);
-        InputStream in =  socket.getInputStream();
-        DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+        POP3 pop3 =  new POP3("64.64.18.121");
+        System.out.println(pop3.startProtocol());
 
-        byte[] buf = new byte[4096];
-        int readBytes = in.read(buf);
-        System.out.println(new String(buf, 0, readBytes));
 
-//        out.write("STLS\r\n".getBytes());
-//        readBytes = in.read(buf);
-//        System.out.println(new String(buf, 0, readBytes));
-
-        TLS tls = new TLS(socket);
+        TLS tls = new TLS(pop3.getSocket());
         tls.doMailHandshake(StartTLS.POP3);
     }
 
