@@ -51,7 +51,6 @@ public class TLS {
 
     public void doMailHandshake(StartTLS start) throws IOException, StartTLSException, TLSHeaderException, HandshakeHeaderException {
         /* Start mail handshake */
-        this.readFirstLine();
         if (!this.startMailHandshake(start)) {
             throw new StartTLSException();
         }
