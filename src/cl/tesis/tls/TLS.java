@@ -16,6 +16,7 @@ import java.util.Arrays;
 public class TLS {
 
     private static final int BUFFER_SIZE = 8196;
+    public static final int TIMEOUT = 5000;
 
     private Socket socket;
     private InputStream in;
@@ -24,7 +25,7 @@ public class TLS {
 
     public TLS(Socket socket) throws IOException {
         this.socket = socket;
-        this.socket.setSoTimeout(1000);
+        this.socket.setSoTimeout(5000);
         this.in = this.socket.getInputStream();
         this.out = new DataOutputStream(this.socket.getOutputStream());
         this.buffer = new byte[BUFFER_SIZE];
@@ -49,52 +50,68 @@ public class TLS {
     }
 
     public void doMailHandshake(StartTLS start) throws IOException, StartTLSException, TLSHeaderException, HandshakeHeaderException {
-           /* start handshake */
-        if (!this.startHandshake(start)) {
+        /* Start mail handshake */
+        this.readFirstLine();
+        if (!this.startMailHandshake(start)) {
             throw new StartTLSException();
         }
 
         this.doHandshake();
     }
 
-    public void checkTLSVersions(StartTLS start) throws IOException, StartTLSException {
+    public ScanTLSVersion checkTLSVersions(StartTLS start) throws IOException, StartTLSException {
+        ScanTLSVersion scanTLSVersion = new ScanTLSVersion();
         InetAddress address = this.socket.getInetAddress();
+        ServerHello serverHello;
         int port = this.socket.getPort();
 
         for (TLSVersion tls : TLSVersion.values()) {
-            this.socket = new Socket(address, port);
-            this.socket.setSoTimeout(10000);
-            this.in = socket.getInputStream();
-            this.out =  new DataOutputStream(socket.getOutputStream());
+            /* Open and setting the connection */
+            this.newConnection(address, port);
 
-            ServerHello serverHello;
+            this.readFirstLine();
+            this.startMailHandshake(start);
 
-            this.in.read(buffer);
-            out.write(start.getMessage().getBytes());
-            this.in.read(buffer);
-
-            out.write(new ClientHello(tls.getStringVersion(), TLSCipherSuites.test).toByte());
+            this.out.write(new ClientHello(tls.getStringVersion(), TLSCipherSuites.test).toByte());
 
             try {
                 this.in.read(buffer);
                 serverHello = new ServerHello(buffer);
             } catch (TLSHeaderException | HandshakeHeaderException | SocketTimeoutException e) {
-                System.out.println(tls.toString() + " : No");
+                scanTLSVersion.setTLSVersion(tls, false);
                 continue;
             }
 
             if (Arrays.equals(tls.getByteVersion(), serverHello.getProtocolVersion())) {
-                System.out.println(tls.getName() + " : Yes");
+                scanTLSVersion.setTLSVersion(tls, true);
             } else {
-                System.out.println(tls.getName() + " : No");
+                scanTLSVersion.setTLSVersion(tls,false);
             }
+        }
+
+        return scanTLSVersion;
+    }
+
+    private void readFirstLine() throws IOException {
+        this.socket.setSoTimeout(TIMEOUT * 2);
+        try {
+            in.read(this.buffer);
+        } catch (SocketTimeoutException e){
+        } finally {
+            this.socket.setSoTimeout(TIMEOUT);
         }
     }
 
-    private boolean startHandshake(StartTLS start) throws IOException {
+    private void newConnection(InetAddress address, int port) throws IOException {
+        this.socket = new Socket(address, port);
+        this.in = socket.getInputStream();
+        this.out =  new DataOutputStream(socket.getOutputStream());
+    }
+
+    private boolean startMailHandshake(StartTLS start) throws IOException {
         this.out.write(start.getMessage().getBytes());
-        int readBytes = this.in.read(buffer);
-        String responce = new String(buffer,0,readBytes);
+        int readBytes = this.in.read(this.buffer);
+        String responce = new String(this.buffer,0,readBytes);
 
         return responce.contains(start.getResponce());
     }
@@ -116,6 +133,6 @@ public class TLS {
     public static void main(String[] args) throws IOException, StartTLSException {
         Socket s =  new Socket("64.64.18.121", 110);
         TLS tls = new TLS(s);
-        tls.checkTLSVersions(StartTLS.POP3);
+        System.out.println(tls.checkTLSVersions(StartTLS.POP3).toJson());
     }
 }
