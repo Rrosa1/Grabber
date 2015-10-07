@@ -2,6 +2,7 @@ package cl.tesis.mail;
 
 import cl.tesis.output.CSVWritable;
 import cl.tesis.output.JsonWritable;
+import cl.tesis.ssl.HostCertificate;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -12,10 +13,15 @@ public class POP3Data implements JsonWritable, CSVWritable{
 
     private String ip;
     private String start;
+    private HostCertificate certificate;
 
     public POP3Data(String ip, String start) {
         this.ip = ip;
         this.start = start;
+    }
+
+    public void setCertificate(HostCertificate certificate) {
+        this.certificate = certificate;
     }
 
     @Override

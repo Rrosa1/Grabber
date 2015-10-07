@@ -6,10 +6,11 @@ import cl.tesis.tls.exception.HandshakeHeaderException;
 import cl.tesis.tls.exception.StartTLSException;
 import cl.tesis.tls.exception.TLSHeaderException;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.Socket;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.cert.CertificateException;
 
 public class POP3 extends Mail{
 
@@ -23,13 +24,14 @@ public class POP3 extends Mail{
         this(host, DEFAULT_PORT);
     }
 
-    public static void main(String[] args) throws IOException, StartTLSException, HandshakeHeaderException, TLSHeaderException {
+    public static void main(String[] args) throws IOException, StartTLSException, HandshakeHeaderException, TLSHeaderException, CertificateException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException {
         POP3 pop3 =  new POP3("64.64.18.121");
-        System.out.println(pop3.startProtocol());
-
+        POP3Data data = new POP3Data("64.64.18.121", pop3.startProtocol());
 
         TLS tls = new TLS(pop3.getSocket());
-        tls.doMailHandshake(StartTLS.POP3);
+        data.setCertificate(tls.doMailHandshake(StartTLS.POP3));
+
+        System.out.println(data.toJson());
     }
 
 }
