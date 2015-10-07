@@ -60,6 +60,10 @@ public class CertificateMessage {
         return certs + "]";
     }
 
+    public List<byte[]> getCertificates() {
+        return certificates;
+    }
+
     @Override
     public String toString() {
         return "CertificateMessage{" +
