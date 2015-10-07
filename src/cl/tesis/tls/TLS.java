@@ -1,12 +1,11 @@
 package cl.tesis.tls;
 
-import cl.tesis.mail.SMTP;
-import cl.tesis.mail.SMTPData;
 import cl.tesis.mail.StartTLS;
 import cl.tesis.ssl.HostCertificate;
 import cl.tesis.tls.exception.HandshakeHeaderException;
 import cl.tesis.tls.exception.StartTLSException;
 import cl.tesis.tls.exception.TLSHeaderException;
+import cl.tesis.tls.handshake.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataOutputStream;
@@ -16,10 +15,8 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.security.InvalidAlgorithmParameterException;
-import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-import java.security.cert.CertPathValidatorException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;

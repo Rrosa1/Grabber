@@ -2,6 +2,7 @@ package cl.tesis.tls;
 
 
 import cl.tesis.output.JsonWritable;
+import cl.tesis.tls.handshake.TLSVersion;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

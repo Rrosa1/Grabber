@@ -1,4 +1,6 @@
-package cl.tesis.tls;
+package cl.tesis.tls.handshake;
+
+import cl.tesis.tls.TLSUtil;
 
 public class ClientHello {
     private static final int RANDOM_SIZE = 32;

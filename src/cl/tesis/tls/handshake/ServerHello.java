@@ -1,6 +1,7 @@
-package cl.tesis.tls;
+package cl.tesis.tls.handshake;
 
 
+import cl.tesis.tls.TLSUtil;
 import cl.tesis.tls.exception.HandshakeHeaderException;
 import cl.tesis.tls.exception.TLSHeaderException;
 
