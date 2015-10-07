@@ -7,7 +7,7 @@ import java.net.Socket;
 
 
 public class Mail {
-    public static final int TIMEOUT = 10000;
+    public static final int TIMEOUT = 30000;
     public static final int BUFFER_SIZE = 2048;
 
     protected String host;

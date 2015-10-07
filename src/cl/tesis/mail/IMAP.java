@@ -10,10 +10,14 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.cert.CertificateException;
 
 public class IMAP {
 
-    public static void main(String[] args) throws IOException, StartTLSException, HandshakeHeaderException, TLSHeaderException {
+    public static void main(String[] args) throws IOException, StartTLSException, HandshakeHeaderException, TLSHeaderException, CertificateException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException {
         Socket socket = new Socket("210.79.49.210", 143);
         InputStream in =  socket.getInputStream();
         DataOutputStream out = new DataOutputStream(socket.getOutputStream());

@@ -40,14 +40,14 @@ public class SMTP extends Mail {
         return new String(buffer, 0, readBytes);
     }
 
-//    public static void main(String[] args) throws IOException, StartTLSException, HandshakeHeaderException, TLSHeaderException, CertificateException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException {
-//        SMTP smtp =  new SMTP("192.80.24.2");
-//        SMTPData data = new SMTPData("192.80.24.2", smtp.startSMTP(), smtp.sendHELP(), smtp.sendEHLO());
-//
-//        TLS tls = new TLS(smtp.getSocket());
-//        data.setCertificate(tls.doMailHandshake(StartTLS.SMTP));
-//
-//        System.out.println(data.toJson());
-//    }
+    public static void main(String[] args) throws IOException, StartTLSException, HandshakeHeaderException, TLSHeaderException, CertificateException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException {
+        SMTP smtp =  new SMTP("192.80.24.2");
+        SMTPData data = new SMTPData("192.80.24.2", smtp.startProtocol(), smtp.sendHELP(), smtp.sendEHLO());
+
+        TLS tls = new TLS(smtp.getSocket());
+        data.setCertificate(tls.doMailHandshake(StartTLS.SMTP));
+
+        System.out.println(data.toJson());
+    }
 
 }
