@@ -1,6 +1,7 @@
 package cl.tesis.tls.exception;
 
-public class TLSHeaderException extends Exception{
+
+public class TLSHeaderException extends TLSException{
 
     public TLSHeaderException() {}
 

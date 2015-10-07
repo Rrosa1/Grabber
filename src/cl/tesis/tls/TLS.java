@@ -46,7 +46,7 @@ public class TLS {
         this.buffer = new byte[BUFFER_SIZE];
     }
 
-    public HostCertificate doHandshake() throws IOException, TLSHeaderException, HandshakeHeaderException, CertificateException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException {
+    public HostCertificate doHandshake() throws IOException, CertificateException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException, TLSHeaderException, HandshakeHeaderException {
 
         /* client hello */
         this.out.write(new ClientHello(TLSVersion.TLS_11.getStringVersion(), TLSCipherSuites.test).toByte());
@@ -111,7 +111,8 @@ public class TLS {
         this.socket.setSoTimeout(TIMEOUT * 2);
         try {
             in.read(this.buffer);
-        } catch (SocketTimeoutException e){
+        } catch (SocketTimeoutException ignored){
+
         } finally {
             this.socket.setSoTimeout(TIMEOUT);
         }
@@ -145,7 +146,7 @@ public class TLS {
         return totalRead;
     }
 
-    public HostCertificate byteArrayToX509Certificate(List<byte[]> list) throws CertificateException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException {
+    private HostCertificate byteArrayToX509Certificate(List<byte[]> list) throws CertificateException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException {
         X509Certificate[] certs = new X509Certificate[list.size()];
         CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
         int i = 0;
@@ -166,7 +167,7 @@ public class TLS {
         return new HostCertificate(certs[0], this.socket.getInetAddress().toString(), validateKeyChain(certs[0], chain), chain);
     }
 
-    public static void main(String[] args) throws IOException, StartTLSException, TLSHeaderException, HandshakeHeaderException, CertificateException, KeyStoreException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, CertPathValidatorException, NoSuchProviderException {
+    public static void main(String[] args) {
 
 //        SMTP smtp =  new SMTP("64.64.18.121");
 //        SMTPData data = new SMTPData("64.64.18.121", smtp.startSMTP(), smtp.sendHELP(), smtp.sendEHLO());
