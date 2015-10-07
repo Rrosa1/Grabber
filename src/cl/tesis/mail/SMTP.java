@@ -7,6 +7,10 @@ import cl.tesis.tls.exception.TLSHeaderException;
 
 import java.io.*;
 import java.net.Socket;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.cert.CertificateException;
 
 public class SMTP extends Mail {
 
@@ -41,12 +45,14 @@ public class SMTP extends Mail {
         return new String(buffer, 0, readBytes);
     }
 
-    public static void main(String[] args) throws IOException, StartTLSException, HandshakeHeaderException, TLSHeaderException {
-        SMTP smtp =  new SMTP("192.80.24.2");
-        SMTPData data = new SMTPData("192.80.24.2", smtp.startSMTP(), smtp.sendHELP(), smtp.sendEHLO());
-
-        TLS tls = new TLS(smtp.getSocket());
-        tls.doMailHandshake(StartTLS.SMTP);
-    }
+//    public static void main(String[] args) throws IOException, StartTLSException, HandshakeHeaderException, TLSHeaderException, CertificateException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException {
+//        SMTP smtp =  new SMTP("192.80.24.2");
+//        SMTPData data = new SMTPData("192.80.24.2", smtp.startSMTP(), smtp.sendHELP(), smtp.sendEHLO());
+//
+//        TLS tls = new TLS(smtp.getSocket());
+//        data.setCertificate(tls.doMailHandshake(StartTLS.SMTP));
+//
+//        System.out.println(data.toJson());
+//    }
 
 }

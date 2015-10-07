@@ -15,7 +15,7 @@ public class SMTPData implements CSVWritable, JsonWritable{
     private String start;
     private String help;
     private String ehlo;
-//    private HostCertificate certificate;
+    private HostCertificate certificate;
 
     public SMTPData(String ip, String start, String help, String ehlo) {
         this.ip = ip;
@@ -26,6 +26,10 @@ public class SMTPData implements CSVWritable, JsonWritable{
 
     public boolean supportTLS() {
         return this.ehlo.contains("STARTTLS");
+    }
+
+    public void setCertificate(HostCertificate certificate) {
+        this.certificate = certificate;
     }
 
     @Override
