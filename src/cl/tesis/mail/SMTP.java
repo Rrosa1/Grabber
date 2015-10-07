@@ -26,11 +26,6 @@ public class SMTP extends Mail {
         this(host, DEFAULT_PORT);
     }
 
-    public String startSMTP() throws IOException {
-        int readBytes = in.read(buffer);
-        return new String(buffer, 0, readBytes);
-    }
-
     public String sendHELP() throws IOException {
         this.out.write(HELP.getBytes());
         int readBytes = in.read(buffer);

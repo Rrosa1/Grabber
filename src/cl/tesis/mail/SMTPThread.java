@@ -36,7 +36,7 @@ public class SMTPThread extends Thread{
         while((columns = this.reader.nextLine()) != null) {
             try {
                 SMTP smtp = new SMTP(columns[IP]);
-                SMTPData data = new SMTPData(smtp.getHost(), smtp.startSMTP(), smtp.sendHELP(), smtp.sendEHLO());
+                SMTPData data = new SMTPData(smtp.getHost(), smtp.startProtocol(), smtp.sendHELP(), smtp.sendEHLO());
                 TLS tls =  new TLS(smtp.getSocket());
                 data.setCertificate(tls.doMailHandshake(StartTLS.SMTP));
                 this.writer.writeLine(data);
