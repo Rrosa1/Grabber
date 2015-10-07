@@ -65,6 +65,10 @@ public class CertChainValidator {
      */
     public static boolean validateKeyChain(X509Certificate client, X509Certificate[] trustedCerts) throws CertificateException, InvalidAlgorithmParameterException, NoSuchAlgorithmException,
             NoSuchProviderException {
+        if (trustedCerts == null){
+            return false;
+        }
+
         boolean found = false;
         int i = trustedCerts.length;
         CertificateFactory cf = CertificateFactory.getInstance("X.509");

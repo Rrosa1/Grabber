@@ -47,17 +47,13 @@ public class TLS {
 
         /* client hello */
         this.out.write(new ClientHello(TLSVersion.TLS_11.getStringVersion(), TLSCipherSuites.test).toByte());
-        int readBytes = this.readAllAvailable();
-        System.out.println(readBytes);
-        TLSUtil.printHexByte(buffer, readBytes);
+        this.readAllAvailable();
 
         /* server hello */
         ServerHello serverHello = new ServerHello(buffer);
-        System.out.println(serverHello);
 
         /* certificate */
         CertificateMessage certificateMessage = new CertificateMessage(buffer, serverHello.endOfServerHello());
-        System.out.println(certificateMessage);
 
         return this.byteArrayToX509Certificate(certificateMessage.getCertificates());
     }
@@ -164,16 +160,4 @@ public class TLS {
         return new HostCertificate(certs[0], this.socket.getInetAddress().toString(), validateKeyChain(certs[0], chain), chain);
     }
 
-    public static void main(String[] args) {
-
-//        SMTP smtp =  new SMTP("64.64.18.121");
-//        SMTPData data = new SMTPData("64.64.18.121", smtp.startSMTP(), smtp.sendHELP(), smtp.sendEHLO());
-//
-//        TLS tls = new TLS(smtp.getSocket());
-//
-//        X509Certificate[] x509Certificates = tls.doMailHandshake(StartTLS.SMTP);
-//
-//        System.out.println(validateKeyChain(x509Certificates[0], Arrays.copyOfRange(x509Certificates, 1, x509Certificates.length)));
-
-    }
 }
