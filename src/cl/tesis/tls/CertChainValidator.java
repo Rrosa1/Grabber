@@ -1,5 +1,9 @@
 package cl.tesis.tls;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyStore;
@@ -24,6 +28,10 @@ import java.util.List;
 import java.util.Set;
 
 public class CertChainValidator {
+
+    private static String keyStore = System.getProperty("java.home") + "/lib/security/cacerts".replace('/', File.separatorChar);
+    private static String password = "changeit";
+
     /**
      * Validate keychain
      *
@@ -117,17 +125,32 @@ public class CertChainValidator {
      * @throws NoSuchAlgorithmException
      * @throws NoSuchProviderException
      */
-    public static boolean isSelfSigned(X509Certificate cert)
-            throws CertificateException, NoSuchAlgorithmException,
-            NoSuchProviderException {
+    public static boolean isSelfSigned(X509Certificate cert) throws CertificateException, NoSuchAlgorithmException, NoSuchProviderException {
         try {
             PublicKey key = cert.getPublicKey();
-
             cert.verify(key);
-            return true;
+//            return true;
+
+            /* Check if cert is in trust store */
+            FileInputStream is = new FileInputStream(keyStore);
+            KeyStore keystore = KeyStore.getInstance(KeyStore.getDefaultType());
+            keystore.load(is, password.toCharArray());
+
+            String inKeyStore = keystore.getCertificateAlias(cert);
+
+//            if (inKeyStore == null) {
+//                return false;
+//            }
+            return inKeyStore != null;
         } catch (SignatureException sigEx) {
             return false;
         } catch (InvalidKeyException keyEx) {
+            return false;
+        } catch (FileNotFoundException e) {
+            return false;
+        } catch (KeyStoreException e) {
+            return false;
+        } catch (IOException e) {
             return false;
         }
     }

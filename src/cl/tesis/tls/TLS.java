@@ -1,5 +1,7 @@
 package cl.tesis.tls;
 
+import cl.tesis.mail.POP3;
+import cl.tesis.mail.POP3Data;
 import cl.tesis.mail.StartTLS;
 import cl.tesis.ssl.HostCertificate;
 import cl.tesis.tls.exception.HandshakeHeaderException;
@@ -15,6 +17,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.security.InvalidAlgorithmParameterException;
+import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.cert.CertificateException;
@@ -34,6 +37,7 @@ public class TLS {
     private InputStream in;
     private DataOutputStream out;
     private byte[] buffer;
+    public X509Certificate[] c;
 
     public TLS(Socket socket) throws IOException {
         this.socket = socket;
@@ -157,7 +161,20 @@ public class TLS {
             chain = Arrays.copyOfRange(certs, 1, certs.length);
         }
 
+        c = certs;
         return new HostCertificate(certs[0], this.socket.getInetAddress().toString(), validateKeyChain(certs[0], chain), chain);
+    }
+
+    public static void main(String[] args) throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException, StartTLSException, InvalidAlgorithmParameterException, TLSHeaderException, HandshakeHeaderException, NoSuchProviderException {
+
+        POP3 pop3 =  new POP3("64.64.18.121");
+        POP3Data data = new POP3Data("64.64.18.121", pop3.startProtocol());
+
+        TLS tls = new TLS(pop3.getSocket());
+        data.setCertificate(tls.doMailHandshake(StartTLS.POP3));
+
+        System.out.println(data.toJson());
+
     }
 
 }
