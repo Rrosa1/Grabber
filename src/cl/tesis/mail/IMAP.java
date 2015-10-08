@@ -15,19 +15,26 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.cert.CertificateException;
 
-public class IMAP {
+public class IMAP extends Mail{
+
+    private static final int DEFAULT_PORT = 143;
+
+    public IMAP(String host, int port) throws IOException {
+        super(host, port);
+    }
+
+    public IMAP(String host) throws IOException {
+        this(host, DEFAULT_PORT);
+    }
 
     public static void main(String[] args) throws IOException, StartTLSException, HandshakeHeaderException, TLSHeaderException, CertificateException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException {
-        Socket socket = new Socket("210.79.49.210", 143);
-        InputStream in =  socket.getInputStream();
-        DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+        IMAP imap = new IMAP("210.79.49.210");
+        IMAPData data = new IMAPData("210.79.49.210", imap.startProtocol());
 
-        byte[] buf = new byte[4096];
-        int readBytes = in.read(buf);
-        System.out.println(new String(buf, 0, readBytes));
+        TLS tls = new TLS(imap.getSocket());
+        data.setCertificate(tls.doMailHandshake(StartTLS.IMAP));
 
-        TLS tls = new TLS(socket);
-        tls.doMailHandshake(StartTLS.IMAP);
+        System.out.println(data.toJson());
 
     }
 
