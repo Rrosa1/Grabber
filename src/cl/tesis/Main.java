@@ -2,6 +2,9 @@ package cl.tesis;
 
 import cl.tesis.http.HttpThread;
 import cl.tesis.input.CSVFileReader;
+import cl.tesis.mail.IMAPThread;
+import cl.tesis.mail.POP3Thread;
+import cl.tesis.mail.SMTPThread;
 import cl.tesis.output.FileWriter;
 import cl.tesis.output.FileWriterFactory;
 import cl.tesis.ssh.SshThread;
@@ -55,6 +58,25 @@ public class Main {
                         t.start();
                         lista.add(t);
                     }
+                case "SMTP":
+                    for (int i = 0; i < commandLine.getThreads(); i++) {
+                        Thread t = new SMTPThread(reader, writer);
+                        t.start();
+                        lista.add(t);
+                    }
+                case "POP3":
+                    for (int i = 0; i < commandLine.getThreads(); i++) {
+                        Thread t = new POP3Thread(reader, writer);
+                        t.start();
+                        lista.add(t);
+                    }
+                case "IMAP":
+                    for (int i = 0; i < commandLine.getThreads(); i++) {
+                        Thread t = new IMAPThread(reader, writer);
+                        t.start();
+                        lista.add(t);
+                    }
+
                 default:
                     logger.info("Probe module not found");
                     System.exit(0);
