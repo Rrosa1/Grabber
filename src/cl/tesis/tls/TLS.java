@@ -153,7 +153,6 @@ public class TLS {
     private boolean startMailHandshake(StartTLS start) throws IOException {
         this.out.write(start.getMessage().getBytes());
         int readBytes = this.in.read(this.buffer);
-
         if (readBytes <= 0)
             return false;
 

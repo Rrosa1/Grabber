@@ -28,6 +28,9 @@ public class Mail {
 
     public String startProtocol() throws IOException {
         int readBytes = in.read(buffer);
+        if (readBytes <= 0)
+            return null;
+
         return new String(buffer, 0, readBytes);
     }
 
