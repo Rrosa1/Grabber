@@ -97,11 +97,40 @@ public class TLS {
             if (Arrays.equals(tls.getByteVersion(), serverHello.getProtocolVersion())) {
                 scanTLSVersion.setTLSVersion(tls, true);
             } else {
-                scanTLSVersion.setTLSVersion(tls,false);
+                scanTLSVersion.setTLSVersion(tls, false);
             }
         }
 
         return scanTLSVersion;
+    }
+
+    public ScanCiphersSuites checkCipherSuites(StartTLS start) throws IOException {
+        ScanCiphersSuites scanCiphersSuites = new ScanCiphersSuites();
+        InetAddress address = this.socket.getInetAddress();
+        ServerHello serverHello;
+        int port = this.socket.getPort();
+
+        for (TLSCipher cipher : TLSCipher.values()) {
+            /* Open and setting the connection */
+            this.newConnection(address, port);
+
+            this.readFirstLine();
+            this.startMailHandshake(start);
+
+            this.out.write(new ClientHello(TLSVersion.TLS_11.getStringVersion(), cipher.getValue()).toByte());
+
+            try {
+                this.in.read(buffer);
+                serverHello = new ServerHello(buffer);
+            } catch (TLSHeaderException | HandshakeHeaderException | SocketTimeoutException e) {
+                scanCiphersSuites.setCipherSuite(cipher, false);
+                continue;
+            }
+
+            scanCiphersSuites.setCipherSuite(cipher, true);
+        }
+
+        return scanCiphersSuites;
     }
 
     private void readFirstLine() throws IOException {
@@ -174,7 +203,8 @@ public class TLS {
         data.setCertificate(tls.doMailHandshake(StartTLS.POP3));
 
         System.out.println(data.toJson());
-
+        System.out.println(tls.checkTLSVersions(StartTLS.POP3).toJson());
+        System.out.println(tls.checkCipherSuites(StartTLS.POP3).toJson());
     }
 
 }

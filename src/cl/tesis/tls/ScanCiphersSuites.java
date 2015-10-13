@@ -2,10 +2,9 @@ package cl.tesis.tls;
 
 
 import cl.tesis.output.JsonWritable;
+import cl.tesis.tls.handshake.TLSCipher;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
-import static cl.tesis.tls.TLSCipher.*;
 
 public class ScanCiphersSuites implements JsonWritable{
     private boolean null_ciphers;

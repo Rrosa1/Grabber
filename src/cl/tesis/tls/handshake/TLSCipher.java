@@ -1,4 +1,4 @@
-package cl.tesis.tls;
+package cl.tesis.tls.handshake;
 
 
 import com.sun.xml.internal.ws.api.model.wsdl.WSDLBoundOperation;
@@ -72,14 +72,14 @@ public enum TLSCipher {
             TLS_RSA_WITH_CAMELLIA_128_CBC_SHA.getStringValue() + TLS_PSK_WITH_AES_128_CBC_SHA.getStringValue());
 
 
-    private String name;
+    private String value;
 
-    TLSCipher(String name) {
-        this.name = name;
+    TLSCipher(String value) {
+        this.value = value;
     }
 
-    public String getName() {
-        return name;
+    public String getValue() {
+        return value;
     }
 
 }
