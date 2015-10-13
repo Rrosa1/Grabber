@@ -30,12 +30,18 @@ public class SMTP extends Mail {
         this.out.write(HELP.getBytes());
         int readBytes = in.read(buffer);
 
+        if (readBytes <= 0)
+            return null;
+
         return new String(buffer, 0, readBytes);
     }
 
     public String sendEHLO() throws IOException {
         this.out.write(EHLO.getBytes());
         int readBytes =  in.read(buffer);
+
+        if (readBytes <= 0)
+            return null;
 
         return new String(buffer, 0, readBytes);
     }
