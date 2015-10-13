@@ -1,8 +1,6 @@
 package cl.tesis.ssh;
 
 
-import cl.tesis.http.HttpConnection;
-import cl.tesis.http.HttpHeader;
 import cl.tesis.input.FileReader;
 import cl.tesis.output.FileWriter;
 
