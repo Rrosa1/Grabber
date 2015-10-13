@@ -29,8 +29,10 @@ import java.util.Set;
 
 public class CertChainValidator {
 
-    private static String keyStore = System.getProperty("java.home") + "/lib/security/cacerts".replace('/', File.separatorChar);
+    private static String keyStorePath = System.getProperty("java.home") + "/lib/security/cacerts".replace('/', File.separatorChar);
     private static String password = "changeit";
+
+    public static KeyStore keyStore = null;
 
     /**
      * Validate keychain
@@ -74,7 +76,7 @@ public class CertChainValidator {
     public static boolean validateKeyChain(X509Certificate client, X509Certificate[] trustedCerts) throws CertificateException, InvalidAlgorithmParameterException, NoSuchAlgorithmException,
             NoSuchProviderException {
         if (trustedCerts == null){
-            return false;
+            return isRootCertificate(client);
         }
 
         boolean found = false;
@@ -103,10 +105,8 @@ public class CertChainValidator {
                     if (isSelfSigned(trustedCerts[i])) {
                         // found root ca
                         found = true;
-//                        System.out.println("validating root" + trustedCerts[i].getSubjectX500Principal().getName());
                     } else if (!client.equals(trustedCerts[i])) {
                         // find parent ca
-//                        System.out.println("validating via:" + trustedCerts[i].getSubjectX500Principal().getName());
                         found = validateKeyChain(trustedCerts[i], trustedCerts);
                     }
                 } catch (CertPathValidatorException e) {
@@ -115,6 +115,22 @@ public class CertChainValidator {
             }
         }
 
+        if (!found) {
+            try {
+                // Check if server not send root certificate
+                KeyStore keystore = getKeyStore();
+
+                Enumeration enumeration = keystore.aliases();
+                while (enumeration.hasMoreElements()) {
+                    String alias = (String) enumeration.nextElement();
+                    X509Certificate certificate = (X509Certificate) keystore.getCertificate(alias);
+                    if (certificate.getSubjectDN().equals(client.getIssuerDN()))
+                        return true;
+                }
+            } catch (KeyStoreException e) {
+                return found;
+            }
+        }
         return found;
     }
 
@@ -129,29 +145,67 @@ public class CertChainValidator {
         try {
             PublicKey key = cert.getPublicKey();
             cert.verify(key);
-//            return true;
-
-            /* Check if cert is in trust store */
-            FileInputStream is = new FileInputStream(keyStore);
-            KeyStore keystore = KeyStore.getInstance(KeyStore.getDefaultType());
-            keystore.load(is, password.toCharArray());
-
-            String inKeyStore = keystore.getCertificateAlias(cert);
-
-//            if (inKeyStore == null) {
-//                return false;
-//            }
-            return inKeyStore != null;
         } catch (SignatureException sigEx) {
             return false;
         } catch (InvalidKeyException keyEx) {
             return false;
-        } catch (FileNotFoundException e) {
-            return false;
+        }
+
+        return isRootCertificate(cert);
+    }
+
+    public static KeyStore getKeyStore() throws KeyStoreException {
+        if (keyStore == null ) {
+            try {
+                FileInputStream is = new FileInputStream(keyStorePath);
+                keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+                keyStore.load(is, password.toCharArray());
+            } catch (CertificateException | NoSuchAlgorithmException | KeyStoreException | IOException e) {
+                keyStore = null;
+                throw new KeyStoreException();
+            }
+        }
+        return keyStore;
+    }
+
+
+    private static boolean isRootCertificate(X509Certificate certificate) {
+        String inKeyStore;
+
+        try {
+            KeyStore keystore = getKeyStore();
+            if (keystore == null)
+                return false;
+
+            inKeyStore = keystore.getCertificateAlias(certificate);
         } catch (KeyStoreException e) {
             return false;
-        } catch (IOException e) {
-            return false;
         }
+
+        return inKeyStore != null;
+    }
+
+    public static void main(String[] args) throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
+//        FileInputStream is = new FileInputStream(keyStorePath);
+//        KeyStore keystore = KeyStore.getInstance(KeyStore.getDefaultType());
+//        keystore.load(is, password.toCharArray());
+////
+////        Enumeration<String> s = keystore.aliases();
+////
+////        while(s.hasMoreElements()){
+////            System.out.println(s.nextElement());
+////        }
+        KeyStore keystore = getKeyStore();
+
+        Enumeration enumeration = keystore.aliases();
+        while(enumeration.hasMoreElements()) {
+            String alias = (String)enumeration.nextElement();
+            System.out.println("alias name: " + alias);
+            Certificate certificate = keystore.getCertificate(alias);
+            System.out.println(certificate.toString());
+
+        }
+
+
     }
 }

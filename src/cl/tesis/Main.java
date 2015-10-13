@@ -58,25 +58,28 @@ public class Main {
                         t.start();
                         lista.add(t);
                     }
+                    break;
                 case "SMTP":
                     for (int i = 0; i < commandLine.getThreads(); i++) {
                         Thread t = new SMTPThread(reader, writer);
                         t.start();
                         lista.add(t);
                     }
+                    break;
                 case "POP3":
                     for (int i = 0; i < commandLine.getThreads(); i++) {
                         Thread t = new POP3Thread(reader, writer);
                         t.start();
                         lista.add(t);
                     }
+                    break;
                 case "IMAP":
                     for (int i = 0; i < commandLine.getThreads(); i++) {
                         Thread t = new IMAPThread(reader, writer);
                         t.start();
                         lista.add(t);
                     }
-
+                    break;
                 default:
                     logger.info("Probe module not found");
                     System.exit(0);
