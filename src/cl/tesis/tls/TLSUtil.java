@@ -18,6 +18,10 @@ public class TLSUtil {
     }
 
     public static String bytesToHex(byte[] bytes) {
+        if (bytes == null) {
+            return null;
+        }
+
         char[] hexChars = new char[bytes.length * 2];
         for (int j = 0; j < bytes.length; j++) {
             int v = bytes[j] & 0xFF;
@@ -60,5 +64,9 @@ public class TLSUtil {
         }
 
         return res;
+    }
+
+    public static int bytesToInt(byte high, byte low) {
+        return (high & 0xFF) << 8 | (low & 0xFF);
     }
 }
