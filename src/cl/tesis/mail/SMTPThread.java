@@ -3,10 +3,10 @@ package cl.tesis.mail;
 import cl.tesis.input.FileReader;
 import cl.tesis.output.FileWriter;
 import cl.tesis.tls.TLS;
+import cl.tesis.tls.exception.HandshakeException;
 import cl.tesis.tls.exception.HandshakeHeaderException;
 import cl.tesis.tls.exception.StartTLSException;
 import cl.tesis.tls.exception.TLSHeaderException;
-import cl.tesis.tls.handshake.TLSVersion;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
@@ -34,21 +34,28 @@ public class SMTPThread extends Thread{
         String[] columns;
 
         while((columns = this.reader.nextLine()) != null) {
+            SMTPData data =  new SMTPData(columns[IP]);
             try {
                 SMTP smtp = new SMTP(columns[IP]);
-                SMTPData data = new SMTPData(smtp.getHost(), smtp.startProtocol(), smtp.sendHELP(), smtp.sendEHLO());
+
+                /* Previous data */
+                data.setStart(smtp.startProtocol());
+                data.setHelp(smtp.sendHELP());
+                data.setEhlo(smtp.sendEHLO());
+
+                /* TLS Handshake*/
                 TLS tls =  new TLS(smtp.getSocket());
-                data.setCertificate(tls.doMailHandshake(StartTLS.SMTP));
-                this.writer.writeLine(data);
-            } catch (CertificateException | NoSuchAlgorithmException | NoSuchProviderException | InvalidAlgorithmParameterException e) {
-                logger.log(Level.INFO, "Problem to validate the certificate {0}", columns[IP]);
-            } catch (StartTLSException | TLSHeaderException | HandshakeHeaderException e) {
+                data.setCertificate(tls.doProtocolHandshake(StartTLS.SMTP));
+
+            } catch (StartTLSException | HandshakeException e) {
+                data.setError(e.getMessage());
                 logger.log(Level.INFO, "Handshake error {0}", columns[IP]);
-            } catch (SocketTimeoutException e){
-                logger.log(Level.INFO, "Handshake timeout {0}", columns[IP]);
-            }catch (IOException e) {
-                logger.log(Level.INFO, "Read or write error {0}", columns[IP]);
+            }  catch (IOException e) {
+                data.setError("Read or write socket error");
+                logger.log(Level.INFO, "Read or write over socket error {0}", columns[IP]);
             }
+
+            this.writer.writeLine(data);
         }
     }
 

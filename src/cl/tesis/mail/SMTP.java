@@ -26,27 +26,45 @@ public class SMTP extends Mail {
         this(host, DEFAULT_PORT);
     }
 
-    public String sendHELP() throws IOException {
+    public String sendHELP(){
+        String ret;
+        try {
         this.out.write(HELP.getBytes());
+
         int readBytes = in.read(buffer);
         if (readBytes <= 0)
             return null;
 
-        return new String(buffer, 0, readBytes);
+        ret = new String(buffer, 0, readBytes);
+        } catch (IOException e) {
+            return null;
+        }
+
+        return ret;
     }
 
-    public String sendEHLO() throws IOException {
-        this.out.write(EHLO.getBytes());
-        int readBytes =  in.read(buffer);
-        if (readBytes <= 0)
-            return null;
+    public String sendEHLO() {
+        String ret;
+        try {
+            this.out.write(EHLO.getBytes());
+            int readBytes = in.read(buffer);
+            if (readBytes <= 0)
+                return null;
 
-        return new String(buffer, 0, readBytes);
+            ret = new String(buffer, 0, readBytes);
+        } catch (IOException e) {
+            return null;
+        }
+
+        return ret;
     }
 
     public static void main(String[] args) throws IOException, HandshakeException, StartTLSException {
         SMTP smtp =  new SMTP("192.80.24.2");
-        SMTPData data = new SMTPData("192.80.24.2", smtp.startProtocol(), smtp.sendHELP(), smtp.sendEHLO());
+        SMTPData data = new SMTPData("192.80.24.2");
+        data.setStart(smtp.startProtocol());
+        data.setHelp(smtp.sendHELP());
+        data.setEhlo(smtp.sendEHLO());
 
         TLS tls = new TLS(smtp.getSocket());
         data.setCertificate(tls.doProtocolHandshake(StartTLS.SMTP));

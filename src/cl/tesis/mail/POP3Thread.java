@@ -4,6 +4,7 @@ package cl.tesis.mail;
 import cl.tesis.input.FileReader;
 import cl.tesis.output.FileWriter;
 import cl.tesis.tls.TLS;
+import cl.tesis.tls.exception.HandshakeException;
 import cl.tesis.tls.exception.HandshakeHeaderException;
 import cl.tesis.tls.exception.StartTLSException;
 import cl.tesis.tls.exception.TLSHeaderException;
@@ -34,21 +35,25 @@ public class POP3Thread extends Thread{
         String[] columns;
 
         while((columns = this.reader.nextLine()) != null) {
+            POP3Data data =  new POP3Data(columns[IP]);
             try {
+                /* Previous data */
                 POP3 pop3 = new POP3(columns[IP]);
-                POP3Data data =  new POP3Data(columns[IP], pop3.startProtocol());
+                data.setStart(pop3.startProtocol());
+
+                /* TLS Handshake */
                 TLS tls =  new TLS(pop3.getSocket());
-                data.setCertificate(tls.doMailHandshake(StartTLS.POP3));
-                this.writer.writeLine(data);
-            } catch (CertificateException | NoSuchAlgorithmException | NoSuchProviderException | InvalidAlgorithmParameterException e) {
-                logger.log(Level.INFO, "Problem to validate the certificate {0}", columns[IP]);
-            } catch (StartTLSException | TLSHeaderException | HandshakeHeaderException e) {
+                data.setCertificate(tls.doProtocolHandshake(StartTLS.POP3));
+
+            } catch (StartTLSException | HandshakeException e) {
+                data.setError(e.getMessage());
                 logger.log(Level.INFO, "Handshake error {0}", columns[IP]);
-            } catch (SocketTimeoutException e){
-                logger.log(Level.INFO, "Handshake timeout {0}", columns[IP]);
-            }catch (IOException e) {
-                logger.log(Level.INFO, "Read or write error {0}", columns[IP]);
+            }  catch (IOException e) {
+                data.setError("Read or write socket error");
+                logger.log(Level.INFO, "Read or write over socket error {0}", columns[IP]);
             }
+
+            this.writer.writeLine(data);
         }
     }
 }

@@ -27,7 +27,8 @@ public class POP3 extends Mail{
 
     public static void main(String[] args) throws IOException, HandshakeException, StartTLSException {
         POP3 pop3 =  new POP3("64.64.18.121");
-        POP3Data data = new POP3Data("64.64.18.121", pop3.startProtocol());
+        POP3Data data = new POP3Data("64.64.18.121");
+        data.setStart(pop3.startProtocol());
 
         TLS tls = new TLS(pop3.getSocket());
         data.setCertificate(tls.doProtocolHandshake(StartTLS.POP3));

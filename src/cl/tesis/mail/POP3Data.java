@@ -12,11 +12,19 @@ import java.util.List;
 public class POP3Data implements JsonWritable, CSVWritable{
 
     private String ip;
+    private String error;
     private String start;
     private HostCertificate certificate;
 
-    public POP3Data(String ip, String start) {
+    public POP3Data(String ip) {
         this.ip = ip;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
+    public void setStart(String start) {
         this.start = start;
     }
 

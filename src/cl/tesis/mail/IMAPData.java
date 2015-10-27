@@ -13,11 +13,19 @@ import java.util.List;
 public class IMAPData implements CSVWritable, JsonWritable{
 
     private String ip;
+    private String error;
     private String start;
     private HostCertificate certificate;
 
-    public IMAPData(String ip, String start) {
+    public IMAPData(String ip) {
         this.ip = ip;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
+    public void setStart(String start) {
         this.start = start;
     }
 

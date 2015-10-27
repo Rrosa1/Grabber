@@ -27,7 +27,8 @@ public class IMAP extends Mail{
 
     public static void main(String[] args) throws IOException, HandshakeException, StartTLSException {
         IMAP imap = new IMAP("210.79.49.210");
-        IMAPData data = new IMAPData("210.79.49.210", imap.startProtocol());
+        IMAPData data = new IMAPData("210.79.49.210");
+        data.setStart(imap.startProtocol());
 
         TLS tls = new TLS(imap.getSocket());
         data.setCertificate(tls.doProtocolHandshake(StartTLS.IMAP));

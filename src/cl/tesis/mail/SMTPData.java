@@ -12,20 +12,34 @@ import java.util.List;
 public class SMTPData implements CSVWritable, JsonWritable{
 
     private String ip;
+    private String error;
     private String start;
     private String help;
     private String ehlo;
     private HostCertificate certificate;
 
-    public SMTPData(String ip, String start, String help, String ehlo) {
+    public SMTPData(String ip) {
         this.ip = ip;
-        this.start = start;
-        this.help = help;
-        this.ehlo = ehlo;
     }
 
     public boolean supportTLS() {
         return this.ehlo.contains("STARTTLS");
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
+    public void setStart(String start) {
+        this.start = start;
+    }
+
+    public void setHelp(String help) {
+        this.help = help;
+    }
+
+    public void setEhlo(String ehlo) {
+        this.ehlo = ehlo;
     }
 
     public void setCertificate(HostCertificate certificate) {
