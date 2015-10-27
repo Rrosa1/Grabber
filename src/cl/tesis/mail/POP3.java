@@ -2,6 +2,7 @@ package cl.tesis.mail;
 
 
 import cl.tesis.tls.TLS;
+import cl.tesis.tls.exception.HandshakeException;
 import cl.tesis.tls.exception.HandshakeHeaderException;
 import cl.tesis.tls.exception.StartTLSException;
 import cl.tesis.tls.exception.TLSHeaderException;
@@ -24,12 +25,12 @@ public class POP3 extends Mail{
         this(host, DEFAULT_PORT);
     }
 
-    public static void main(String[] args) throws IOException, StartTLSException, HandshakeHeaderException, TLSHeaderException, CertificateException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException {
+    public static void main(String[] args) throws IOException, HandshakeException, StartTLSException {
         POP3 pop3 =  new POP3("64.64.18.121");
         POP3Data data = new POP3Data("64.64.18.121", pop3.startProtocol());
 
         TLS tls = new TLS(pop3.getSocket());
-        data.setCertificate(tls.doMailHandshake(StartTLS.POP3));
+        data.setCertificate(tls.doProtocolHandshake(StartTLS.POP3));
 
         System.out.println(data.toJson());
     }

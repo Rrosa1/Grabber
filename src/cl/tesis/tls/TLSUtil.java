@@ -69,4 +69,13 @@ public class TLSUtil {
     public static int bytesToInt(byte high, byte low) {
         return (high & 0xFF) << 8 | (low & 0xFF);
     }
+
+    public static byte[] addAll(byte[] array1, byte[] array2) {
+        byte[] ret =  new byte[array1.length + array2.length];
+
+        System.arraycopy(array1, 0, ret, 0, array1.length);
+        System.arraycopy(array2, 0, ret, array1.length, array2.length);
+
+        return ret;
+    }
 }

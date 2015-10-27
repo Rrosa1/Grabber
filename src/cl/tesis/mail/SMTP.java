@@ -1,12 +1,12 @@
 package cl.tesis.mail;
 
 import cl.tesis.tls.TLS;
+import cl.tesis.tls.exception.HandshakeException;
 import cl.tesis.tls.exception.HandshakeHeaderException;
 import cl.tesis.tls.exception.StartTLSException;
 import cl.tesis.tls.exception.TLSHeaderException;
 
 import java.io.*;
-import java.net.Socket;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -44,12 +44,12 @@ public class SMTP extends Mail {
         return new String(buffer, 0, readBytes);
     }
 
-    public static void main(String[] args) throws IOException, StartTLSException, HandshakeHeaderException, TLSHeaderException, CertificateException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException {
+    public static void main(String[] args) throws IOException, HandshakeException, StartTLSException {
         SMTP smtp =  new SMTP("192.80.24.2");
         SMTPData data = new SMTPData("192.80.24.2", smtp.startProtocol(), smtp.sendHELP(), smtp.sendEHLO());
 
         TLS tls = new TLS(smtp.getSocket());
-        data.setCertificate(tls.doMailHandshake(StartTLS.SMTP));
+        data.setCertificate(tls.doProtocolHandshake(StartTLS.SMTP));
 
         System.out.println(data.toJson());
     }
