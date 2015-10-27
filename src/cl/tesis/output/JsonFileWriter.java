@@ -7,15 +7,12 @@ import java.util.logging.Logger;
 public class JsonFileWriter implements FileWriter{
 
     private static final Logger logger = Logger.getLogger(JsonFileWriter.class.getName());
-//    private static final String start = "[\n";
 
     private String fileName;
     private BufferedWriter writer;
-    private boolean header;
 
     public JsonFileWriter(String fileName) {
         this.fileName = fileName;
-        this.header = true;
 
         try {
             this.writer =  new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.fileName), "utf-8"));
@@ -29,21 +26,16 @@ public class JsonFileWriter implements FileWriter{
     }
 
     @Override
-    public synchronized void writeLine(Writable writable) throws IOException {
-        if (this.header){
-            this.writer.write("[");
-            this.header = false;
-        } else {
-            this.writer.write(",\n");
+    public synchronized void writeLine(Writable writable) {
+        try {
+            this.writer.write(((JsonWritable) writable).toJson() + "\n");
+        } catch (IOException e) {
+            logger.log(Level.INFO, "Write error");
         }
-        this.writer.write(((JsonWritable)writable).toJson());
     }
 
     @Override
     public void close() throws IOException {
-        if (!this.header){
-            this.writer.write("]");
-        }
         this.writer.close();
     }
 }

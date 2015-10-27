@@ -30,13 +30,17 @@ public class CSVFileWriter implements cl.tesis.output.FileWriter {
     }
 
     @Override
-    public synchronized void writeLine(Writable writable) throws IOException {
-        if (!this.header) {
-            this.writer.write(toCSV(((CSVWritable) writable).getParameterList()));
-            this.header = true;
-        }
+    public synchronized void writeLine(Writable writable) {
+        try {
+            if (!this.header) {
+                this.writer.write(toCSV(((CSVWritable) writable).getParameterList()));
+                this.header = true;
+            }
 
-        this.writer.write(toCSV(((CSVWritable)writable).getValueList()));
+            this.writer.write(toCSV(((CSVWritable) writable).getValueList()));
+        } catch (IOException e) {
+            logger.log(Level.INFO, "Write error");
+        }
     }
 
     private String toCSV(List<String> list) {
