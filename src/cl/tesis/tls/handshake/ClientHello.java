@@ -38,7 +38,7 @@ public class ClientHello {
         this.random = TLSUtil.getRandomBytes(RANDOM_SIZE);
         this.clientVersion = TLSversion;
 
-        this.handshakeBody = clientVersion + random + sessionIdLength + cipherSuitesLength + cipherSuites + compressionLength + compression + extensionLength;
+        this.handshakeBody = clientVersion + random + sessionIdLength + cipherSuitesLength + cipherSuites + compressionLength + compression + extensionLength + extension;
         this.handshakeHeader = HandshakeType.CLIENT_HELLO + TLSUtil.intToHex(TLSUtil.countBytes(handshakeBody), 3);
 
         this.tlsBody = handshakeHeader + handshakeBody;

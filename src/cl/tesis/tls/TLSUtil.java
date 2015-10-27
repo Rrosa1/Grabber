@@ -7,6 +7,9 @@ public class TLSUtil {
     private static char[] hexArray = "0123456789ABCDEF".toCharArray();
 
     public static int countBytes(String s) {
+        if (s == null) {
+            return 0;
+        }
         return s.length() / 2;
     }
 
