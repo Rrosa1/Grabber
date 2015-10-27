@@ -7,7 +7,7 @@ import com.google.gson.GsonBuilder;
 
 public class Heartbleed implements JsonWritable {
     private boolean heartbeat;
-    private boolean heartbleed;
+//    private boolean heartbleed;
 
     public Heartbleed(boolean heartbeat) {
         this.heartbeat = heartbeat;

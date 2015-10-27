@@ -61,7 +61,7 @@ public class Main {
                     break;
                 case "SMTP":
                     for (int i = 0; i < commandLine.getThreads(); i++) {
-                        Thread t = new SMTPThread(reader, writer, true, true);
+                        Thread t = new SMTPThread(reader, writer, true, true, true);
                         t.start();
                         lista.add(t);
                     }

@@ -7,6 +7,7 @@ import cl.tesis.tls.exception.HandshakeException;
 import cl.tesis.tls.exception.HandshakeHeaderException;
 import cl.tesis.tls.exception.StartTLSException;
 import cl.tesis.tls.exception.TLSHeaderException;
+import cl.tesis.tls.handshake.TLSVersion;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
@@ -25,12 +26,14 @@ public class SMTPThread extends Thread{
     private FileWriter writer;
     private boolean allProtocols;
     private boolean allCiphersSuites;
+    private boolean heartbleed;
 
-    public SMTPThread(FileReader reader, FileWriter writer, boolean allProtocols, boolean allCiphersSuites) {
+    public SMTPThread(FileReader reader, FileWriter writer, boolean allProtocols, boolean allCiphersSuites, boolean heartbleed) {
         this.reader = reader;
         this.writer = writer;
         this.allProtocols = allProtocols;
         this.allCiphersSuites = allCiphersSuites;
+        this.heartbleed = heartbleed;
     }
 
     @Override
@@ -59,7 +62,9 @@ public class SMTPThread extends Thread{
                 if (allCiphersSuites)
                     data.setCiphersSuites(tls.checkCipherSuites(StartTLS.SMTP));
 
-                /* */
+                /* Heartbleed test*/
+                if (heartbleed)
+                    data.setHeartbleed(tls.heartbleedTest(StartTLS.SMTP, TLSVersion.TLS_12));
 
             } catch (StartTLSException | HandshakeException e) {
                 data.setError(e.getMessage());

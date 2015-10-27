@@ -186,7 +186,10 @@ public class TLS {
     }
 
     private void newConnection(InetAddress address, int port) throws IOException {
+        /* CLose the old socket */
         this.socket.close();
+
+        /* Setting new socket */
         this.socket = new Socket(address, port);
         this.socket.setSoTimeout(TIMEOUT);
         this.in = socket.getInputStream();

@@ -52,6 +52,10 @@ public class SMTPData implements CSVWritable, JsonWritable{
         this.certificate = certificate;
     }
 
+    public void setHeartbleed(Heartbleed heartbleed) {
+        this.heartbleed = heartbleed;
+    }
+
     public void setProtocols(ScanTLSVersion protocols) {
         this.protocols = protocols;
     }
