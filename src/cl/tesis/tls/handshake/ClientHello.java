@@ -4,6 +4,10 @@ import cl.tesis.tls.TLSUtil;
 
 public class ClientHello {
     private static final int RANDOM_SIZE = 32;
+    public static String HEARTBEAT_MSG_TYPE = "16";
+    public static String HEARTBEAT_HEADER = "00dc010000d8";
+    public static String HEARTBEAT_BODY = "53435b909d9b720bbc0cbc2b92a84897cfbd3904cc160a8503909f770433d4de000066c014c00ac022c0210039003800880087c00fc00500350084c012c008c01cc01b00160013c00dc003000ac013c009c01fc01e00330032009a009900450044c00ec004002f00960041c011c007c00cc002000500040015001200090014001100080006000300ff01000049000b000403000102000a00340032000e000d0019000b000c00180009000a00160017000800060007001400150004000500120013000100020003000f0010001100230000000f000101";
+
 
     private String tlsHeader;
     private String tlsBody;
@@ -17,9 +21,15 @@ public class ClientHello {
     private String compressionLength;
     private String compression;
     private String extensionLength;
+    private String extension;
 
     public ClientHello(String TLSversion, String cipherSuitesList) {
-        this.extensionLength = "0000";
+        this(TLSversion, cipherSuitesList, null);
+    }
+
+    public ClientHello(String TLSversion, String cipherSuitesList, String extension) {
+        this.extension = extension;
+        this.extensionLength = TLSUtil.intToHex(TLSUtil.countBytes(this.extension), 2);
         this.compression = "00";
         this.compressionLength = "01";
         this.cipherSuites = cipherSuitesList;
@@ -53,6 +63,11 @@ public class ClientHello {
                 ", compression='" + compression + '\'' +
                 ", extensionLength='" + extensionLength + '\'' +
                 '}';
+    }
+
+    public static byte[] heartbleedHello(TLSVersion version) {
+        String packet = HEARTBEAT_MSG_TYPE + version.getStringVersion() + HEARTBEAT_HEADER + version.getStringVersion() + HEARTBEAT_BODY;
+        return  TLSUtil.hexStringToByteArray(packet);
     }
 
 }
