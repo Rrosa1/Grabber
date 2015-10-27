@@ -30,7 +30,8 @@ import static cl.tesis.tls.CertChainValidator.validateKeyChain;
 public class TLS {
 
     private static final int BUFFER_SIZE = 8196;
-    public static final int TIMEOUT = 5000;
+    private static final int TIMEOUT = 5000;
+    private static final String TLS_ALERT = "150300020240";
 
     private Socket socket;
     private InputStream in;
@@ -58,8 +59,11 @@ public class TLS {
 
             /* certificate */
             CertificateMessage certificateMessage = new CertificateMessage(buffer, serverHello.endOfServerHello());
-
             hostCertificate = this.byteArrayToHostCertificate(certificateMessage.getCertificates());
+
+            /* Close connection */
+            this.sendAlertMessage();
+
         } catch (TLSHeaderException e) {
              throw new HandshakeException("Error in TLS header");
         } catch (HandshakeHeaderException e) {
@@ -69,7 +73,6 @@ public class TLS {
     }
 
     public HostCertificate doProtocolHandshake(StartTLS start) throws StartTLSException, IOException, HandshakeException {
-        /* Start mail handshake */
         if (!this.startProtocolHandshake(start)) {
             throw new StartTLSException(String.format("Problems to start TLS handshake of %s", start.getProtocol()));
         }
@@ -88,13 +91,18 @@ public class TLS {
                 /* Open and setting the connection */
                 this.newConnection(address, port);
 
-                this.readFirstLine();
-                this.startProtocolHandshake(start);
+                /* STARTTLS */
+                if (start != null) {
+                    this.readFirstLine();
+                    this.startProtocolHandshake(start);
+                }
 
                 this.out.write(new ClientHello(tls.getStringVersion(), TLSCipherSuites.test).toByte());
-
                 this.in.read(buffer);
                 serverHello = new ServerHello(buffer);
+                this.sendAlertMessage();
+
+
             } catch (TLSHeaderException | HandshakeHeaderException | IOException e) {
                 scanTLSVersion.setTLSVersion(tls, false);
                 continue;
@@ -117,17 +125,21 @@ public class TLS {
         int port = this.socket.getPort();
 
         for (TLSCipher cipher : TLSCipher.values()) {
-            /* Open and setting the connection */
             try {
+                /* Open and setting the connection */
                 this.newConnection(address, port);
 
-                this.readFirstLine();
-                this.startProtocolHandshake(start);
+                /* STARTTLS */
+                if (start != null) {
+                    this.readFirstLine();
+                    this.startProtocolHandshake(start);
+                }
 
                 this.out.write(new ClientHello(TLSVersion.TLS_11.getStringVersion(), cipher.getValue()).toByte());
-
                 this.in.read(buffer);
                 serverHello = new ServerHello(buffer);
+                this.sendAlertMessage();
+
             } catch (TLSHeaderException | HandshakeHeaderException | IOException e) {
                 scanCiphersSuites.setCipherSuite(cipher, false);
                 continue;
@@ -174,7 +186,9 @@ public class TLS {
     }
 
     private void newConnection(InetAddress address, int port) throws IOException {
+        this.socket.close();
         this.socket = new Socket(address, port);
+        this.socket.setSoTimeout(TIMEOUT);
         this.in = socket.getInputStream();
         this.out =  new DataOutputStream(socket.getOutputStream());
     }
@@ -234,6 +248,9 @@ public class TLS {
 
         }
 
+    private void sendAlertMessage() throws IOException {
+        this.out.write(TLSUtil.hexStringToByteArray(TLS_ALERT));
+    }
     public static void main(String[] args) throws IOException, TLSHeaderException, HandshakeHeaderException {
         Socket socket = new Socket("192.80.24.4", 443);
         TLS tls =  new TLS(socket);
