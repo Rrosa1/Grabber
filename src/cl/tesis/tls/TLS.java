@@ -1,9 +1,9 @@
 package cl.tesis.tls;
 
-import cl.tesis.mail.POP3;
-import cl.tesis.mail.POP3Data;
 import cl.tesis.mail.StartTLS;
+import cl.tesis.ssl.Certificate;
 import cl.tesis.ssl.HostCertificate;
+import cl.tesis.tls.exception.HandshakeException;
 import cl.tesis.tls.exception.HandshakeHeaderException;
 import cl.tesis.tls.exception.StartTLSException;
 import cl.tesis.tls.exception.TLSHeaderException;
@@ -17,7 +17,6 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.security.InvalidAlgorithmParameterException;
-import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.cert.CertificateException;
@@ -41,55 +40,62 @@ public class TLS {
 
     public TLS(Socket socket) throws IOException {
         this.socket = socket;
-        this.socket.setSoTimeout(5000);
+        this.socket.setSoTimeout(TIMEOUT);
         this.in = this.socket.getInputStream();
         this.out = new DataOutputStream(this.socket.getOutputStream());
         this.buffer = new byte[BUFFER_SIZE];
     }
 
-    public HostCertificate doHandshake() throws IOException, CertificateException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException, TLSHeaderException, HandshakeHeaderException {
+    public HostCertificate doHandshake() throws IOException, HandshakeException {
+        HostCertificate hostCertificate;
+        try {
+            /* client hello */
+            this.out.write(new ClientHello(TLSVersion.TLS_11.getStringVersion(), TLSCipherSuites.test).toByte());
+            this.readAllAvailable();
 
-        /* client hello */
-        this.out.write(new ClientHello(TLSVersion.TLS_11.getStringVersion(), TLSCipherSuites.test).toByte());
-        this.readAllAvailable();
+            /* server hello */
+            ServerHello serverHello = new ServerHello(buffer);
 
-        /* server hello */
-        ServerHello serverHello = new ServerHello(buffer);
+            /* certificate */
+            CertificateMessage certificateMessage = new CertificateMessage(buffer, serverHello.endOfServerHello());
 
-        /* certificate */
-        CertificateMessage certificateMessage = new CertificateMessage(buffer, serverHello.endOfServerHello());
-
-        return this.byteArrayToX509Certificate(certificateMessage.getCertificates());
+            hostCertificate = this.byteArrayToHostCertificate(certificateMessage.getCertificates());
+        } catch (TLSHeaderException e) {
+             throw new HandshakeException("Error in TLS header");
+        } catch (HandshakeHeaderException e) {
+            throw  new HandshakeException("Error in handshake header");
+        }
+        return hostCertificate;
     }
 
-    public HostCertificate doMailHandshake(StartTLS start) throws IOException, StartTLSException, TLSHeaderException, HandshakeHeaderException, CertificateException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException {
+    public HostCertificate doProtocolHandshake(StartTLS start) throws StartTLSException, IOException, HandshakeException {
         /* Start mail handshake */
-        if (!this.startMailHandshake(start)) {
-            throw new StartTLSException();
+        if (!this.startProtocolHandshake(start)) {
+            throw new StartTLSException(String.format("Problems to start TLS handshake of %s", start.getProtocol()));
         }
 
         return this.doHandshake();
     }
 
-    public ScanTLSVersion checkTLSVersions(StartTLS start) throws IOException, StartTLSException {
+    public ScanTLSVersion checkTLSVersions(StartTLS start) {
         ScanTLSVersion scanTLSVersion = new ScanTLSVersion();
         InetAddress address = this.socket.getInetAddress();
         ServerHello serverHello;
         int port = this.socket.getPort();
 
         for (TLSVersion tls : TLSVersion.values()) {
-            /* Open and setting the connection */
-            this.newConnection(address, port);
-
-            this.readFirstLine();
-            this.startMailHandshake(start);
-
-            this.out.write(new ClientHello(tls.getStringVersion(), TLSCipherSuites.test).toByte());
-
             try {
+                /* Open and setting the connection */
+                this.newConnection(address, port);
+
+                this.readFirstLine();
+                this.startProtocolHandshake(start);
+
+                this.out.write(new ClientHello(tls.getStringVersion(), TLSCipherSuites.test).toByte());
+
                 this.in.read(buffer);
                 serverHello = new ServerHello(buffer);
-            } catch (TLSHeaderException | HandshakeHeaderException | SocketTimeoutException e) {
+            } catch (TLSHeaderException | HandshakeHeaderException | IOException e) {
                 scanTLSVersion.setTLSVersion(tls, false);
                 continue;
             }
@@ -104,7 +110,7 @@ public class TLS {
         return scanTLSVersion;
     }
 
-    public ScanCiphersSuites checkCipherSuites(StartTLS start) throws IOException {
+    public ScanCiphersSuites checkCipherSuites(StartTLS start) {
         ScanCiphersSuites scanCiphersSuites = new ScanCiphersSuites();
         InetAddress address = this.socket.getInetAddress();
         ServerHello serverHello;
@@ -112,17 +118,17 @@ public class TLS {
 
         for (TLSCipher cipher : TLSCipher.values()) {
             /* Open and setting the connection */
-            this.newConnection(address, port);
-
-            this.readFirstLine();
-            this.startMailHandshake(start);
-
-            this.out.write(new ClientHello(TLSVersion.TLS_11.getStringVersion(), cipher.getValue()).toByte());
-
             try {
+                this.newConnection(address, port);
+
+                this.readFirstLine();
+                this.startProtocolHandshake(start);
+
+                this.out.write(new ClientHello(TLSVersion.TLS_11.getStringVersion(), cipher.getValue()).toByte());
+
                 this.in.read(buffer);
                 serverHello = new ServerHello(buffer);
-            } catch (TLSHeaderException | HandshakeHeaderException | SocketTimeoutException e) {
+            } catch (TLSHeaderException | HandshakeHeaderException | IOException e) {
                 scanCiphersSuites.setCipherSuite(cipher, false);
                 continue;
             }
@@ -131,6 +137,28 @@ public class TLS {
         }
 
         return scanCiphersSuites;
+    }
+
+    public boolean heartbleedTest(StartTLS start, TLSVersion version) {
+        ServerHello serverHello;
+        try {
+            InetAddress address = this.socket.getInetAddress();
+            int port = this.socket.getPort();
+            this.newConnection(address, port);
+
+            if (start != null) {
+                this.readFirstLine();
+                this.startProtocolHandshake(start);
+            }
+
+            this.out.write(ClientHello.heartbleedHello(version));
+            this.in.read(buffer);
+
+            serverHello = new ServerHello(buffer);
+        } catch (TLSHeaderException | HandshakeHeaderException | IOException e) {
+            return false;
+        }
+        return serverHello.hasHeartbeat();
     }
 
     private void readFirstLine() throws IOException {
@@ -150,7 +178,7 @@ public class TLS {
         this.out =  new DataOutputStream(socket.getOutputStream());
     }
 
-    private boolean startMailHandshake(StartTLS start) throws IOException {
+    private boolean startProtocolHandshake(StartTLS start) throws IOException {
         this.out.write(start.getMessage().getBytes());
         int readBytes = this.in.read(this.buffer);
         if (readBytes <= 0)
@@ -175,39 +203,51 @@ public class TLS {
         return totalRead;
     }
 
-    private HostCertificate byteArrayToX509Certificate(List<byte[]> list) throws CertificateException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException {
-        X509Certificate[] certs = new X509Certificate[list.size()];
-        CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
-        int i = 0;
+    private HostCertificate byteArrayToHostCertificate(List<byte[]> list) {
+        HostCertificate certificate;
 
-        for (byte[] array : list) {
-            InputStream in = new ByteArrayInputStream(array);
-            certs[i] = (X509Certificate)certificateFactory.generateCertificate(in);
-            ++i;
+        try {
+            X509Certificate[] certs = new X509Certificate[list.size()];
+            CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
+            int i = 0;
+
+            for (byte[] array : list) {
+                InputStream in = new ByteArrayInputStream(array);
+                certs[i] = (X509Certificate) certificateFactory.generateCertificate(in);
+                ++i;
+            }
+
+            X509Certificate[] chain;
+            if (i == 1) {
+                chain = null;
+            } else {
+                chain = Arrays.copyOfRange(certs, 1, certs.length);
+            }
+
+            c = certs;
+            certificate = new HostCertificate(certs[0], this.socket.getInetAddress().toString(), validateKeyChain(certs[0], chain), chain);
+        } catch (CertificateException | InvalidAlgorithmParameterException | NoSuchAlgorithmException | NoSuchProviderException e) {
+            return null;
+        }
+        return certificate;
+
         }
 
-        X509Certificate[] chain;
-        if (i == 1) {
-            chain = null;
-        } else {
-            chain = Arrays.copyOfRange(certs, 1, certs.length);
-        }
-
-        c = certs;
-        return new HostCertificate(certs[0], this.socket.getInetAddress().toString(), validateKeyChain(certs[0], chain), chain);
+    public static void main(String[] args) throws IOException, TLSHeaderException, HandshakeHeaderException {
+        Socket socket = new Socket("192.80.24.4", 443);
+        TLS tls =  new TLS(socket);
+        System.out.println(tls.heartbleedTest(null, TLSVersion.TLS_11));
+//        InputStream in = socket.getInputStream();
+//        DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+//        byte[] buffer =  new byte[BUFFER_SIZE];
+//
+//        out.write(ClientHello.heartbleedHello(TLSVersion.TLS_11));
+//
+//        int i = in.read(buffer);
+//        TLSUtil.printHexByte(buffer, i);
+//        System.out.println(i);
+//        ServerHello hello = new ServerHello(buffer);
+//
+//        System.out.println(hello.hasHeartbeat());
     }
-
-    public static void main(String[] args) throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException, StartTLSException, InvalidAlgorithmParameterException, TLSHeaderException, HandshakeHeaderException, NoSuchProviderException {
-
-        POP3 pop3 =  new POP3("64.64.18.121");
-        POP3Data data = new POP3Data("64.64.18.121", pop3.startProtocol());
-
-        TLS tls = new TLS(pop3.getSocket());
-        data.setCertificate(tls.doMailHandshake(StartTLS.POP3));
-
-        System.out.println(data.toJson());
-        System.out.println(tls.checkTLSVersions(StartTLS.POP3).toJson());
-        System.out.println(tls.checkCipherSuites(StartTLS.POP3).toJson());
-    }
-
 }
