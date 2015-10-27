@@ -23,10 +23,14 @@ public class SMTPThread extends Thread{
 
     private FileReader reader;
     private FileWriter writer;
+    private boolean allProtocols;
+    private boolean allCiphersSuites;
 
-    public SMTPThread(FileReader reader, FileWriter writer) {
+    public SMTPThread(FileReader reader, FileWriter writer, boolean allProtocols, boolean allCiphersSuites) {
         this.reader = reader;
         this.writer = writer;
+        this.allProtocols = allProtocols;
+        this.allCiphersSuites = allCiphersSuites;
     }
 
     @Override
@@ -46,6 +50,16 @@ public class SMTPThread extends Thread{
                 /* TLS Handshake*/
                 TLS tls =  new TLS(smtp.getSocket());
                 data.setCertificate(tls.doProtocolHandshake(StartTLS.SMTP));
+
+                /* Check all SSL/TLS Protocols*/
+                if (allProtocols)
+                    data.setProtocols(tls.checkTLSVersions(StartTLS.SMTP));
+
+                /* Check all Cipher Suites */
+                if (allCiphersSuites)
+                    data.setCiphersSuites(tls.checkCipherSuites(StartTLS.SMTP));
+
+                /* */
 
             } catch (StartTLSException | HandshakeException e) {
                 data.setError(e.getMessage());

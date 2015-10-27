@@ -3,6 +3,9 @@ package cl.tesis.mail;
 import cl.tesis.output.CSVWritable;
 import cl.tesis.output.JsonWritable;
 import cl.tesis.ssl.HostCertificate;
+import cl.tesis.tls.Heartbleed;
+import cl.tesis.tls.ScanCiphersSuites;
+import cl.tesis.tls.ScanTLSVersion;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -17,6 +20,9 @@ public class SMTPData implements CSVWritable, JsonWritable{
     private String help;
     private String ehlo;
     private HostCertificate certificate;
+    private Heartbleed heartbleed;
+    private ScanTLSVersion protocols;
+    private ScanCiphersSuites ciphersSuites;
 
     public SMTPData(String ip) {
         this.ip = ip;
@@ -44,6 +50,14 @@ public class SMTPData implements CSVWritable, JsonWritable{
 
     public void setCertificate(HostCertificate certificate) {
         this.certificate = certificate;
+    }
+
+    public void setProtocols(ScanTLSVersion protocols) {
+        this.protocols = protocols;
+    }
+
+    public void setCiphersSuites(ScanCiphersSuites ciphersSuites) {
+        this.ciphersSuites = ciphersSuites;
     }
 
     @Override

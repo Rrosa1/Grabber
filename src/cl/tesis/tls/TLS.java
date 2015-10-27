@@ -139,8 +139,8 @@ public class TLS {
         return scanCiphersSuites;
     }
 
-    public boolean heartbleedTest(StartTLS start, TLSVersion version) {
-        ServerHello serverHello;
+    public Heartbleed heartbleedTest(StartTLS start, TLSVersion version) {
+        Heartbleed heartbleed;
         try {
             InetAddress address = this.socket.getInetAddress();
             int port = this.socket.getPort();
@@ -154,11 +154,12 @@ public class TLS {
             this.out.write(ClientHello.heartbleedHello(version));
             this.in.read(buffer);
 
-            serverHello = new ServerHello(buffer);
+            ServerHello serverHello = new ServerHello(buffer);
+            heartbleed = new Heartbleed(serverHello.hasHeartbeat());
         } catch (TLSHeaderException | HandshakeHeaderException | IOException e) {
-            return false;
+            return new Heartbleed(false);
         }
-        return serverHello.hasHeartbeat();
+        return heartbleed;
     }
 
     private void readFirstLine() throws IOException {
@@ -225,7 +226,7 @@ public class TLS {
             }
 
             c = certs;
-            certificate = new HostCertificate(certs[0], this.socket.getInetAddress().toString(), validateKeyChain(certs[0], chain), chain);
+            certificate = new HostCertificate(certs[0], validateKeyChain(certs[0], chain), chain);
         } catch (CertificateException | InvalidAlgorithmParameterException | NoSuchAlgorithmException | NoSuchProviderException e) {
             return null;
         }

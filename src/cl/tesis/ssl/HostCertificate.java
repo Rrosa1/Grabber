@@ -10,20 +10,18 @@ import java.util.Map;
 
 
 public class HostCertificate extends Certificate implements CSVWritable, JsonWritable{
-    private String ip;
     private boolean validation;
     private String certificateAuthority;
     private List<Certificate> chainAuthority;
-
-    public HostCertificate(X509Certificate x509Certificate, String ip, boolean validation, X509Certificate[] chain) {
+    public HostCertificate(X509Certificate x509Certificate, boolean validation, X509Certificate[] chain) {
         super(x509Certificate);
         Map<String, String> issuerMap = parserX500Principal(x509Certificate.getIssuerX500Principal());
 
-        this.ip = ip;
         this.validation = validation;
         this.certificateAuthority = issuerMap.get("CN");
         this.chainAuthority = parseChain(chain);
     }
+
 
     private List<Certificate> parseChain(X509Certificate[] chain) {
         if (chain == null) {
@@ -60,7 +58,6 @@ public class HostCertificate extends Certificate implements CSVWritable, JsonWri
     public List<String> getValueList() {
         ArrayList<String> values = new ArrayList<>();
 
-        values.add(this.ip);
         values.add(this.validation + "");
         values.add(this.getSignatureAlgorithm());
         values.add(this.getExpiredTime().toString());
@@ -76,8 +73,7 @@ public class HostCertificate extends Certificate implements CSVWritable, JsonWri
     @Override
     public String toString() {
         return "HostCertificate{" +
-                "ip='" + ip + '\'' +
-                ", validation=" + validation +
+                "validation=" + validation +
                 ", certificateAuthority='" + certificateAuthority + '\'' +
                 ", chainAuthority=" + chainAuthority +
                 "} " + super.toString();

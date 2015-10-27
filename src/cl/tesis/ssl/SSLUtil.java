@@ -20,6 +20,6 @@ public class SSLUtil {
             }
         }
 
-        return new HostCertificate(certificate, ip, validate, chain);
+        return new HostCertificate(certificate, validate, chain);
     }
 }
