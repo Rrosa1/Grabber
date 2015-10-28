@@ -8,6 +8,7 @@ import cl.tesis.tls.exception.HandshakeException;
 import cl.tesis.tls.exception.HandshakeHeaderException;
 import cl.tesis.tls.exception.StartTLSException;
 import cl.tesis.tls.exception.TLSHeaderException;
+import cl.tesis.tls.handshake.TLSVersion;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
@@ -24,10 +25,17 @@ public class IMAPThread extends Thread{
 
     private FileReader reader;
     private FileWriter writer;
+    private boolean allProtocols;
+    private boolean allCiphersSuites;
+    private boolean heartbleed;
 
-    public IMAPThread(FileReader reader, FileWriter writer) {
+
+    public IMAPThread(FileReader reader, FileWriter writer, boolean allProtocols, boolean allCiphersSuites, boolean heartbleed) {
         this.reader = reader;
         this.writer = writer;
+        this.allProtocols = allProtocols;
+        this.allCiphersSuites = allCiphersSuites;
+        this.heartbleed = heartbleed;
     }
 
     @Override
@@ -44,6 +52,20 @@ public class IMAPThread extends Thread{
                 /* TLS Handshake */
                 TLS tls =  new TLS(imap.getSocket());
                 data.setCertificate(tls.doProtocolHandshake(StartTLS.IMAP));
+
+                /* Check all SSL/TLS Protocols*/
+                if (allProtocols)
+                    data.setProtocols(tls.checkTLSVersions(StartTLS.IMAP));
+
+                /* Check all Cipher Suites */
+                if (allCiphersSuites)
+                    data.setCiphersSuites(tls.checkCipherSuites(StartTLS.IMAP));
+
+                /* Heartbleed test*/
+                if (heartbleed)
+                    data.setHeartbleed(tls.heartbleedTest(StartTLS.IMAP, TLSVersion.TLS_12));
+
+
 
             } catch (StartTLSException | HandshakeException e) {
                 data.setError(e.getMessage());
