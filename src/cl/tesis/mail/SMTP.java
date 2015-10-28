@@ -15,8 +15,8 @@ import java.security.cert.CertificateException;
 public class SMTP extends Mail {
 
     private static final int DEFAULT_PORT = 25;
-    private static final String HELP = "HELP\r\n";
-    private static final String EHLO = "EHLO example.cl\r\n";
+    public static final String HELP = "HELP\r\n";
+    public static final String EHLO = "EHLO example.cl\r\n";
 
     public SMTP(String host, int port) throws IOException {
         super(host, port);
@@ -58,18 +58,4 @@ public class SMTP extends Mail {
 
         return ret;
     }
-
-    public static void main(String[] args) throws IOException, HandshakeException, StartTLSException {
-        SMTP smtp =  new SMTP("192.80.24.2");
-        SMTPData data = new SMTPData("192.80.24.2");
-        data.setStart(smtp.startProtocol());
-        data.setHelp(smtp.sendHELP());
-        data.setEhlo(smtp.sendEHLO());
-
-        TLS tls = new TLS(smtp.getSocket());
-        data.setCertificate(tls.doProtocolHandshake(StartTLS.SMTP));
-
-        System.out.println(data.toJson());
-    }
-
 }
