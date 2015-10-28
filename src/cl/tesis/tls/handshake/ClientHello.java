@@ -24,7 +24,7 @@ public class ClientHello {
     private String extension;
 
     public ClientHello(String TLSversion, String cipherSuitesList) {
-        this(TLSversion, cipherSuitesList, null);
+        this(TLSversion, cipherSuitesList, "");
     }
 
     public ClientHello(String TLSversion, String cipherSuitesList, String extension) {
@@ -38,7 +38,7 @@ public class ClientHello {
         this.random = TLSUtil.getRandomBytes(RANDOM_SIZE);
         this.clientVersion = TLSversion;
 
-        this.handshakeBody = clientVersion + random + sessionIdLength + cipherSuitesLength + cipherSuites + compressionLength + compression + extensionLength + extension;
+        this.handshakeBody = clientVersion + random + sessionIdLength + cipherSuitesLength + cipherSuites + compressionLength + compression + extensionLength + this.extension;
         this.handshakeHeader = HandshakeType.CLIENT_HELLO + TLSUtil.intToHex(TLSUtil.countBytes(handshakeBody), 3);
 
         this.tlsBody = handshakeHeader + handshakeBody;

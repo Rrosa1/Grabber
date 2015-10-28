@@ -62,7 +62,7 @@ public class TLS {
             hostCertificate = this.byteArrayToHostCertificate(certificateMessage.getCertificates());
 
             /* Close connection */
-//            this.sendAlertMessage();
+            this.sendAlertMessage();
 
         } catch (TLSHeaderException e) {
              throw new HandshakeException("Error in TLS header");
