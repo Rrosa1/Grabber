@@ -7,12 +7,12 @@ public enum StartTLS {
 
     private final String protocol;
     private final String message;
-    private final String responce;
+    private final String response;
 
-    StartTLS(String protocol, String message, String responce) {
+    StartTLS(String protocol, String message, String response) {
         this.protocol = protocol;
         this.message = message;
-        this.responce = responce;
+        this.response = response;
     }
 
     public String getProtocol() {
@@ -23,8 +23,8 @@ public enum StartTLS {
         return message;
     }
 
-    public String getResponce() {
-        return responce;
+    public String getResponse() {
+        return response;
     }
 
     public static void main(String[] args) {

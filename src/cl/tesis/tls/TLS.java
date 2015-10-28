@@ -1,7 +1,7 @@
 package cl.tesis.tls;
 
+import cl.tesis.mail.SMTP;
 import cl.tesis.mail.StartTLS;
-import cl.tesis.ssl.Certificate;
 import cl.tesis.ssl.HostCertificate;
 import cl.tesis.tls.exception.HandshakeException;
 import cl.tesis.tls.exception.HandshakeHeaderException;
@@ -62,7 +62,7 @@ public class TLS {
             hostCertificate = this.byteArrayToHostCertificate(certificateMessage.getCertificates());
 
             /* Close connection */
-            this.sendAlertMessage();
+//            this.sendAlertMessage();
 
         } catch (TLSHeaderException e) {
              throw new HandshakeException("Error in TLS header");
@@ -197,14 +197,22 @@ public class TLS {
     }
 
     private boolean startProtocolHandshake(StartTLS start) throws IOException {
+        if (start == StartTLS.SMTP) {
+            this.out.write(SMTP.EHLO.getBytes());
+            // wait 5000
+            int readBytes = in.read(buffer);
+            if (readBytes <= 0)
+                return false;
+        }
+
         this.out.write(start.getMessage().getBytes());
         int readBytes = this.in.read(this.buffer);
         if (readBytes <= 0)
             return false;
 
-        String responce = new String(this.buffer,0,readBytes);
+        String response = new String(this.buffer, 0, readBytes);
 
-        return responce.contains(start.getResponce());
+        return response.contains(start.getResponse());
     }
 
     private int readAllAvailable() throws IOException{
@@ -257,18 +265,7 @@ public class TLS {
     public static void main(String[] args) throws IOException, TLSHeaderException, HandshakeHeaderException {
         Socket socket = new Socket("192.80.24.4", 443);
         TLS tls =  new TLS(socket);
-        System.out.println(tls.heartbleedTest(null, TLSVersion.TLS_11));
-//        InputStream in = socket.getInputStream();
-//        DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-//        byte[] buffer =  new byte[BUFFER_SIZE];
-//
-//        out.write(ClientHello.heartbleedHello(TLSVersion.TLS_11));
-//
-//        int i = in.read(buffer);
-//        TLSUtil.printHexByte(buffer, i);
-//        System.out.println(i);
-//        ServerHello hello = new ServerHello(buffer);
-//
-//        System.out.println(hello.hasHeartbeat());
+        System.out.println(tls.heartbleedTest(null, TLSVersion.TLS_11).toJson());
+        System.out.println(tls.checkTLSVersions(null).toJson());
     }
 }
