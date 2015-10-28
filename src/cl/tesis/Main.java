@@ -68,14 +68,14 @@ public class Main {
                     break;
                 case "POP3":
                     for (int i = 0; i < commandLine.getThreads(); i++) {
-                        Thread t = new POP3Thread(reader, writer);
+                        Thread t = new POP3Thread(reader, writer, true, true, true);
                         t.start();
                         lista.add(t);
                     }
                     break;
                 case "IMAP":
                     for (int i = 0; i < commandLine.getThreads(); i++) {
-                        Thread t = new IMAPThread(reader, writer);
+                        Thread t = new IMAPThread(reader, writer, true, true, true);
                         t.start();
                         lista.add(t);
                     }
