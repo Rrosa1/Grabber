@@ -1,5 +1,7 @@
 package cl.tesis.tls.handshake;
 
+import java.util.Arrays;
+
 public enum CipherSuites {
 
     TLS_NULL_WITH_NULL_NULL("TLS_NULL_WITH_NULL_NULL", "0000", new byte[]{(byte) 0x00, (byte) 0x00}),
@@ -369,6 +371,15 @@ public enum CipherSuites {
 
     public byte[] getByteValue() {
         return byteValue;
+    }
+
+    public static String getNameByByte(byte[] cipher) {
+        for (CipherSuites e : CipherSuites.values()) {
+            if (Arrays.equals(cipher, e.getByteValue())) {
+                return e.getName();
+            }
+        }
+        return null;
     }
 
 }
