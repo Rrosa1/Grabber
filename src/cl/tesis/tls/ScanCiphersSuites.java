@@ -7,44 +7,44 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class ScanCiphersSuites implements JsonWritable{
-    private boolean null_ciphers;
-    private boolean anonymous_null_ciphers;
-    private boolean anonymous_dh_ciphers;
-    private boolean export_40_ciphers;
-    private boolean low_ciphers;
-    private boolean medium_ciphers;
-    private boolean des3_ciphers;
-    private boolean high_ciphers;
+    private String null_ciphers;
+    private String anonymous_null_ciphers;
+    private String anonymous_dh_ciphers;
+    private String export_40_ciphers;
+    private String low_ciphers;
+    private String medium_ciphers;
+    private String des3_ciphers;
+    private String high_ciphers;
 
     public ScanCiphersSuites() {
         super();
     }
 
-    public void setCipherSuite(TLSCipher cipher, boolean support) {
-        switch (cipher) {
+    public void setCipherSuite(TLSCipher cipherType, String cipher) {
+        switch (cipherType) {
             case NULL_CIPHERS:
-                null_ciphers = support;
+                null_ciphers = cipher;
                 break;
             case ANONYMOUS_NULL_CIPHERS:
-                anonymous_null_ciphers = support;
+                anonymous_null_ciphers = cipher;
                 break;
             case ANONYMOUS_DH_CIPHERS:
-                anonymous_dh_ciphers = support;
+                anonymous_dh_ciphers = cipher;
                 break;
             case EXPORT_40_CIPHERS:
-                export_40_ciphers = support;
+                export_40_ciphers = cipher;
                 break;
             case LOW_CIPHERS:
-                low_ciphers = support;
+                low_ciphers = cipher;
                 break;
             case MEDIUM_CIPHERS:
-                medium_ciphers = support;
+                medium_ciphers = cipher;
                 break;
             case DES3_CIPHERS:
-                des3_ciphers = support;
+                des3_ciphers = cipher;
                 break;
             case HIGH_CIPHERS:
-                high_ciphers = support;
+                high_ciphers = cipher;
                 break;
         }
     }

@@ -141,11 +141,11 @@ public class TLS {
                 this.sendAlertMessage();
 
             } catch (TLSHeaderException | HandshakeHeaderException | IOException e) {
-                scanCiphersSuites.setCipherSuite(cipher, false);
+                scanCiphersSuites.setCipherSuite(cipher, null);
                 continue;
             }
 
-            scanCiphersSuites.setCipherSuite(cipher, true);
+            scanCiphersSuites.setCipherSuite(cipher, CipherSuites.getNameByByte(serverHello.getCipherSuite()));
         }
 
         return scanCiphersSuites;
@@ -267,5 +267,6 @@ public class TLS {
         TLS tls =  new TLS(socket);
         System.out.println(tls.heartbleedTest(null, TLSVersion.TLS_11).toJson());
         System.out.println(tls.checkTLSVersions(null).toJson());
+        System.out.println(tls.checkCipherSuites(null).toJson());
     }
 }

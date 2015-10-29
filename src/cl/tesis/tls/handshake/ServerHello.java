@@ -91,6 +91,10 @@ public class ServerHello {
         return protocolVersion;
     }
 
+    public byte[] getCipherSuite() {
+        return cipherSuite;
+    }
+
     @Override
     public String toString() {
         return "ServerHello{" +
@@ -105,5 +109,4 @@ public class ServerHello {
                 ", ExtensionsNames=" + Arrays.toString(extensionsNames.toArray(new String[extensionsNames.size()])) +
                 '}';
     }
-
 }
