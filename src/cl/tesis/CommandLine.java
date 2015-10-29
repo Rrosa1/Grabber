@@ -14,7 +14,7 @@ public class CommandLine {
     private String output;
 
     @Option(name = "-om", aliases = {"--outputModule"}, usage = "Output file format", metaVar = "String", required = false, help = true)
-    private String outputModule = "CSV";
+    private String outputModule = "JSON";
 
     @Option(name = "-m", aliases = {"--module"}, usage = "Set the probe module", metaVar = "String", required = true, help = true)
     private String module;
@@ -22,13 +22,28 @@ public class CommandLine {
     @Option(name = "-t", aliases = {"--threads"}, metaVar = "Int", usage = "Threads used to send probes", help = true)
     private int threads = 1;
 
+    @Option(name = "-p", aliases = {"--port"}, metaVar = "Int", usage = "Port to scan", required = true, help = true)
+    private int port;
+
+    @Option(name = "--startTLS", usage =  "Start a TLS connection in non secure port", required = false, help = true)
+    private boolean startTLS;
+
+    @Option(name = "--allTLSProtocols", usage = "Test SSLv3.0, TLSv1.0, TLSv1.1, TLSv1.2", help =  true)
+    private boolean allTLSProtocols;
+
+    @Option(name = "--allCipherSuites", usage = "Test 10 groups of cipher suites", help =  true)
+    private boolean allCipherSuites;
+
+    @Option(name = "--heartbleed", usage = "Test heartbleed", help =  true)
+    private boolean heartbleed;
+
     @Option(name = "--list-probe-modules", usage = "Print all probe modules", required = false, help = true)
     private boolean listProbeModules;
 
     @Option(name = "--list-output-modules", usage = "Print all output modules", required = false, help = true)
     private boolean listOutputModules;
 
-    private String[] probeModules = {"SSLCertificate", "HTTPHeader", "SSHVersion"};
+    private String[] probeModules = {"SSLCertificate", "HTTPHeader", "SSHVersion", "SMTP", "POP3", "IMAP"};
     private String[] outputModules = {"CSV", "JSON"};
 
     public void parse(String[] args) {
@@ -63,7 +78,7 @@ public class CommandLine {
     }
 
     private boolean runningArgs() {
-        return getInput() == null || getOutput() == null || getModule() == null;
+        return getInput() == null || getOutput() == null || getModule() == null || getPort() == 0;
     }
 
     private boolean infoArgs() {
@@ -94,6 +109,26 @@ public class CommandLine {
 
     public String getModule() {
         return module;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public boolean isStartTLS() {
+        return startTLS;
+    }
+
+    public boolean isAllTLSProtocols() {
+        return allTLSProtocols;
+    }
+
+    public boolean isAllCipherSuites() {
+        return allCipherSuites;
+    }
+
+    public boolean isHeartbleed() {
+        return heartbleed;
     }
 
     public static void main(String[] args) {
