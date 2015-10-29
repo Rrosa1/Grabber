@@ -51,7 +51,7 @@ public class TLS {
         HostCertificate hostCertificate;
         try {
             /* client hello */
-            this.out.write(new ClientHello(TLSVersion.TLS_11.getStringVersion(), TLSCipherSuites.test).toByte());
+            this.out.write(new ClientHello(TLSVersion.TLS_11.getStringVersion(), TLSCipher.TEST).toByte());
             this.readAllAvailable();
 
             /* server hello */
@@ -97,7 +97,7 @@ public class TLS {
                     this.startProtocolHandshake(start);
                 }
 
-                this.out.write(new ClientHello(tls.getStringVersion(), TLSCipherSuites.test).toByte());
+                this.out.write(new ClientHello(tls.getStringVersion(), TLSCipher.TEST).toByte());
                 this.in.read(buffer);
                 serverHello = new ServerHello(buffer);
                 this.sendAlertMessage();
@@ -135,7 +135,7 @@ public class TLS {
                     this.startProtocolHandshake(start);
                 }
 
-                this.out.write(new ClientHello(TLSVersion.TLS_11.getStringVersion(), cipher.getValue()).toByte());
+                this.out.write(new ClientHello(TLSVersion.TLS_11.getStringVersion(), cipher).toByte());
                 this.in.read(buffer);
                 serverHello = new ServerHello(buffer);
                 this.sendAlertMessage();

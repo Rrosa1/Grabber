@@ -23,16 +23,16 @@ public class ClientHello {
     private String extensionLength;
     private String extension;
 
-    public ClientHello(String TLSversion, String cipherSuitesList) {
+    public ClientHello(String TLSversion, TLSCipher cipherSuitesList) {
         this(TLSversion, cipherSuitesList, "");
     }
 
-    public ClientHello(String TLSversion, String cipherSuitesList, String extension) {
+    public ClientHello(String TLSversion, TLSCipher cipherSuitesList, String extension) {
         this.extension = extension;
         this.extensionLength = TLSUtil.intToHex(TLSUtil.countBytes(this.extension), 2);
         this.compression = "00";
         this.compressionLength = "01";
-        this.cipherSuites = cipherSuitesList;
+        this.cipherSuites = cipherSuitesList.getValue();
         this.cipherSuitesLength = TLSUtil.intToHex(TLSUtil.countBytes(cipherSuites), 2);
         this.sessionIdLength = "00";
         this.random = TLSUtil.getRandomBytes(RANDOM_SIZE);

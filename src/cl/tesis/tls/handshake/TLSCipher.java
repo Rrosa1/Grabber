@@ -6,6 +6,11 @@ import com.sun.xml.internal.ws.api.model.wsdl.WSDLBoundOperation;
 import static cl.tesis.tls.handshake.CipherSuites.*;
 
 public enum TLSCipher {
+    TEST(TLS_DHE_RSA_WITH_AES_128_CBC_SHA.getStringValue() + TLS_ECDHE_RSA_WITH_RC4_128_SHA.getStringValue() +
+            TLS_RSA_WITH_NULL_MD5.getStringValue() + TLS_RSA_WITH_NULL_SHA.getStringValue() +
+            TLS_RSA_WITH_NULL_SHA256.getStringValue() + TLS_RSA_WITH_RC4_128_MD5.getStringValue() +
+            TLS_RSA_WITH_RC4_128_SHA.getStringValue() + TLS_RSA_WITH_3DES_EDE_CBC_SHA.getStringValue() +
+            TLS_RSA_WITH_AES_128_CBC_SHA.getStringValue() + TLS_RSA_WITH_AES_256_CBC_SHA.getStringValue()),
     NULL_CIPHERS(TLS_ECDHE_RSA_WITH_NULL_SHA.getStringValue() + TLS_ECDHE_ECDSA_WITH_NULL_SHA.getStringValue() +
             TLS_ECDH_ANON_WITH_NULL_SHA.getStringValue() + TLS_ECDH_RSA_WITH_NULL_SHA.getStringValue() +
             TLS_ECDH_ECDSA_WITH_NULL_SHA.getStringValue() + TLS_RSA_WITH_NULL_SHA256.getStringValue() +
