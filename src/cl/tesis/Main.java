@@ -61,21 +61,21 @@ public class Main {
                     break;
                 case "SMTP":
                     for (int i = 0; i < commandLine.getThreads(); i++) {
-                        Thread t = new SMTPThread(reader, writer, true, true, true);
+                        Thread t = new SMTPThread(reader, writer, 25, true, true, true, true);
                         t.start();
                         lista.add(t);
                     }
                     break;
                 case "POP3":
                     for (int i = 0; i < commandLine.getThreads(); i++) {
-                        Thread t = new POP3Thread(reader, writer, true, true, true);
+                        Thread t = new POP3Thread(reader, writer, 110, true, true, true, true);
                         t.start();
                         lista.add(t);
                     }
                     break;
                 case "IMAP":
                     for (int i = 0; i < commandLine.getThreads(); i++) {
-                        Thread t = new IMAPThread(reader, writer, true, true, true);
+                        Thread t = new IMAPThread(reader, writer, 143, true, true, true, true);
                         t.start();
                         lista.add(t);
                     }

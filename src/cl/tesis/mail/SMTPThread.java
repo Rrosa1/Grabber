@@ -4,17 +4,10 @@ import cl.tesis.input.FileReader;
 import cl.tesis.output.FileWriter;
 import cl.tesis.tls.TLS;
 import cl.tesis.tls.exception.HandshakeException;
-import cl.tesis.tls.exception.HandshakeHeaderException;
 import cl.tesis.tls.exception.StartTLSException;
-import cl.tesis.tls.exception.TLSHeaderException;
 import cl.tesis.tls.handshake.TLSVersion;
 
 import java.io.IOException;
-import java.net.SocketTimeoutException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.cert.CertificateException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,16 +17,25 @@ public class SMTPThread extends Thread{
 
     private FileReader reader;
     private FileWriter writer;
+    private int port;
+    private boolean needStartTLS;
+    private StartTLS startTLS;
     private boolean allProtocols;
     private boolean allCiphersSuites;
     private boolean heartbleed;
 
-    public SMTPThread(FileReader reader, FileWriter writer, boolean allProtocols, boolean allCiphersSuites, boolean heartbleed) {
+    public SMTPThread(FileReader reader, FileWriter writer, int port, boolean startTLS, boolean allProtocols, boolean allCiphersSuites, boolean heartbleed) {
         this.reader = reader;
         this.writer = writer;
+        this.port = port;
+        this.needStartTLS = startTLS;
         this.allProtocols = allProtocols;
         this.allCiphersSuites = allCiphersSuites;
         this.heartbleed = heartbleed;
+
+        if (needStartTLS) {
+            this.startTLS = StartTLS.SMTP;
+        }
     }
 
     @Override
@@ -43,28 +45,31 @@ public class SMTPThread extends Thread{
         while((columns = this.reader.nextLine()) != null) {
             SMTPData data =  new SMTPData(columns[IP]);
             try {
-                SMTP smtp = new SMTP(columns[IP]);
-
-                /* Previous data */
-                data.setStart(smtp.startProtocol());
-                data.setHelp(smtp.sendHELP());
-                data.setEhlo(smtp.sendEHLO());
+                SMTP smtp = new SMTP(columns[IP], this.port);
 
                 /* TLS Handshake*/
                 TLS tls =  new TLS(smtp.getSocket());
-                data.setCertificate(tls.doProtocolHandshake(StartTLS.SMTP));
+
+                if (needStartTLS) {
+                    data.setStart(smtp.startProtocol());
+                    data.setHelp(smtp.sendHELP());
+                    data.setEhlo(smtp.sendEHLO());
+                    data.setCertificate(tls.doProtocolHandshake(this.startTLS));
+                } else {
+                    data.setCertificate(tls.doHandshake());
+                }
 
                 /* Check all SSL/TLS Protocols*/
                 if (allProtocols)
-                    data.setProtocols(tls.checkTLSVersions(StartTLS.SMTP));
+                    data.setProtocols(tls.checkTLSVersions(this.startTLS));
 
                 /* Check all Cipher Suites */
                 if (allCiphersSuites)
-                    data.setCiphersSuites(tls.checkCipherSuites(StartTLS.SMTP));
+                    data.setCiphersSuites(tls.checkCipherSuites(this.startTLS));
 
                 /* Heartbleed test*/
                 if (heartbleed)
-                    data.setHeartbleed(tls.heartbleedTest(StartTLS.SMTP, TLSVersion.TLS_12));
+                    data.setHeartbleed(tls.heartbleedTest(this.startTLS, TLSVersion.TLS_12));
 
             } catch (StartTLSException | HandshakeException e) {
                 data.setError(e.getMessage());

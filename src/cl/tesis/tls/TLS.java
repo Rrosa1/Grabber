@@ -263,7 +263,7 @@ public class TLS {
         this.out.write(TLSUtil.hexStringToByteArray(TLS_ALERT));
     }
     public static void main(String[] args) throws IOException, TLSHeaderException, HandshakeHeaderException {
-        Socket socket = new Socket("192.80.24.4", 443);
+        Socket socket = new Socket("192.80.24.4", 465);
         TLS tls =  new TLS(socket);
         System.out.println(tls.heartbleedTest(null, TLSVersion.TLS_11).toJson());
         System.out.println(tls.checkTLSVersions(null).toJson());

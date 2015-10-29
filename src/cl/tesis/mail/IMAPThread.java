@@ -25,17 +25,26 @@ public class IMAPThread extends Thread{
 
     private FileReader reader;
     private FileWriter writer;
+    private int port;
+    private boolean needStartTLS;
+    private StartTLS startTLS;
     private boolean allProtocols;
     private boolean allCiphersSuites;
     private boolean heartbleed;
 
 
-    public IMAPThread(FileReader reader, FileWriter writer, boolean allProtocols, boolean allCiphersSuites, boolean heartbleed) {
+    public IMAPThread(FileReader reader, FileWriter writer, int port, boolean startTLS, boolean allProtocols, boolean allCiphersSuites, boolean heartbleed) {
         this.reader = reader;
         this.writer = writer;
+        this.port = port;
+        this.needStartTLS = startTLS;
         this.allProtocols = allProtocols;
         this.allCiphersSuites = allCiphersSuites;
         this.heartbleed = heartbleed;
+
+        if (needStartTLS) {
+            this.startTLS = StartTLS.IMAP;
+        }
     }
 
     @Override
@@ -45,25 +54,29 @@ public class IMAPThread extends Thread{
         while((columns = this.reader.nextLine()) != null) {
             IMAPData data = new IMAPData(columns[IP]);
             try {
-                /* Previous data */
                 IMAP imap = new IMAP(columns[IP]);
-                data.setStart(imap.startProtocol());
 
                 /* TLS Handshake */
                 TLS tls =  new TLS(imap.getSocket());
-                data.setCertificate(tls.doProtocolHandshake(StartTLS.IMAP));
+                if (needStartTLS) {
+                    data.setStart(imap.startProtocol());
+                    data.setCertificate(tls.doProtocolHandshake(this.startTLS));
+                } else {
+                    data.setCertificate(tls.doHandshake());
+                }
+
 
                 /* Check all SSL/TLS Protocols*/
                 if (allProtocols)
-                    data.setProtocols(tls.checkTLSVersions(StartTLS.IMAP));
+                    data.setProtocols(tls.checkTLSVersions(this.startTLS));
 
                 /* Check all Cipher Suites */
                 if (allCiphersSuites)
-                    data.setCiphersSuites(tls.checkCipherSuites(StartTLS.IMAP));
+                    data.setCiphersSuites(tls.checkCipherSuites(this.startTLS));
 
                 /* Heartbleed test*/
                 if (heartbleed)
-                    data.setHeartbleed(tls.heartbleedTest(StartTLS.IMAP, TLSVersion.TLS_12));
+                    data.setHeartbleed(tls.heartbleedTest(this.startTLS, TLSVersion.TLS_12));
 
 
 

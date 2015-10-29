@@ -25,16 +25,25 @@ public class POP3Thread extends Thread{
 
     private FileReader reader;
     private FileWriter writer;
+    private int port;
+    private boolean needStartTLS;
+    private StartTLS startTLS;
     private boolean allProtocols;
     private boolean allCiphersSuites;
     private boolean heartbleed;
 
-    public POP3Thread(FileReader reader, FileWriter writer, boolean allProtocols, boolean allCiphersSuites, boolean heartbleed) {
+    public POP3Thread(FileReader reader, FileWriter writer, int port, boolean startTLS, boolean allProtocols, boolean allCiphersSuites, boolean heartbleed) {
         this.reader = reader;
         this.writer = writer;
+        this.port = port;
+        this.needStartTLS = startTLS;
         this.allProtocols = allProtocols;
         this.allCiphersSuites = allCiphersSuites;
         this.heartbleed = heartbleed;
+
+        if (needStartTLS) {
+            this.startTLS = StartTLS.POP3;
+        }
     }
 
     @Override
@@ -44,27 +53,30 @@ public class POP3Thread extends Thread{
         while((columns = this.reader.nextLine()) != null) {
             POP3Data data =  new POP3Data(columns[IP]);
             try {
-                /* Previous data */
-                POP3 pop3 = new POP3(columns[IP]);
-                data.setStart(pop3.startProtocol());
+                POP3 pop3 = new POP3(columns[IP], this.port);
 
                 /* TLS Handshake */
                 TLS tls =  new TLS(pop3.getSocket());
-                data.setCertificate(tls.doProtocolHandshake(StartTLS.POP3));
+                if (needStartTLS) {
+                    data.setStart(pop3.startProtocol());
+                    data.setCertificate(tls.doProtocolHandshake(this.startTLS));
+                } else {
+                    data.setCertificate(tls.doHandshake());
+                }
 
                 /* Check all SSL/TLS Protocols */
                 if (allProtocols) {
-                    data.setProtocols(tls.checkTLSVersions(StartTLS.POP3));
+                    data.setProtocols(tls.checkTLSVersions(this.startTLS));
                 }
 
                 /* Check all Cipher Suites */
                 if (allCiphersSuites) {
-                    data.setCiphersSuites(tls.checkCipherSuites(StartTLS.POP3));
+                    data.setCiphersSuites(tls.checkCipherSuites(this.startTLS));
                 }
 
                 /* Heartbleed test */
                 if (heartbleed) {
-                    data.setHeartbleed(tls.heartbleedTest(StartTLS.POP3, TLSVersion.TLS_12));
+                    data.setHeartbleed(tls.heartbleedTest(this.startTLS, TLSVersion.TLS_12));
                 }
 
             } catch (StartTLSException | HandshakeException e) {
