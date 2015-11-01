@@ -29,7 +29,7 @@ public class SMTPTest extends TestCase{
     }
 
     public void testHandshake() throws Exception {
-//        smtp.startProtocol();
+        smtp.startProtocol();
         smtp.sendEHLO();
         TLS tls =  new TLS(smtp.getSocket());
         HostCertificate hostCertificate = tls.doProtocolHandshake(StartTLS.SMTP);
