@@ -33,6 +33,22 @@ public class ScanTLSVersion implements JsonWritable{
         }
     }
 
+    public boolean isSSL_30() {
+        return SSL_30;
+    }
+
+    public boolean isTLS_10() {
+        return TLS_10;
+    }
+
+    public boolean isTLS_11() {
+        return TLS_11;
+    }
+
+    public boolean isTLS_12() {
+        return TLS_12;
+    }
+
     @Override
     public String toJson() {
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
