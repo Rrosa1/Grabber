@@ -1,4 +1,4 @@
-package cl.tesis.ssl.ssl;
+package cl.tesis.ssl;
 
 import cl.tesis.output.CSVWritable;
 import cl.tesis.output.JsonWritable;

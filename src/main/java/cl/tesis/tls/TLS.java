@@ -2,7 +2,7 @@ package cl.tesis.tls;
 
 import cl.tesis.mail.SMTP;
 import cl.tesis.mail.StartTLS;
-import cl.tesis.ssl.ssl.HostCertificate;
+import cl.tesis.ssl.HostCertificate;
 import cl.tesis.tls.exception.HandshakeException;
 import cl.tesis.tls.exception.HandshakeHeaderException;
 import cl.tesis.tls.exception.StartTLSException;

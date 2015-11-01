@@ -1,6 +1,5 @@
 package cl.tesis.ssl;
 
-import cl.tesis.ssl.ssl.HostCertificate;
 import junit.framework.TestCase;
 
 import java.io.BufferedInputStream;

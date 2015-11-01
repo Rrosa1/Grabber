@@ -1,4 +1,4 @@
-package cl.tesis.ssl.ssl;
+package cl.tesis.ssl;
 
 import java.security.cert.X509Certificate;
 

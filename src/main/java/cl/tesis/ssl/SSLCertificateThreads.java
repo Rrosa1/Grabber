@@ -1,8 +1,8 @@
-package cl.tesis.ssl.ssl;
+package cl.tesis.ssl;
 
 import cl.tesis.output.FileWriter;
-import cl.tesis.ssl.ssl.exception.SSLConnectionException;
-import cl.tesis.ssl.ssl.exception.SSLHandshakeTimeoutException;
+import cl.tesis.ssl.exception.SSLHandshakeTimeoutException;
+import cl.tesis.ssl.exception.SSLConnectionException;
 import cl.tesis.input.FileReader;
 
 import javax.net.ssl.SSLHandshakeException;

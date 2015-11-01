@@ -8,7 +8,7 @@ import cl.tesis.mail.SMTPThread;
 import cl.tesis.output.FileWriter;
 import cl.tesis.output.FileWriterFactory;
 import cl.tesis.ssh.SshThread;
-import cl.tesis.ssl.ssl.SSLCertificateThreads;
+import cl.tesis.ssl.SSLCertificateThreads;
 
 import java.io.IOException;
 import java.util.ArrayList;

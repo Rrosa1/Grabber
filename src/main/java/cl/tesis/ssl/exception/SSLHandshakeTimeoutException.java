@@ -1,4 +1,4 @@
-package cl.tesis.ssl.ssl.exception;
+package cl.tesis.ssl.exception;
 
 public class SSLHandshakeTimeoutException extends Exception {
 
