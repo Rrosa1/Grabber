@@ -37,6 +37,14 @@ public class HostCertificate extends Certificate implements CSVWritable, JsonWri
         return chainAuthority;
     }
 
+    public String getCertificateAuthority() {
+        return certificateAuthority;
+    }
+
+    public boolean isValidation() {
+        return validation;
+    }
+
     @Override
     public List<String> getParameterList() {
         ArrayList<String> parameters = new ArrayList<>();
