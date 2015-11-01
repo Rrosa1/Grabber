@@ -49,6 +49,38 @@ public class ScanCiphersSuites implements JsonWritable{
         }
     }
 
+    public String getNull_ciphers() {
+        return null_ciphers;
+    }
+
+    public String getAnonymous_null_ciphers() {
+        return anonymous_null_ciphers;
+    }
+
+    public String getAnonymous_dh_ciphers() {
+        return anonymous_dh_ciphers;
+    }
+
+    public String getExport_40_ciphers() {
+        return export_40_ciphers;
+    }
+
+    public String getLow_ciphers() {
+        return low_ciphers;
+    }
+
+    public String getMedium_ciphers() {
+        return medium_ciphers;
+    }
+
+    public String getDes3_ciphers() {
+        return des3_ciphers;
+    }
+
+    public String getHigh_ciphers() {
+        return high_ciphers;
+    }
+
     @Override
     public String toJson() {
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
