@@ -3,3 +3,5 @@ jdk:
   - oraclejdk7
 before_script:
   mvn install -DskipTests=true
+
+mvn test
