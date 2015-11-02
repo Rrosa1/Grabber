@@ -5,9 +5,9 @@ import cl.tesis.output.JsonWritable;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import sun.misc.BASE64Encoder;
-import sun.security.provider.X509Factory;
 
 import javax.security.auth.x500.X500Principal;
+import javax.xml.bind.DatatypeConverter;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import java.util.*;
@@ -15,6 +15,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Certificate implements CSVWritable, JsonWritable {
+    private static String BEGIN_CERT ="-----BEGIN CERTIFICATE-----";
+    private static String END_CERT ="-----END CERTIFICATE-----";
+
     private String signatureAlgorithm;
     private Date expiredTime;
     private String organizationName;
@@ -64,12 +67,11 @@ public class Certificate implements CSVWritable, JsonWritable {
 
     protected String toPemFormat(X509Certificate x509Certificate) {
         String pemFormat = "";
-        BASE64Encoder encoder = new BASE64Encoder();
 
         try {
-            pemFormat += X509Factory.BEGIN_CERT + "\n";
-            pemFormat += encoder.encode(x509Certificate.getEncoded());
-            pemFormat += "\n" + X509Factory.END_CERT;
+            pemFormat += BEGIN_CERT + "\n";
+            pemFormat += DatatypeConverter.printBase64Binary(x509Certificate.getEncoded());
+            pemFormat += "\n" + END_CERT;
         }catch (CertificateEncodingException e) {
             pemFormat = "";
         }
