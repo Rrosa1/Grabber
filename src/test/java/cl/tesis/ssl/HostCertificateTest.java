@@ -41,7 +41,6 @@ public class HostCertificateTest extends TestCase {
         List<String> values = cert2048.getValueList();
         assertEquals(values.get(0), "true");
         assertEquals(values.get(1), "SHA1withRSA");
-        assertEquals(values.get(2), "Mon Aug 21 02:27:41 CLT 2017");
         assertEquals(values.get(3), "Frank4DD");
         assertEquals(values.get(4), "www.example.com");
         assertEquals(values.get(5), "Frank4DD Web CA");
