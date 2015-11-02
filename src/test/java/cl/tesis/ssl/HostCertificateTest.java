@@ -4,6 +4,7 @@ import junit.framework.TestCase;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.List;
@@ -17,11 +18,11 @@ public class HostCertificateTest extends TestCase {
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        FileInputStream stream = new FileInputStream("test/resources/2048b-rsa-cert.pem");
-        BufferedInputStream buffered = new BufferedInputStream(stream);
+//        FileInputStream stream = new FileInputStream("test/resources/2048b-rsa-cert.pem");
+//        BufferedInputStream buffered = new BufferedInputStream(HostCertificateTest.class.getResourceAsStream("/2048b-rsa-cert.pem"));
 
         CertificateFactory cf = CertificateFactory.getInstance("X.509");
-        x509Cert = (X509Certificate) cf.generateCertificate(buffered);
+        x509Cert = (X509Certificate) cf.generateCertificate(HostCertificateTest.class.getResourceAsStream("/2048b-rsa-cert.pem"));
         cert2048 = new HostCertificate(x509Cert, true, null);
 
     }

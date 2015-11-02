@@ -41,7 +41,6 @@ public class IMAPTest extends TestCase {
     public void testCipherSuite() throws Exception {
         TLS tls =  new TLS(imap.getSocket());
         ScanCiphersSuites suites = tls.checkCipherSuites(StartTLS.IMAP);
-        System.out.println(suites.toJson());
         assertEquals("TLS_RSA_EXPORT_WITH_DES40_CBC_SHA", suites.getExport_40_ciphers());
         assertEquals("TLS_RSA_WITH_SEED_CBC_SHA", suites.getMedium_ciphers());
         assertEquals("TLS_RSA_WITH_3DES_EDE_CBC_SHA", suites.getDes3_ciphers());

@@ -49,7 +49,6 @@ public class HostCertificate extends Certificate implements CSVWritable, JsonWri
     public List<String> getParameterList() {
         ArrayList<String> parameters = new ArrayList<>();
 
-        parameters.add("Ip");
         parameters.add("Validation");
         parameters.add("Signature Algorithm");
         parameters.add("Expired Time");
