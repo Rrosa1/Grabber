@@ -1,8 +1,5 @@
 package cl.tesis.tls.handshake;
 
-
-import com.sun.xml.internal.ws.api.model.wsdl.WSDLBoundOperation;
-
 import static cl.tesis.tls.handshake.CipherSuites.*;
 
 public enum TLSCipher {
