@@ -1,0 +1,3 @@
+languaje: java
+before_script:
+  mvn install -DskipTests=true
