@@ -9,8 +9,8 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class HttpConnection {
-    private static final Logger logger = Logger.getLogger(HttpConnection.class.getName());
+public class Http {
+    private static final Logger logger = Logger.getLogger(Http.class.getName());
 
     private final static String HTTP = "http";
     private final static String GET = "GET";
@@ -19,11 +19,11 @@ public class HttpConnection {
     private URL url;
     private HttpURLConnection connection;
 
-    public HttpConnection(String host) throws IOException {
+    public Http(String host) throws IOException {
         this(host, "");
     }
 
-    public HttpConnection(String host, String file) throws IOException {
+    public Http(String host, String file) throws IOException {
         this.url = new URL(HTTP, host, file);
         this.connection =  (HttpURLConnection) url.openConnection();
 

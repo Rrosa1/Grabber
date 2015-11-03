@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class HttpResponse implements CSVWritable, JsonWritable{
+public class HttpData implements CSVWritable, JsonWritable{
 
     private String ip;
     private String responseCode;
@@ -19,11 +19,11 @@ public class HttpResponse implements CSVWritable, JsonWritable{
     private Map<String, List<String>> header;
     private String index;
 
-    public HttpResponse(String ip, Map<String, List<String>> header, String index) {
+    public HttpData(String ip, Map<String, List<String>> header, String index) {
         this.ip = ip;
         this.responseCode =  getKey(header, null);
         this.server = getKey(header, "Server");
-        this.domain = this.getDomain(header.get("Set-Cookie"));
+        this.domain = this.parseDomain(header.get("Set-Cookie"));
         this.header = header;
         this.index = index;
     }
@@ -37,7 +37,7 @@ public class HttpResponse implements CSVWritable, JsonWritable{
         return values.get(0);
     }
 
-    private String getDomain(List<String> cookies) {
+    private String parseDomain(List<String> cookies) {
         if (cookies == null)
             return null;
 
@@ -50,9 +50,37 @@ public class HttpResponse implements CSVWritable, JsonWritable{
         return null;
     }
 
+   /* GETTER AND SETTER */
+
+    public String getIp() {
+        return ip;
+    }
+
+    public String getResponseCode() {
+        return responseCode;
+    }
+
+    public String getServer() {
+        return server;
+    }
+
+    public String getDomain() {
+        return domain;
+    }
+
+    public Map<String, List<String>> getHeader() {
+        return header;
+    }
+
+    public String getIndex() {
+        return index;
+    }
+
+    /* String Methods */
+
     @Override
     public String toString() {
-        return "HttpResponse{" +
+        return "HttpData{" +
                 "ip='" + ip + '\'' +
                 ", responseCode='" + responseCode + '\'' +
                 ", server='" + server + '\'' +
