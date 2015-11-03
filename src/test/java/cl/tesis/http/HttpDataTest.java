@@ -10,7 +10,9 @@ public class HttpDataTest extends TestCase{
     public void setUp() throws Exception {
         super.setUp();
         Http http =  new Http("192.80.24.4");
-        data =  new HttpData("192.80.24.4", http.getHeader(), http.getIndex());
+        data =  new HttpData("192.80.24.4");
+        data.setHeader(http.getHeader());
+        data.setIndex(http.getIndex());
     }
 
     public void testIP() throws Exception {

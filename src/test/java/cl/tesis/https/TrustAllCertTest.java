@@ -1,5 +1,6 @@
-package cl.tesis.ssl;
+package cl.tesis.https;
 
+import cl.tesis.https.TrustAllCert;
 import junit.framework.TestCase;
 //import org.junit.Test;
 

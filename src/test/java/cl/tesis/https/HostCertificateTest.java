@@ -1,4 +1,4 @@
-package cl.tesis.ssl;
+package cl.tesis.https;
 
 import cl.tesis.tls.HostCertificate;
 import junit.framework.TestCase;
