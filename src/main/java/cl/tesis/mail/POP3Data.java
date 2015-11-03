@@ -2,7 +2,7 @@ package cl.tesis.mail;
 
 import cl.tesis.output.CSVWritable;
 import cl.tesis.output.JsonWritable;
-import cl.tesis.ssl.HostCertificate;
+import cl.tesis.tls.HostCertificate;
 import cl.tesis.tls.Heartbleed;
 import cl.tesis.tls.ScanCiphersSuites;
 import cl.tesis.tls.ScanTLSVersion;

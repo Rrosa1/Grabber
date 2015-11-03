@@ -1,6 +1,6 @@
 package cl.tesis.mail;
 
-import cl.tesis.ssl.HostCertificate;
+import cl.tesis.tls.HostCertificate;
 import cl.tesis.tls.ScanCiphersSuites;
 import cl.tesis.tls.ScanTLSVersion;
 import cl.tesis.tls.TLS;

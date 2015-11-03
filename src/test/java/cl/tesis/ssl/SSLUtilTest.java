@@ -1,5 +1,6 @@
 package cl.tesis.ssl;
 
+import cl.tesis.tls.HostCertificate;
 import junit.framework.TestCase;
 
 public class SSLUtilTest extends TestCase {

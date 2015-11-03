@@ -1,5 +1,7 @@
 package cl.tesis.ssl;
 
+import cl.tesis.tls.HostCertificate;
+
 import java.security.cert.X509Certificate;
 
 public class SSLUtil {

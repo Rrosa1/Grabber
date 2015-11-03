@@ -1,10 +1,8 @@
 package cl.tesis.ssl;
 
+import cl.tesis.tls.HostCertificate;
 import junit.framework.TestCase;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.List;

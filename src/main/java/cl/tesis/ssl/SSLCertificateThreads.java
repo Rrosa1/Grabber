@@ -4,6 +4,7 @@ import cl.tesis.output.FileWriter;
 import cl.tesis.ssl.exception.SSLHandshakeTimeoutException;
 import cl.tesis.ssl.exception.SSLConnectionException;
 import cl.tesis.input.FileReader;
+import cl.tesis.tls.HostCertificate;
 
 import javax.net.ssl.SSLHandshakeException;
 import java.net.ConnectException;
