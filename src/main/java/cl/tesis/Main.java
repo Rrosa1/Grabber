@@ -1,5 +1,6 @@
 package cl.tesis;
 
+import cl.tesis.ftp.FTPThread;
 import cl.tesis.http.HttpThread;
 import cl.tesis.https.HttpsCertificateThread;
 import cl.tesis.https.HttpsThread;
@@ -84,6 +85,13 @@ public class Main {
                 case "IMAP":
                     for (int i = 0; i < commandLine.getThreads(); i++) {
                         Thread t = new IMAPThread(reader, writer, commandLine.getPort(), commandLine.isStartTLS(), commandLine.isAllTLSProtocols(), commandLine.isAllCipherSuites(), commandLine.isHeartbleed());
+                        t.start();
+                        lista.add(t);
+                    }
+                    break;
+                case "FTP":
+                    for (int i = 0; i < commandLine.getThreads(); i++) {
+                        Thread t = new FTPThread(reader, writer, commandLine.getPort());
                         t.start();
                         lista.add(t);
                     }
