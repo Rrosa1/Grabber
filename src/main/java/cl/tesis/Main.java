@@ -1,6 +1,7 @@
 package cl.tesis;
 
 import cl.tesis.http.HttpThread;
+import cl.tesis.https.HttpsCertificateThread;
 import cl.tesis.https.HttpsThread;
 import cl.tesis.input.CSVFileReader;
 import cl.tesis.mail.IMAPThread;
@@ -41,6 +42,13 @@ public class Main {
                 case "HTTPS":
                     for (int i = 0; i < commandLine.getThreads(); i++) {
                         Thread t = new HttpsThread(reader, writer, commandLine.getPort());
+                        t.start();
+                        lista.add(t);
+                    }
+                    break;
+                case "HTTPSCertificate":
+                    for (int i = 0; i < commandLine.getThreads(); i++) {
+                        Thread t = new HttpsCertificateThread(reader, writer, commandLine.getPort(), commandLine.isAllTLSProtocols(), commandLine.isAllCipherSuites(), commandLine.isHeartbleed());
                         t.start();
                         lista.add(t);
                     }
