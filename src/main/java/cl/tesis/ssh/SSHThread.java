@@ -30,7 +30,7 @@ public class SSHThread extends Thread {
         while((columns = this.reader.nextLine()) != null) {
             SSHData host = new SSHData(columns[IP]);
             try {
-                SshConnection connection = new SshConnection(columns[IP], this.port);
+                SSHConnection connection = new SSHConnection(columns[IP], this.port);
                 connection.close();
             } catch (IOException e) {
                 host.setError("Read or write socket error");
