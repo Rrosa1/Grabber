@@ -13,6 +13,9 @@ public class Heartbleed implements JsonWritable {
         this.heartbeat = heartbeat;
     }
 
+    public boolean isHeartbeat() {
+        return heartbeat;
+    }
 
     @Override
     public String toJson() {

@@ -13,6 +13,7 @@ public class HostCertificate extends Certificate implements CSVWritable, JsonWri
     private boolean validation;
     private String certificateAuthority;
     private List<Certificate> chainAuthority;
+
     public HostCertificate(X509Certificate x509Certificate, boolean validation, X509Certificate[] chain) {
         super(x509Certificate);
         Map<String, String> issuerMap = parserX500Principal(x509Certificate.getIssuerX500Principal());
