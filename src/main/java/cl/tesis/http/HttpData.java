@@ -12,6 +12,7 @@ import java.util.Map;
 public class HttpData implements CSVWritable, JsonWritable{
 
     private String ip;
+    private String error;
     private String responseCode;
     private String server;
     private String domain;
@@ -19,14 +20,18 @@ public class HttpData implements CSVWritable, JsonWritable{
     private Map<String, List<String>> header;
     private String index;
 
-    public HttpData(String ip, Map<String, List<String>> header, String index) {
+    public HttpData(String ip) {
         this.ip = ip;
-        this.responseCode =  getKey(header, null);
-        this.server = getKey(header, "Server");
-        this.domain = this.parseDomain(header.get("Set-Cookie"));
-        this.header = header;
-        this.index = index;
     }
+
+//    public HttpData(String ip, Map<String, List<String>> header, String index) {
+//        this.ip = ip;
+//        this.responseCode =  getKey(header, null);
+//        this.server = getKey(header, "Server");
+//        this.domain = this.parseDomain(header.get("Set-Cookie"));
+//        this.header = header;
+//        this.index = index;
+//    }
 
     private static String getKey(Map<String, List<String>> header, String key){
         List<String> values = header.get(key);
@@ -56,6 +61,10 @@ public class HttpData implements CSVWritable, JsonWritable{
         return ip;
     }
 
+    public String getError() {
+        return error;
+    }
+
     public String getResponseCode() {
         return responseCode;
     }
@@ -74,6 +83,21 @@ public class HttpData implements CSVWritable, JsonWritable{
 
     public String getIndex() {
         return index;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
+    public void setHeader(Map<String, List<String>> header) {
+        this.responseCode =  getKey(header, null);
+        this.server = getKey(header, "Server");
+        this.domain = this.parseDomain(header.get("Set-Cookie"));
+        this.header = header;
+    }
+
+    public void setIndex(String index) {
+        this.index = index;
     }
 
     /* String Methods */

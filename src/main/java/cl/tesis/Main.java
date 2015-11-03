@@ -1,6 +1,7 @@
 package cl.tesis;
 
 import cl.tesis.http.HttpThread;
+import cl.tesis.https.HttpsThread;
 import cl.tesis.input.CSVFileReader;
 import cl.tesis.mail.IMAPThread;
 import cl.tesis.mail.POP3Thread;
@@ -8,7 +9,6 @@ import cl.tesis.mail.SMTPThread;
 import cl.tesis.output.FileWriter;
 import cl.tesis.output.FileWriterFactory;
 import cl.tesis.ssh.SshThread;
-import cl.tesis.ssl.SSLCertificateThreads;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,9 +38,9 @@ public class Main {
             List<Thread> lista = new ArrayList<>();
 
             switch (commandLine.getModule()){
-                case "SSLCertificate":
+                case "HTTPS":
                     for (int i = 0; i < commandLine.getThreads(); i++) {
-                        Thread t = new SSLCertificateThreads(reader, writer);
+                        Thread t = new HttpsThread(reader, writer, commandLine.getPort());
                         t.start();
                         lista.add(t);
                     }

@@ -1,4 +1,4 @@
-package cl.tesis.ssl;
+package cl.tesis.https;
 
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
