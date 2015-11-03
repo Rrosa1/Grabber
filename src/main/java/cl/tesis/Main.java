@@ -45,9 +45,9 @@ public class Main {
                         lista.add(t);
                     }
                     break;
-                case "HTTPHeader":
+                case "HTTP":
                     for (int i = 0; i < commandLine.getThreads(); i++) {
-                        Thread t = new HttpThread(reader, writer);
+                        Thread t = new HttpThread(reader, writer, commandLine.getPort());
                         t.start();
                         lista.add(t);
                     }

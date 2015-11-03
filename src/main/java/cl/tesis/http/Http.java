@@ -12,19 +12,24 @@ import java.util.logging.Logger;
 public class Http {
     private static final Logger logger = Logger.getLogger(Http.class.getName());
 
-    private final static String HTTP = "http";
-    private final static String GET = "GET";
-    private final static int TIMEOUT = 60000;
+    private static final String HTTP = "http";
+    private static final String GET = "GET";
+    private static final int TIMEOUT = 60000;
+    private static final int DEFAULT_PORT = 80;
 
     private URL url;
     private HttpURLConnection connection;
 
-    public Http(String host) throws IOException {
-        this(host, "");
+    public Http (String host) throws IOException {
+        this(host, DEFAULT_PORT, "");
     }
 
-    public Http(String host, String file) throws IOException {
-        this.url = new URL(HTTP, host, file);
+    public Http(String host, int port) throws IOException {
+        this(host, port, "");
+    }
+
+    public Http(String host,int port, String file) throws IOException {
+        this.url = new URL(HTTP, host, port, file);
         this.connection =  (HttpURLConnection) url.openConnection();
 
         // Setting methods

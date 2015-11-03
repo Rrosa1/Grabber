@@ -13,10 +13,12 @@ public class HttpThread extends Thread {
 
     private FileReader reader;
     private FileWriter writer;
+    private int port;
 
-    public HttpThread(FileReader reader, FileWriter writer) {
+    public HttpThread(FileReader reader, FileWriter writer, int port) {
         this.reader = reader;
         this.writer = writer;
+        this.port = port;
     }
 
     @Override
@@ -25,7 +27,7 @@ public class HttpThread extends Thread {
 
         while((columns = this.reader.nextLine()) != null) {
             try {
-                Http connection = new Http(columns[IP]);
+                Http connection = new Http(columns[IP], this.port);
                 HttpData response = new HttpData(columns[IP], connection.getHeader() , connection.getIndex());
                 this.writer.writeLine(response);
             } catch (IOException e) {
