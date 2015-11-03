@@ -9,7 +9,7 @@ import cl.tesis.mail.POP3Thread;
 import cl.tesis.mail.SMTPThread;
 import cl.tesis.output.FileWriter;
 import cl.tesis.output.FileWriterFactory;
-import cl.tesis.ssh.SshThread;
+import cl.tesis.ssh.SSHThread;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -62,7 +62,7 @@ public class Main {
                     break;
                 case "SSHVersion":
                     for (int i = 0; i < commandLine.getThreads(); i++) {
-                        Thread t = new SshThread(reader, writer);
+                        Thread t = new SSHThread(reader, writer, commandLine.getPort());
                         t.start();
                         lista.add(t);
                     }

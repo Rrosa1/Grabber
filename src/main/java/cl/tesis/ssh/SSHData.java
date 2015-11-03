@@ -8,19 +8,27 @@ import com.google.gson.GsonBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SshHost implements CSVWritable, JsonWritable{
+public class SSHData implements CSVWritable, JsonWritable{
 
     private String ip;
+    private String error;
     private String response;
 
-    public SshHost(String ip, String response) {
+    public SSHData(String ip) {
         this.ip = ip;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
+    public void setResponse(String response) {
         this.response = response;
     }
 
     @Override
     public String toString() {
-        return "SshHost{" +
+        return "SSHData{" +
                 "ip='" + ip + '\'' +
                 ", response='" + response + '\'' +
                 '}';
