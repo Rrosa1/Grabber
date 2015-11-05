@@ -1,6 +1,7 @@
 package cl.tesis;
 
 import cl.tesis.database.MySQLThread;
+import cl.tesis.database.PostgreSQLThread;
 import cl.tesis.ftp.FTPThread;
 import cl.tesis.http.HttpThread;
 import cl.tesis.https.HttpsCertificateThread;
@@ -100,6 +101,13 @@ public class Main {
                 case "MYSQL":
                     for (int i = 0; i < commandLine.getThreads(); i++) {
                         Thread t = new MySQLThread(reader, writer, commandLine.getPort());
+                        t.start();
+                        lista.add(t);
+                    }
+                    break;
+                case "POSTGRESQL":
+                    for (int i = 0; i < commandLine.getThreads(); i++) {
+                        Thread t = new PostgreSQLThread(reader, writer, commandLine.getPort());
                         t.start();
                         lista.add(t);
                     }
