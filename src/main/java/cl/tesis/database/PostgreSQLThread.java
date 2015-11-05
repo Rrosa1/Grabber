@@ -3,22 +3,20 @@ package cl.tesis.database;
 import cl.tesis.input.FileReader;
 import cl.tesis.output.FileWriter;
 import cl.tesis.ssh.SSHConnection;
-import cl.tesis.ssh.SSHData;
 
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
-public class MySQLThread extends  Thread{
-    private static final Logger logger = Logger.getLogger(MySQLThread.class.getName());
+public class PostgreSQLThread extends Thread {
+    private static final Logger logger = Logger.getLogger(PostgreSQLThread.class.getName());
     private static final int IP = 0;
 
     private FileReader reader;
     private FileWriter writer;
     private int port;
 
-    public MySQLThread(FileReader reader, FileWriter writer, int port) {
+    public PostgreSQLThread(FileReader reader, FileWriter writer, int port) {
         this.reader = reader;
         this.writer = writer;
         this.port = port;
@@ -29,9 +27,9 @@ public class MySQLThread extends  Thread{
         String[] columns;
 
         while((columns = this.reader.nextLine()) != null) {
-            MySQLData data = new MySQLData(columns[IP]);
+            PostgreSQLData data = new PostgreSQLData(columns[IP]);
             try {
-                MySQL connection = new MySQL(columns[IP], this.port);
+                SSHConnection connection = new SSHConnection(columns[IP], this.port);
                 connection.close();
             } catch (IOException e) {
                 data.setError("Read or write socket error");
@@ -41,3 +39,4 @@ public class MySQLThread extends  Thread{
         }
     }
 }
+
