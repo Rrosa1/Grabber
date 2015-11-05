@@ -43,7 +43,7 @@ public class CommandLine {
     @Option(name = "--list-output-modules", usage = "Print all output modules", required = false, help = true)
     private boolean listOutputModules;
 
-    private String[] probeModules = {"HTTPSCertificate", "HTTP", "HTTPS", "SSHVersion", "SMTP", "POP3", "IMAP", "FTP"};
+    private String[] probeModules = {"HTTPSCertificate", "HTTP", "HTTPS", "SSHVersion", "SMTP", "POP3", "IMAP", "FTP", "MYSQL"};
     private String[] outputModules = {"CSV", "JSON"};
 
     public void parse(String[] args) {
