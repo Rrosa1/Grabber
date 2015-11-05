@@ -29,7 +29,7 @@ public class PostgreSQLThread extends Thread {
         while((columns = this.reader.nextLine()) != null) {
             PostgreSQLData data = new PostgreSQLData(columns[IP]);
             try {
-                SSHConnection connection = new SSHConnection(columns[IP], this.port);
+                PostgreSQL connection = new PostgreSQL(columns[IP], this.port);
                 connection.close();
             } catch (IOException e) {
                 data.setError("Read or write socket error");
