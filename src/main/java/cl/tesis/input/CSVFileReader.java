@@ -1,5 +1,7 @@
 package cl.tesis.input;
 
+import org.omg.SendingContext.RunTime;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -37,6 +39,9 @@ public class CSVFileReader implements  FileReader{
 
             if (this.readLines % TICKS == 0 && line!= null) {
                 logger.log(Level.INFO, "Lines processed {0}", this.readLines);
+                int mb = 1024 * 1024;
+                Runtime instance = Runtime.getRuntime();
+                logger.log(Level.INFO, "Current Total memory {0}, Free memory {1}, Max memory", new long[]{instance.totalMemory()/mb, instance.freeMemory()/mb, instance.maxMemory()});
             }
 
         } catch (IOException error) {
