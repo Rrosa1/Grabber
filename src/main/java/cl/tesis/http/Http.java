@@ -51,6 +51,7 @@ public class Http {
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(this.connection.getInputStream()));
             String inputLine;
+            /* TODO change readline to read buffer  */
 
             while ((inputLine = in.readLine()) != null) {
                 response.append(inputLine);
