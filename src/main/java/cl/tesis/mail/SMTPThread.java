@@ -51,7 +51,7 @@ public class SMTPThread extends Thread{
                 TLS tls =  new TLS(smtp.getSocket());
 
                 if (needStartTLS) {
-                    data.setStart(smtp.startProtocol());
+                    data.setStart(smtp.readBanner());
                     data.setHelp(smtp.sendHELP());
                     data.setEhlo(smtp.sendEHLO());
                     data.setCertificate(tls.doProtocolHandshake(this.startTLS));
@@ -77,7 +77,9 @@ public class SMTPThread extends Thread{
             }  catch (IOException e) {
                 data.setError("Read or write socket error");
                 logger.log(Level.INFO, "Read or write over socket error {0}", columns[IP]);
-            }
+            } catch (ConnectionException e) {
+                data.setError(e.getMessage());
+                logger.log(Level.INFO, "Connection Exception {0},  {1}", new String[]{columns[IP], e.getMessage()});            }
 
             this.writer.writeLine(data);
         }

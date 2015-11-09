@@ -16,23 +16,30 @@ public class Mail {
     protected DataOutputStream out;
     protected byte[] buffer;
 
-//    TODO wrap the IOException mail
-    public Mail(String host, int port) throws IOException {
-        this.host = host;
-        this.socket = new Socket(host, port);
-        this.in = socket.getInputStream();
-        this.out = new DataOutputStream(socket.getOutputStream());
-        this.buffer =  new byte[BUFFER_SIZE];
+    public Mail(String host, int port) throws ConnectionException{
+        try {
+            this.host = host;
+            this.socket = new Socket(host, port);
+            this.in = socket.getInputStream();
+            this.out = new DataOutputStream(socket.getOutputStream());
+            this.buffer = new byte[BUFFER_SIZE];
 
-        this.socket.setSoTimeout(TIMEOUT);
+            this.socket.setSoTimeout(TIMEOUT);
+        } catch (IOException e) {
+            throw new ConnectionException("Can't create the connection");
+        }
     }
 
-    public String startProtocol() throws IOException {
-        int readBytes = in.read(buffer);
-        if (readBytes <= 0)
-            return null;
+    public String readBanner() throws ConnectionException {
+        try {
+            int readBytes = in.read(buffer);
+            if (readBytes <= 0)
+                return null;
 
-        return new String(buffer, 0, readBytes);
+            return new String(buffer, 0, readBytes);
+        } catch (IOException e) {
+            throw new ConnectionException("Can't read the protocol banner");
+        }
     }
 
     public String getHost() {

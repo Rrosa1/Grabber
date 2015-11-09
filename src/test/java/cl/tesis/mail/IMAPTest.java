@@ -17,12 +17,12 @@ public class IMAPTest extends TestCase {
     }
 
    public void testIMAPProtocol() throws Exception {
-        String start =  imap.startProtocol();
+        String start =  imap.readBanner();
         assertEquals(true, start.contains(START_PROTOCOL));
     }
 
     public void testHandshake() throws Exception {
-        imap.startProtocol();
+        imap.readBanner();
         TLS tls =  new TLS(imap.getSocket());
         HostCertificate hostCertificate = tls.doProtocolHandshake(StartTLS.IMAP);
         assertEquals(true, hostCertificate.isValidation());

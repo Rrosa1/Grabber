@@ -15,12 +15,12 @@ public class POPTest extends TestCase{
     }
 
     public void testPOPProtocol() throws Exception {
-        String start =  pop.startProtocol();
+        String start =  pop.readBanner();
         assertEquals("+OK Dovecot ready.\r\n", start);
     }
 
     public void testHandshake() throws Exception {
-        pop.startProtocol();
+        pop.readBanner();
         TLS tls =  new TLS(pop.getSocket());
         HostCertificate hostCertificate = tls.doProtocolHandshake(StartTLS.POP3);
         assertEquals(true, hostCertificate.isValidation());

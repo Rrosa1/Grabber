@@ -5,17 +5,10 @@ import cl.tesis.input.FileReader;
 import cl.tesis.output.FileWriter;
 import cl.tesis.tls.TLS;
 import cl.tesis.tls.exception.HandshakeException;
-import cl.tesis.tls.exception.HandshakeHeaderException;
 import cl.tesis.tls.exception.StartTLSException;
-import cl.tesis.tls.exception.TLSHeaderException;
 import cl.tesis.tls.handshake.TLSVersion;
 
 import java.io.IOException;
-import java.net.SocketTimeoutException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.cert.CertificateException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -58,7 +51,7 @@ public class POP3Thread extends Thread{
                 /* TLS Handshake */
                 TLS tls =  new TLS(pop3.getSocket());
                 if (needStartTLS) {
-                    data.setStart(pop3.startProtocol());
+                    data.setStart(pop3.readBanner());
                     data.setCertificate(tls.doProtocolHandshake(this.startTLS));
                 } else {
                     data.setCertificate(tls.doHandshake());
@@ -85,6 +78,9 @@ public class POP3Thread extends Thread{
             }  catch (IOException e) {
                 data.setError("Read or write socket error");
                 logger.log(Level.INFO, "Read or write over socket error {0}", columns[IP]);
+            } catch (ConnectionException e) {
+                data.setError(e.getMessage());
+                logger.log(Level.INFO, "Connection Exception {0},  {1}", new String[]{columns[IP], e.getMessage()});
             }
 
             this.writer.writeLine(data);

@@ -18,7 +18,7 @@ public class SMTPTest extends TestCase{
     }
 
     public void testSMTPProtocol() throws Exception {
-        String start =  smtp.startProtocol();
+        String start =  smtp.readBanner();
         assertEquals("220 dichato.dcc.uchile.cl ESMTP Postfix\r\n", start);
 
         String help =  smtp.sendHELP();
@@ -29,7 +29,7 @@ public class SMTPTest extends TestCase{
     }
 
     public void testHandshake() throws Exception {
-        smtp.startProtocol();
+        smtp.readBanner();
         smtp.sendEHLO();
         TLS tls =  new TLS(smtp.getSocket());
         HostCertificate hostCertificate = tls.doProtocolHandshake(StartTLS.SMTP);
