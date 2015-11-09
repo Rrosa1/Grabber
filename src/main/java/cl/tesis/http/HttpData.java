@@ -20,18 +20,15 @@ public class HttpData implements CSVWritable, JsonWritable{
     private Map<String, List<String>> header;
     private String index;
 
-    public HttpData(String ip) {
-        this.ip = ip;
+    public void clear() {
+        this.ip = null;
+        this.error = null;
+        this.responseCode =  null;
+        this.server = null;
+        this.domain = null;
+        this.header = null;
+        this.index = null;
     }
-
-//    public HttpData(String ip, Map<String, List<String>> header, String index) {
-//        this.ip = ip;
-//        this.responseCode =  getKey(header, null);
-//        this.server = getKey(header, "Server");
-//        this.domain = this.parseDomain(header.get("Set-Cookie"));
-//        this.header = header;
-//        this.index = index;
-//    }
 
     private static String getKey(Map<String, List<String>> header, String key){
         List<String> values = header.get(key);
@@ -83,6 +80,10 @@ public class HttpData implements CSVWritable, JsonWritable{
 
     public String getIndex() {
         return index;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
     }
 
     public void setError(String error) {

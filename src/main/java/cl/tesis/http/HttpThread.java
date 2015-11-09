@@ -24,18 +24,20 @@ public class HttpThread extends Thread {
     @Override
     public void run() {
         String[] columns;
+        HttpData data = new HttpData();
 
         while((columns = this.reader.nextLine()) != null) {
-            HttpData response = new HttpData(columns[IP]);
             try {
+                data.setIp(columns[IP]);
                 Http connection = new Http(columns[IP], this.port);
-                response.setHeader(connection.getHeader());
-                response.setIndex(connection.getIndex());
+                data.setHeader(connection.getHeader());
+                data.setIndex(connection.getIndex());
             } catch (IOException e) {
-                response.setError("Read or write socket error");
+                data.setError("Read or write socket error");
                 logger.log(Level.INFO, "IOException {0}", columns[IP]);
             }
-            this.writer.writeLine(response);
+            this.writer.writeLine(data);
+            data.clear();
         }
     }
 }
