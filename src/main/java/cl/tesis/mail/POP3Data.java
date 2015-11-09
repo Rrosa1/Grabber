@@ -16,7 +16,7 @@ public class POP3Data implements JsonWritable, CSVWritable{
 
     private String ip;
     private String error;
-    private String start;
+    private String banner;
     private HostCertificate certificate;
     private Heartbleed heartbleed;
     private ScanTLSVersion protocols;
@@ -30,8 +30,8 @@ public class POP3Data implements JsonWritable, CSVWritable{
         this.error = error;
     }
 
-    public void setStart(String start) {
-        this.start = start;
+    public void setBanner(String banner) {
+        this.banner = banner;
     }
 
     public void setCertificate(HostCertificate certificate) {
@@ -55,7 +55,7 @@ public class POP3Data implements JsonWritable, CSVWritable{
         ArrayList<String> parameters = new ArrayList<>();
 
         parameters.add("ip");
-        parameters.add("start");
+        parameters.add("banner");
 
         return parameters;
     }
@@ -65,7 +65,7 @@ public class POP3Data implements JsonWritable, CSVWritable{
         ArrayList<String> values =  new ArrayList<>();
 
         values.add(this.ip);
-        values.add(this.start);
+        values.add(this.banner);
 
         return values;
     }

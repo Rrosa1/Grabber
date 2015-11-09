@@ -51,7 +51,7 @@ public class POP3Thread extends Thread{
                 /* TLS Handshake */
                 TLS tls =  new TLS(pop3.getSocket());
                 if (needStartTLS) {
-                    data.setStart(pop3.readBanner());
+                    data.setBanner(pop3.readBanner());
                     data.setCertificate(tls.doProtocolHandshake(this.startTLS));
                 } else {
                     data.setCertificate(tls.doHandshake());

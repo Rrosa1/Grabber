@@ -52,7 +52,7 @@ public class IMAPThread extends Thread{
                 /* TLS Handshake */
                 TLS tls =  new TLS(imap.getSocket());
                 if (needStartTLS) {
-                    data.setStart(imap.readBanner());
+                    data.setBanner(imap.readBanner());
                     data.setCertificate(tls.doProtocolHandshake(this.startTLS));
                 } else {
                     data.setCertificate(tls.doHandshake());

@@ -51,7 +51,7 @@ public class SMTPThread extends Thread{
                 TLS tls =  new TLS(smtp.getSocket());
 
                 if (needStartTLS) {
-                    data.setStart(smtp.readBanner());
+                    data.setBanner(smtp.readBanner());
                     data.setHelp(smtp.sendHELP());
                     data.setEhlo(smtp.sendEHLO());
                     data.setCertificate(tls.doProtocolHandshake(this.startTLS));
