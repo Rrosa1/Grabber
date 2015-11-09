@@ -46,6 +46,7 @@ public class TLS {
         this.buffer = new byte[BUFFER_SIZE];
     }
 
+    //        TODO wrap IOException and return a readable message
     public HostCertificate doHandshake() throws IOException, HandshakeException {
         HostCertificate hostCertificate;
         try {
@@ -196,6 +197,7 @@ public class TLS {
     }
 
     private boolean startProtocolHandshake(StartTLS start) throws IOException {
+//        TODO wrap IOException and return false
         if (start == StartTLS.SMTP) {
             this.out.write(SMTP.EHLO.getBytes());
             // wait 5000
@@ -261,6 +263,7 @@ public class TLS {
     private void sendAlertMessage() throws IOException {
         this.out.write(TLSUtil.hexStringToByteArray(TLS_ALERT));
     }
+
     public static void main(String[] args) throws IOException, TLSHeaderException, HandshakeHeaderException {
         Socket socket = new Socket("192.80.24.4", 465);
         TLS tls =  new TLS(socket);

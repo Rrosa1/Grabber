@@ -16,6 +16,7 @@ public class Mail {
     protected DataOutputStream out;
     protected byte[] buffer;
 
+//    TODO wrap the IOException mail
     public Mail(String host, int port) throws IOException {
         this.host = host;
         this.socket = new Socket(host, port);
