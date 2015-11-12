@@ -21,7 +21,10 @@ public class Https {
 
     private static final String HTTPS = "https";
     private static final String GET = "GET";
+
     private static final int TIMEOUT = 60000;
+    private static final int MAX_LINES = 30;
+    private static final int MAX_SIZE = 6000;
 
     private URL url;
     private HttpsURLConnection connection;
@@ -33,11 +36,7 @@ public class Https {
         HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
 
         // Create all-trusting host name verifier
-        HostnameVerifier allHostsValid = new HostnameVerifier() {
-            public boolean verify(String hostname, SSLSession session) {
-                return true;
-            }
-        };
+        HostnameVerifier allHostsValid = TrustAllCert.getHostnameVerifier();
 
         // Install the all-trusting host verifier
         HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
@@ -77,13 +76,7 @@ public class Https {
         return response.toString();
     }
 
-    public static void main(String[] args) throws NoSuchAlgorithmException, KeyManagementException, IOException {
-        Https https = new Https("192.80.24.4", 443);
-
-        System.out.println(https.getHeader());
-        System.out.println(https.getIndex());
-
+    public void close() {
+        this.connection.disconnect();
     }
-
-
 }

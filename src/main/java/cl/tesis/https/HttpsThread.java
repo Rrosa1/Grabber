@@ -37,6 +37,8 @@ public class HttpsThread extends  Thread{
                 Https connection = new Https(columns[IP], this.port);
                 data.setHeader(connection.getHeader());
                 data.setIndex(connection.getIndex());
+                connection.close();
+                logger.log(Level.INFO, "Completed scan of {0}", columns[IP]);
             } catch (IOException e) {
                 data.setError("Read or write socket error");
                 logger.log(Level.INFO, "IOException {0}", columns[IP]);
