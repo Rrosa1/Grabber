@@ -1,5 +1,7 @@
 package cl.tesis.http;
 
+import cl.tesis.http.exception.HTTPConnectionException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -24,25 +26,30 @@ public class Http {
     private URL url;
     private HttpURLConnection connection;
 
-    public Http (String host) throws IOException {
+    public Http (String host) throws HTTPConnectionException {
         this(host, DEFAULT_PORT, "");
     }
 
-    public Http(String host, int port) throws IOException {
+    public Http(String host, int port) throws HTTPConnectionException {
         this(host, port, "");
     }
 
-    public Http(String host,int port, String file) throws IOException {
-        this.url = new URL(HTTP, host, port, file);
-        this.connection =  (HttpURLConnection) url.openConnection();
+    public Http(String host,int port, String file) throws HTTPConnectionException {
+        try {
+            this.url = new URL(HTTP, host, port, file);
+            this.connection = (HttpURLConnection) url.openConnection();
 
-        // Setting methods
-        this.connection.setRequestMethod(GET);
-        this.connection.setRequestProperty("User-Agent", "Mozilla/5.0");
+            // Setting methods
+            this.connection.setRequestMethod(GET);
+            this.connection.setRequestProperty("User-Agent", "Mozilla/5.0");
 
-        // Setting timeouts
-        this.connection.setConnectTimeout(TIMEOUT);
-        this.connection.setReadTimeout(TIMEOUT);
+            // Setting timeouts
+            this.connection.setConnectTimeout(TIMEOUT);
+            this.connection.setReadTimeout(TIMEOUT);
+        } catch (IOException e) {
+            throw new HTTPConnectionException();
+        }
+
     }
 
     public Map<String, List<String>> getHeader() {
@@ -70,5 +77,9 @@ public class Http {
         }
 
         return response.toString();
+    }
+
+    public void close() {
+        this.connection.disconnect();
     }
 }

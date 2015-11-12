@@ -1,5 +1,6 @@
 package cl.tesis.http;
 
+import cl.tesis.http.exception.HTTPConnectionException;
 import cl.tesis.input.FileReader;
 import cl.tesis.output.FileWriter;
 
@@ -32,9 +33,11 @@ public class HttpThread extends Thread {
                 Http connection = new Http(columns[IP], this.port);
                 data.setHeader(connection.getHeader());
                 data.setIndex(connection.getIndex());
-            } catch (IOException e) {
-                data.setError("Read or write socket error");
-                logger.log(Level.INFO, "IOException {0}", columns[IP]);
+                connection.close();
+                logger.log(Level.INFO, "Completed scan of {0}", columns[IP]);
+            } catch (HTTPConnectionException e) {
+                data.setError("Connection error");
+                logger.log(Level.INFO, "Connection error {0}", columns[IP]);
             }
             this.writer.writeLine(data);
             data.clear();
