@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.*;
+import java.security.PrivateKey;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -14,8 +15,11 @@ public class Http {
 
     private static final String HTTP = "http";
     private static final String GET = "GET";
+
     private static final int TIMEOUT = 60000;
     private static final int DEFAULT_PORT = 80;
+    private static final int MAX_LINES = 30;
+    private static final int MAX_SIZE = 6000;
 
     private URL url;
     private HttpURLConnection connection;
@@ -52,9 +56,12 @@ public class Http {
             BufferedReader in = new BufferedReader(new InputStreamReader(this.connection.getInputStream()));
             String inputLine;
 
-            while ((inputLine = in.readLine()) != null && lines < 30) {
+            while ((inputLine = in.readLine()) != null && lines < MAX_LINES) {
                 response.append(inputLine);
                 ++lines;
+
+                if (response.length() >= MAX_SIZE)
+                    break;
             }
             in.close();
         } catch (IOException e) {
