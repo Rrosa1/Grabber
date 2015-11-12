@@ -47,14 +47,14 @@ public class Http {
 
     public String getIndex() {
         StringBuilder response = new StringBuilder();
-
+        int lines = 0;
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(this.connection.getInputStream()));
             String inputLine;
-            /* TODO change readline to read buffer  */
 
-            while ((inputLine = in.readLine()) != null) {
+            while ((inputLine = in.readLine()) != null && lines < 30) {
                 response.append(inputLine);
+                ++lines;
             }
             in.close();
         } catch (IOException e) {
