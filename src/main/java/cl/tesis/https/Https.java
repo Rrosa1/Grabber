@@ -59,13 +59,18 @@ public class Https {
 
     public String getIndex() {
         StringBuilder response = new StringBuilder();
+        int lines = 0;
 
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(this.connection.getInputStream()));
             String inputLine;
 
-            while ((inputLine = in.readLine()) != null) {
+            while ((inputLine = in.readLine()) != null && lines < MAX_LINES) {
                 response.append(inputLine);
+                ++lines;
+
+                if (response.length() >= MAX_SIZE)
+                    break;
             }
             in.close();
         } catch (IOException e) {
