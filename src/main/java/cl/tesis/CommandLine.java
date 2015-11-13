@@ -80,6 +80,7 @@ public class CommandLine {
         }
         if (version) {
             System.out.println("version: " + versionDetails);
+            System.exit(0);
         }
 
     }
