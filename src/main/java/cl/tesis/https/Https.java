@@ -43,13 +43,14 @@ public class Https {
         this.url = new URL(HTTPS, ip, port, "");
         this.connection = (HttpsURLConnection) url.openConnection();
 
+        // Setting timeouts
+        this.connection.setReadTimeout(TIMEOUT);
+
         // Setting methods
+        this.connection.setInstanceFollowRedirects(false);
         this.connection.setRequestMethod(GET);
         this.connection.setRequestProperty("User-Agent", "Mozilla/5.0");
 
-        // Setting timeouts
-        this.connection.setConnectTimeout(TIMEOUT);
-        this.connection.setReadTimeout(TIMEOUT);
     }
 
     public Map<String, List<String>> getHeader() {
@@ -58,7 +59,7 @@ public class Https {
 
     public String getIndex() {
         char[] index = new char[INDEX_SIZE];
-        int readChars = 0;
+        int readChars;
 
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(this.connection.getInputStream()));
