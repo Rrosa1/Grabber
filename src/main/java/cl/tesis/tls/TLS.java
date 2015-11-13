@@ -47,18 +47,23 @@ public class TLS {
     }
 
     public HostCertificate doHandshake() throws IOException, HandshakeException {
-        HostCertificate hostCertificate;
+        HostCertificate hostCertificate = null;
         try {
             /* client hello */
             this.out.write(new ClientHello(TLSVersion.TLS_11.getStringVersion(), TLSCipher.TEST).toByte());
             this.readAllAvailable();
 
             /* server hello */
+            try{
             ServerHello serverHello = new ServerHello(buffer);
 
             /* certificate */
-            CertificateMessage certificateMessage = new CertificateMessage(buffer, serverHello.endOfServerHello());
-            hostCertificate = this.byteArrayToHostCertificate(certificateMessage.getCertificates());
+                CertificateMessage certificateMessage = new CertificateMessage(buffer, serverHello.endOfServerHello());
+                hostCertificate = this.byteArrayToHostCertificate(certificateMessage.getCertificates());
+
+            } catch (IndexOutOfBoundsException e){
+                System.out.println(this.socket.getInetAddress());
+            }
 
             /* Close connection */
             this.sendAlertMessage();
@@ -261,11 +266,10 @@ public class TLS {
     private void sendAlertMessage() throws IOException {
         this.out.write(TLSUtil.hexStringToByteArray(TLS_ALERT));
     }
-    public static void main(String[] args) throws IOException, TLSHeaderException, HandshakeHeaderException {
-        Socket socket = new Socket("192.80.24.4", 465);
+
+    public static void main(String[] args) throws IOException, TLSHeaderException, HandshakeHeaderException, HandshakeException {
+        Socket socket = new Socket("200.91.20.147", 443);
         TLS tls =  new TLS(socket);
-        System.out.println(tls.heartbleedTest(null, TLSVersion.TLS_11).toJson());
-        System.out.println(tls.checkTLSVersions(null).toJson());
-        System.out.println(tls.checkCipherSuites(null).toJson());
+        tls.doHandshake();
     }
 }
