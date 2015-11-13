@@ -20,8 +20,6 @@ public class Http {
 
     private static final int TIMEOUT = 60000;
     private static final int DEFAULT_PORT = 80;
-/*    private static final int MAX_LINES = 30;
-    private static final int MAX_SIZE = 6000;*/
     private static final int INDEX_SIZE = 4 * 1024; // 6 Kb
 
     private URL url;

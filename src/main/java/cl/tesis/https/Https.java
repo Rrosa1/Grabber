@@ -23,8 +23,7 @@ public class Https {
     private static final String GET = "GET";
 
     private static final int TIMEOUT = 60000;
-    private static final int MAX_LINES = 30;
-    private static final int MAX_SIZE = 6000;
+    private static final int INDEX_SIZE = 4 * 1024; // 4 Kb
 
     private URL url;
     private HttpsURLConnection connection;
@@ -58,27 +57,19 @@ public class Https {
     }
 
     public String getIndex() {
-        StringBuilder response = new StringBuilder();
-        int lines = 0;
+        char[] index = new char[INDEX_SIZE];
+        int readChars;
 
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(this.connection.getInputStream()));
-            String inputLine;
-
-            while ((inputLine = in.readLine()) != null && lines < MAX_LINES) {
-                response.append(inputLine);
-                ++lines;
-
-                if (response.length() >= MAX_SIZE)
-                    break;
-            }
+            readChars = in.read(index);
             in.close();
         } catch (IOException e) {
             logger.log(Level.INFO, "Error getting index {0}", this.url.getHost());
             return null;
         }
 
-        return response.toString();
+        return new String(index, 0, readChars);
     }
 
     public void close() {
