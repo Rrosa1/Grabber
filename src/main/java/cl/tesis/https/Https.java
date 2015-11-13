@@ -58,7 +58,7 @@ public class Https {
 
     public String getIndex() {
         char[] index = new char[INDEX_SIZE];
-        int readChars;
+        int readChars = 0;
 
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(this.connection.getInputStream()));
@@ -69,7 +69,10 @@ public class Https {
             return null;
         }
 
-        return new String(index, 0, readChars);
+        if (readChars == 0)
+            return null;
+        else
+            return new String(index, 0, readChars);
     }
 
     public void close() {
