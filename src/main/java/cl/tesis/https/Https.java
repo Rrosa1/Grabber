@@ -44,6 +44,7 @@ public class Https {
         this.connection = (HttpsURLConnection) url.openConnection();
 
         // Setting timeouts
+        this.connection.setConnectTimeout(TIMEOUT);
         this.connection.setReadTimeout(TIMEOUT);
 
         // Setting methods
