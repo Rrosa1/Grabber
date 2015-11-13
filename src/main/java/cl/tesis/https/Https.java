@@ -69,7 +69,7 @@ public class Https {
             return null;
         }
 
-        if (readChars == 0)
+        if (readChars <= 0)
             return null;
         else
             return new String(index, 0, readChars);
