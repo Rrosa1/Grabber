@@ -90,7 +90,7 @@ public class CommandLine {
     }
 
     private boolean infoArgs() {
-        return !(listProbeModules || listOutputModules);
+        return !(listProbeModules || listOutputModules || version);
     }
 
     public void required(CmdLineParser parser) throws CmdLineException {
