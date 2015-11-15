@@ -1,6 +1,11 @@
 package cl.tesis.https;
 
 
+import cl.tesis.http.exception.HTTPHeaderException;
+import cl.tesis.http.exception.HTTPIndexException;
+import cl.tesis.https.exception.HTTPSHeaderException;
+import cl.tesis.https.exception.HTTPSIndexException;
+
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -23,14 +28,15 @@ public class Https {
     private static final String GET = "GET";
 
     private static final int TIMEOUT = 60000;
-    private static final int INDEX_SIZE = 4 * 1024; // 4 Kb
+    private static final int INDEX_SIZE = 8 * 1024; // 8 Kb
 
     private URL url;
     private HttpsURLConnection connection;
+    private BufferedReader in;
 
     public Https(String ip, int port) throws NoSuchAlgorithmException, KeyManagementException, IOException {
         // Install the all-trusting trust manager
-        SSLContext sc = SSLContext.getInstance("SSL");
+        SSLContext sc = SSLContext.getInstance("TLS");
         sc.init(null, TrustAllCert.getManager(), new java.security.SecureRandom());
         HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
 
@@ -52,32 +58,42 @@ public class Https {
         this.connection.setRequestMethod(GET);
         this.connection.setRequestProperty("User-Agent", "Mozilla/5.0");
 
+        // Setting Buffer Reader
+        this.in = new BufferedReader(new InputStreamReader(this.connection.getInputStream()));
+
     }
 
-    public Map<String, List<String>> getHeader() {
-        return this.connection.getHeaderFields();
+    public Map<String, List<String>> getHeader() throws HTTPSHeaderException {
+        Map<String, List<String>> header;
+
+        try {
+            Thread.sleep(10000);
+            header = this.connection.getHeaderFields();
+        } catch (InterruptedException e) {
+            throw new HTTPSHeaderException();
+        }
+
+        if (header != null && header.size() == 0) {
+            throw new HTTPSHeaderException();
+        }
+
+        return header;
     }
 
-    public String getIndex() {
+    public String getIndex() throws HTTPSIndexException {
         char[] index = new char[INDEX_SIZE];
         int readChars;
 
         try {
-            BufferedReader in = new BufferedReader(new InputStreamReader(this.connection.getInputStream()));
             readChars = in.read(index);
             in.close();
         } catch (IOException e) {
-            logger.log(Level.INFO, "Error getting index {0}", this.url.getHost());
-            return null;
+            throw new HTTPSIndexException();
         }
 
         if (readChars <= 0)
             return null;
         else
             return new String(index, 0, readChars);
-    }
-
-    public void close() {
-        this.connection.disconnect();
     }
 }
