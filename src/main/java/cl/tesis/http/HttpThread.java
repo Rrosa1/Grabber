@@ -1,6 +1,8 @@
 package cl.tesis.http;
 
 import cl.tesis.http.exception.HTTPConnectionException;
+import cl.tesis.http.exception.HTTPHeaderException;
+import cl.tesis.http.exception.HTTPIndexException;
 import cl.tesis.input.FileReader;
 import cl.tesis.output.FileWriter;
 
@@ -33,12 +35,18 @@ public class HttpThread extends Thread {
                 Http connection = new Http(columns[IP], this.port);
                 data.setHeader(connection.getHeader());
                 data.setIndex(connection.getIndex());
-                connection.close();
                 logger.log(Level.INFO, "Completed scan of {0}", columns[IP]);
             } catch (HTTPConnectionException e) {
                 data.setError("Connection error");
                 logger.log(Level.INFO, "Connection error {0}", columns[IP]);
+            } catch (HTTPHeaderException e) {
+                data.setError("Get header error");
+                logger.log(Level.INFO, "Get header error {0}", columns[IP]);
+            } catch (HTTPIndexException e) {
+                data.setError("Get index error");
+                logger.log(Level.INFO, "Get index error {0}", columns[IP]);
             }
+
             this.writer.writeLine(data);
             data.clear();
         }
