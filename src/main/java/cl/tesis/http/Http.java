@@ -26,7 +26,6 @@ public class Http {
 
     private URL url;
     private HttpURLConnection connection;
-    private BufferedReader in;
 
     public Http (String host) throws HTTPConnectionException {
         this(host, DEFAULT_PORT, "");
@@ -50,8 +49,8 @@ public class Http {
             this.connection.setRequestMethod(GET);
             this.connection.setRequestProperty("User-Agent", "Mozilla/5.0");
 
-            // Setting the Buffer Reader
-            this.in = new BufferedReader(new InputStreamReader(this.connection.getInputStream()));
+            // Setting the connection
+            this.connection.connect();
 
         } catch (IOException e) {
             throw new HTTPConnectionException();
@@ -81,6 +80,7 @@ public class Http {
         int readChars;
 
         try {
+            BufferedReader in = new BufferedReader(new InputStreamReader(this.connection.getInputStream()));
             readChars = in.read(index);
             in.close();
         } catch (IOException e) {

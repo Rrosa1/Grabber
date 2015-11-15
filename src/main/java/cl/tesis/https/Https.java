@@ -32,7 +32,6 @@ public class Https {
 
     private URL url;
     private HttpsURLConnection connection;
-    private BufferedReader in;
 
     public Https(String ip, int port) throws NoSuchAlgorithmException, KeyManagementException, IOException {
         // Install the all-trusting trust manager
@@ -58,8 +57,8 @@ public class Https {
         this.connection.setRequestMethod(GET);
         this.connection.setRequestProperty("User-Agent", "Mozilla/5.0");
 
-        // Setting Buffer Reader
-        this.in = new BufferedReader(new InputStreamReader(this.connection.getInputStream()));
+        // Setting the connection
+        this.connection.connect();
 
     }
 
@@ -85,6 +84,7 @@ public class Https {
         int readChars;
 
         try {
+            BufferedReader in = new BufferedReader(new InputStreamReader(this.connection.getInputStream()));
             readChars = in.read(index);
             in.close();
         } catch (IOException e) {
