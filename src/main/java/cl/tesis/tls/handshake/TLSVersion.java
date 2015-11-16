@@ -3,7 +3,6 @@ package cl.tesis.tls.handshake;
 import java.util.Arrays;
 
 public enum TLSVersion {
-    SSL_20("SSLv2", "", null),
     SSL_30("SSLv3", "0300", new byte[]{0x03, 0x00}),
     TLS_10("TLSv1", "0301", new byte[]{0x03, 0x01}),
     TLS_11("TLSv1.1", "0302", new byte[]{0x03, 0x02}),
