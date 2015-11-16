@@ -1,9 +1,6 @@
 package cl.tesis.https;
 
-import cl.tesis.https.handshake.SocketTLSHandshakeException;
-import cl.tesis.https.handshake.TLSGetCertificateException;
-import cl.tesis.https.handshake.TLSHandshake;
-import cl.tesis.https.handshake.TLSHandshakeException;
+import cl.tesis.https.handshake.*;
 import cl.tesis.input.FileReader;
 import cl.tesis.output.FileWriter;
 import cl.tesis.tls.HostCertificate;
@@ -72,6 +69,9 @@ public class HttpsCertificateThread extends Thread{
             } catch (SocketTLSHandshakeException e) {
                 data.setError("Create socket Error");
                 logger.log(Level.INFO, "Create socket error {0}", columns[IP]);
+            } catch (TLSConnectionException e) {
+                data.setError("Connection error");
+                logger.log(Level.INFO, "Connection error {0}", columns[IP]);
             } catch (TLSHandshakeException e) {
                 data.setError("Handshake error");
                 logger.log(Level.INFO, "Handshake error {0}", columns[IP]);

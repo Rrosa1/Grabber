@@ -42,11 +42,14 @@ public class TLSHandshake {
         this(host, port, TLSVersion.TLS_12);
     }
 
-    public void connect() throws TLSHandshakeException {
+    public void connect() throws TLSHandshakeException, TLSConnectionException {
         try {
             this.socket.connect(this.address, CONNECTION_TIMEOUT);
             this.socket.setSoTimeout(HANDSHAKE_TIMEOUT);
-
+        } catch (IOException e) {
+            throw new TLSConnectionException();
+        }
+        try {
             this.socket.startHandshake();
             this.session = this.socket.getSession();
         } catch (IOException e) {
@@ -76,7 +79,7 @@ public class TLSHandshake {
         return this.session.getCipherSuite();
     }
 
-    public static void main(String[] args) throws SocketTLSHandshakeException, IOException, TLSHandshakeException, TLSGetCertificateException {
+    public static void main(String[] args) throws SocketTLSHandshakeException, IOException, TLSHandshakeException, TLSGetCertificateException, TLSConnectionException {
         TLSHandshake tls =  new TLSHandshake("192.80.24.4", 443);
         tls.connect();
         X509Certificate[] certs = tls.getChainCertificate();
