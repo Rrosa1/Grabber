@@ -2,12 +2,12 @@ package cl.tesis.mail;
 
 import cl.tesis.output.CSVWritable;
 import cl.tesis.output.JsonWritable;
-import cl.tesis.tls.HostCertificate;
 import cl.tesis.tls.Heartbleed;
+import cl.tesis.tls.HostCertificate;
 import cl.tesis.tls.ScanCiphersSuites;
-import cl.tesis.tls.ScanTLSVersion;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import tlsNew.ScanTLSProtocolsData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ public class POP3Data implements JsonWritable, CSVWritable{
     private String start;
     private HostCertificate certificate;
     private Heartbleed heartbleed;
-    private ScanTLSVersion protocols;
+    private ScanTLSProtocolsData protocols;
     private ScanCiphersSuites ciphersSuites;
 
     public POP3Data(String ip) {
@@ -42,7 +42,7 @@ public class POP3Data implements JsonWritable, CSVWritable{
         this.heartbleed = heartbleed;
     }
 
-    public void setProtocols(ScanTLSVersion protocols) {
+    public void setProtocols(ScanTLSProtocolsData protocols) {
         this.protocols = protocols;
     }
 

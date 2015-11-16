@@ -12,6 +12,7 @@ import tlsNew.exception.TLSHandshakeException;
 import javax.net.ssl.*;
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.net.SocketAddress;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -40,6 +41,10 @@ public class TLSHandshake {
         } catch (NoSuchAlgorithmException | KeyManagementException | IOException e) {
             throw new SocketTLSHandshakeException();
         }
+    }
+
+    public TLSHandshake(Socket socket, TLSVersion protocolVersion) {
+
     }
 
     public TLSHandshake(String host, int port) throws SocketTLSHandshakeException {

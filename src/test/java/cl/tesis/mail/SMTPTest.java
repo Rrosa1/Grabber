@@ -3,9 +3,9 @@ package cl.tesis.mail;
 
 import cl.tesis.tls.HostCertificate;
 import cl.tesis.tls.ScanCiphersSuites;
-import cl.tesis.tls.ScanTLSVersion;
 import cl.tesis.tls.TLS;
 import junit.framework.TestCase;
+import tlsNew.ScanTLSProtocolsData;
 
 
 
@@ -39,7 +39,7 @@ public class SMTPTest extends TestCase{
 
     public void testAllTLSVersion() throws Exception {
         TLS tls =  new TLS(smtp.getSocket());
-        ScanTLSVersion version =  tls.checkTLSVersions(StartTLS.SMTP);
+        ScanTLSProtocolsData version =  tls.checkTLSVersions(StartTLS.SMTP);
         assertEquals(false, version.isSSL_30());
         assertEquals(true, version.isTLS_10());
         assertEquals(true, version.isTLS_11());

@@ -2,9 +2,9 @@ package cl.tesis.mail;
 
 import cl.tesis.tls.HostCertificate;
 import cl.tesis.tls.ScanCiphersSuites;
-import cl.tesis.tls.ScanTLSVersion;
 import cl.tesis.tls.TLS;
 import junit.framework.TestCase;
+import tlsNew.ScanTLSProtocolsData;
 
 public class POPTest extends TestCase{
     public POP3 pop;
@@ -29,7 +29,7 @@ public class POPTest extends TestCase{
 
     public void testAllTLSVersion() throws Exception {
         TLS tls =  new TLS(pop.getSocket());
-        ScanTLSVersion version =  tls.checkTLSVersions(StartTLS.POP3);
+        ScanTLSProtocolsData version =  tls.checkTLSVersions(StartTLS.POP3);
         assertEquals(false, version.isSSL_30());
         assertEquals(true, version.isTLS_10());
         assertEquals(false, version.isTLS_11());

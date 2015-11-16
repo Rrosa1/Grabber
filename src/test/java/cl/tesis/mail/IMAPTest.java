@@ -2,9 +2,9 @@ package cl.tesis.mail;
 
 import cl.tesis.tls.HostCertificate;
 import cl.tesis.tls.ScanCiphersSuites;
-import cl.tesis.tls.ScanTLSVersion;
 import cl.tesis.tls.TLS;
 import junit.framework.TestCase;
+import tlsNew.ScanTLSProtocolsData;
 
 public class IMAPTest extends TestCase {
     public static String START_PROTOCOL = "* OK [CAPABILITY IMAP4REV1 I18NLEVEL=1 LITERAL+ SASL-IR LOGIN-REFERRALS STARTTLS LOGINDISABLED] dichato.dcc.uchile.cl";
@@ -31,7 +31,7 @@ public class IMAPTest extends TestCase {
 
     public void testAllTLSVersion() throws Exception {
         TLS tls =  new TLS(imap.getSocket());
-        ScanTLSVersion version =  tls.checkTLSVersions(StartTLS.IMAP);
+        ScanTLSProtocolsData version =  tls.checkTLSVersions(StartTLS.IMAP);
         assertEquals(false, version.isSSL_30());
         assertEquals(true, version.isTLS_10());
         assertEquals(false, version.isTLS_11());

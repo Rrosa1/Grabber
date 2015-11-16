@@ -1,4 +1,4 @@
-package cl.tesis.tls;
+package tlsNew;
 
 
 import cl.tesis.output.JsonWritable;
@@ -6,13 +6,13 @@ import cl.tesis.tls.handshake.TLSVersion;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class ScanTLSVersion implements JsonWritable{
+public class ScanTLSProtocolsData implements JsonWritable{
     private boolean SSL_30;
     private boolean TLS_10;
     private boolean TLS_11;
     private boolean TLS_12;
 
-    public ScanTLSVersion() {
+    public ScanTLSProtocolsData() {
         super();
     }
 

@@ -2,7 +2,6 @@ package tlsNew;
 
 
 import cl.tesis.mail.StartTLS;
-import cl.tesis.tls.ScanTLSVersion;
 import cl.tesis.tls.handshake.TLSVersion;
 import tlsNew.exception.SocketTLSHandshakeException;
 import tlsNew.exception.TLSConnectionException;
@@ -25,14 +24,14 @@ public class ScanTLSProtocols {
         this(host, port, null);
     }
 
-    public ScanTLSVersion scanAllProtocols() {
-        ScanTLSVersion scanTLSVersion = new ScanTLSVersion();
+    public ScanTLSProtocolsData scanAllProtocols() {
+        ScanTLSProtocolsData scanTLSProtocolsData = new ScanTLSProtocolsData();
 
         for (TLSVersion tlsVersion : TLSVersion.values()) {
-            scanTLSVersion.setTLSVersion(tlsVersion, scanProtocol(tlsVersion));
+            scanTLSProtocolsData.setTLSVersion(tlsVersion, scanProtocol(tlsVersion));
         }
 
-        return scanTLSVersion;
+        return scanTLSProtocolsData;
     }
 
     private boolean scanProtocol(TLSVersion version) {

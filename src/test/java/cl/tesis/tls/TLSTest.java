@@ -2,6 +2,7 @@ package cl.tesis.tls;
 
 import junit.framework.TestCase;
 import tlsNew.ScanTLSProtocols;
+import tlsNew.ScanTLSProtocolsData;
 import tlsNew.TLSHandshake;
 
 import java.net.Socket;
@@ -33,7 +34,7 @@ public class TLSTest extends TestCase{
 
     public void testTLSVersion() throws Exception {
         ScanTLSProtocols protocols =  new ScanTLSProtocols(HOST, PORT);
-        ScanTLSVersion version = protocols.scanAllProtocols();
+        ScanTLSProtocolsData version = protocols.scanAllProtocols();
 
         assertEquals(false, version.isSSL_30());
         assertEquals(true, version.isTLS_10());

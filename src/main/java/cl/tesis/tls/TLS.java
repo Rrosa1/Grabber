@@ -7,6 +7,7 @@ import cl.tesis.tls.exception.HandshakeHeaderException;
 import cl.tesis.tls.exception.StartTLSException;
 import cl.tesis.tls.exception.TLSHeaderException;
 import cl.tesis.tls.handshake.*;
+import tlsNew.ScanTLSProtocolsData;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataOutputStream;
@@ -84,8 +85,8 @@ public class TLS {
         return this.doHandshake();
     }
 
-    public ScanTLSVersion checkTLSVersions(StartTLS start) {
-        ScanTLSVersion scanTLSVersion = new ScanTLSVersion();
+    public ScanTLSProtocolsData checkTLSVersions(StartTLS start) {
+        ScanTLSProtocolsData scanTLSProtocolsData = new ScanTLSProtocolsData();
         InetAddress address = this.socket.getInetAddress();
         ServerHello serverHello;
         int port = this.socket.getPort();
@@ -108,18 +109,18 @@ public class TLS {
 
 
             } catch (TLSHeaderException | HandshakeHeaderException | IOException e) {
-                scanTLSVersion.setTLSVersion(tls, false);
+                scanTLSProtocolsData.setTLSVersion(tls, false);
                 continue;
             }
 
             if (Arrays.equals(tls.getByteVersion(), serverHello.getProtocolVersion())) {
-                scanTLSVersion.setTLSVersion(tls, true);
+                scanTLSProtocolsData.setTLSVersion(tls, true);
             } else {
-                scanTLSVersion.setTLSVersion(tls, false);
+                scanTLSProtocolsData.setTLSVersion(tls, false);
             }
         }
 
-        return scanTLSVersion;
+        return scanTLSProtocolsData;
     }
 
     public ScanCiphersSuites checkCipherSuites(StartTLS start) {
