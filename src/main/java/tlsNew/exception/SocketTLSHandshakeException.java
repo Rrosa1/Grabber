@@ -1,4 +1,4 @@
-package cl.tesis.https.handshake;
+package tlsNew.exception;
 
 
 public class SocketTLSHandshakeException extends Exception {

@@ -1,9 +1,13 @@
-package cl.tesis.https.handshake;
+package tlsNew;
 
 
 import cl.tesis.https.TrustAllCert;
 import cl.tesis.tls.HostCertificate;
 import cl.tesis.tls.handshake.TLSVersion;
+import tlsNew.exception.SocketTLSHandshakeException;
+import tlsNew.exception.TLSConnectionException;
+import tlsNew.exception.TLSGetCertificateException;
+import tlsNew.exception.TLSHandshakeException;
 
 import javax.net.ssl.*;
 import java.io.IOException;
