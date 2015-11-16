@@ -3,6 +3,7 @@ package cl.tesis.https.handshake;
 
 import cl.tesis.https.TrustAllCert;
 import cl.tesis.tls.HostCertificate;
+import cl.tesis.tls.handshake.TLSVersion;
 
 import javax.net.ssl.*;
 import java.io.IOException;
@@ -22,10 +23,10 @@ public class TLSHandshake {
     private SSLSession session;
     private SocketAddress address;
 
-    public TLSHandshake(String host, int port) throws SocketTLSHandshakeException {
+    public TLSHandshake(String host, int port, TLSVersion protocolVersion) throws SocketTLSHandshakeException {
         try {
 
-            SSLContext sslContext =  SSLContext.getInstance("TLSv1.2");
+            SSLContext sslContext =  SSLContext.getInstance(protocolVersion.getName());
             sslContext.init(null, TrustAllCert.getManager(), new java.security.SecureRandom());
             this.sslSocketFactory = sslContext.getSocketFactory();
 
@@ -37,12 +38,21 @@ public class TLSHandshake {
         }
     }
 
-    public void connect() throws IOException, TLSHandshakeTimeoutException {
-        this.socket.connect(this.address, CONNECTION_TIMEOUT);
-        this.socket.setSoTimeout(HANDSHAKE_TIMEOUT);
+    public TLSHandshake(String host, int port) throws SocketTLSHandshakeException {
+        this(host, port, TLSVersion.TLS_12);
+    }
 
-        this.socket.startHandshake();
-        this.session = this.socket.getSession();
+    public void connect() throws TLSHandshakeException {
+        try {
+            this.socket.connect(this.address, CONNECTION_TIMEOUT);
+            this.socket.setSoTimeout(HANDSHAKE_TIMEOUT);
+
+            this.socket.startHandshake();
+            this.session = this.socket.getSession();
+        } catch (IOException e) {
+            throw new TLSHandshakeException();
+        }
+
     }
 
     public X509Certificate[] getChainCertificate() throws TLSGetCertificateException {
@@ -66,7 +76,7 @@ public class TLSHandshake {
         return this.session.getCipherSuite();
     }
 
-    public static void main(String[] args) throws SocketTLSHandshakeException, IOException, TLSHandshakeTimeoutException, TLSGetCertificateException {
+    public static void main(String[] args) throws SocketTLSHandshakeException, IOException, TLSHandshakeException, TLSGetCertificateException {
         TLSHandshake tls =  new TLSHandshake("192.80.24.4", 443);
         tls.connect();
         X509Certificate[] certs = tls.getChainCertificate();
