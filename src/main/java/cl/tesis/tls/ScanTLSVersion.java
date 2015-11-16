@@ -7,7 +7,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class ScanTLSVersion implements JsonWritable{
-    private boolean SSL_20;
     private boolean SSL_30;
     private boolean TLS_10;
     private boolean TLS_11;
