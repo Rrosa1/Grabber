@@ -15,7 +15,9 @@ import java.util.List;
 public class HttpsCertificateData implements CSVWritable, JsonWritable{
     private String ip;
     private String error;
-    private HostCertificate certificate;
+    private String tlsProtocol;
+    private String cipherSuite;
+    private HostCertificate certificate; // Todo change to array of certs
     private Heartbleed heartbleed;
     private ScanTLSVersion protocols;
     private ScanCiphersSuites ciphersSuites;
@@ -26,6 +28,14 @@ public class HttpsCertificateData implements CSVWritable, JsonWritable{
 
     public void setError(String error) {
         this.error = error;
+    }
+
+    public void setTLSProtocol(String tlsProtocol) {
+        this.tlsProtocol = tlsProtocol;
+    }
+
+    public void setCipherSuite(String cipherSuite) {
+        this.cipherSuite = cipherSuite;
     }
 
     public void setCertificate(HostCertificate certificate) {
@@ -44,6 +54,7 @@ public class HttpsCertificateData implements CSVWritable, JsonWritable{
         this.ciphersSuites = ciphersSuites;
     }
 
+    // TODO remove csvfilewriter
     @Override
     public List<String> getParameterList() {
         ArrayList<String> parameters = new ArrayList<>();

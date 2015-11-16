@@ -45,6 +45,9 @@ public class HttpsCertificateThread extends Thread{
                 TLSHandshake tls =  new TLSHandshake(columns[IP], this.port);
                 tls.connect();
                 X509Certificate[] certs = tls.getChainCertificate();
+
+                data.setTLSProtocol(tls.getProtocol());
+                data.setCipherSuite(tls.getCipherSuite());
                 data.setCertificate(new HostCertificate(certs[0], false, certs));
 
 //                /* Check all SSL/TLS Protocols*/
