@@ -1,7 +1,7 @@
 package tlsNew.exception;
 
 
-public class TLSHandshakeException extends Throwable {
+public class TLSHandshakeException extends Exception {
 
     public TLSHandshakeException() {
     }
