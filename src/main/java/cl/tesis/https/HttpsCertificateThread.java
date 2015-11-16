@@ -1,11 +1,15 @@
 package cl.tesis.https;
 
-import cl.tesis.https.handshake.*;
 import cl.tesis.input.FileReader;
 import cl.tesis.output.FileWriter;
 import cl.tesis.tls.HostCertificate;
+import tlsNew.ScanTLSProtocols;
+import tlsNew.TLSHandshake;
+import tlsNew.exception.SocketTLSHandshakeException;
+import tlsNew.exception.TLSConnectionException;
+import tlsNew.exception.TLSGetCertificateException;
+import tlsNew.exception.TLSHandshakeException;
 
-import java.io.IOException;
 import java.security.cert.X509Certificate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -47,10 +51,12 @@ public class HttpsCertificateThread extends Thread{
                 data.setCipherSuite(tls.getCipherSuite());
                 data.setCertificate(new HostCertificate(certs[0], false, certs));
 
-//                /* Check all SSL/TLS Protocols*/
-//                if (allProtocols)
-//                    data.setProtocols(tls.checkTLSVersions(null));
-//
+                /* Check all SSL/TLS Protocols*/
+                if (allProtocols) {
+                    ScanTLSProtocols scan = new ScanTLSProtocols(columns[IP], port);
+                    data.setProtocols(scan.scanAllProtocols());
+                }
+
 //                /* Check all Cipher Suites */
 //                if (allCiphersSuites)
 //                    data.setCiphersSuites(tls.checkCipherSuites(null));
