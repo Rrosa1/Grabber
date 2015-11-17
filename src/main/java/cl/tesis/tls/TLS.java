@@ -6,10 +6,16 @@ import cl.tesis.tls.exception.HandshakeException;
 import cl.tesis.tls.exception.HandshakeHeaderException;
 import cl.tesis.tls.exception.StartTLSException;
 import cl.tesis.tls.exception.TLSHeaderException;
-import cl.tesis.tls.handshake.*;
+import cl.tesis.tls.handshake.CertificateMessage;
+import cl.tesis.tls.handshake.ClientHello;
+import cl.tesis.tls.handshake.ServerHello;
 import tlsNew.HeartbleedData;
 import tlsNew.ScanCipherSuitesData;
 import tlsNew.ScanTLSProtocolsData;
+import tlsNew.constant.CipherSuites;
+import tlsNew.constant.TLSCipher;
+import tlsNew.constant.TLSVersion;
+import tlsNew.util.TLSUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataOutputStream;
@@ -27,7 +33,7 @@ import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.List;
 
-import static cl.tesis.tls.CertChainValidator.validateKeyChain;
+import static tlsNew.util.CertChainValidator.validateKeyChain;
 
 public class TLS {
 

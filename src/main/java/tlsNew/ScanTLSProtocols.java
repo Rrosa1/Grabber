@@ -3,7 +3,7 @@ package tlsNew;
 
 import cl.tesis.mail.StartTLS;
 import cl.tesis.tls.exception.StartTLSException;
-import cl.tesis.tls.handshake.TLSVersion;
+import tlsNew.constant.TLSVersion;
 import tlsNew.exception.SocketTLSHandshakeException;
 import tlsNew.exception.TLSConnectionException;
 import tlsNew.exception.TLSHandshakeException;

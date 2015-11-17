@@ -2,9 +2,9 @@ package tlsNew;
 
 
 import cl.tesis.output.JsonWritable;
-import cl.tesis.tls.handshake.TLSVersion;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import tlsNew.constant.TLSVersion;
 
 public class ScanTLSProtocolsData implements JsonWritable{
     private boolean SSL_30;

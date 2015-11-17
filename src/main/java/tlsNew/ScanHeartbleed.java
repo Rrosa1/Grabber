@@ -7,7 +7,7 @@ import cl.tesis.tls.exception.StartTLSException;
 import cl.tesis.tls.exception.TLSHeaderException;
 import cl.tesis.tls.handshake.ClientHello;
 import cl.tesis.tls.handshake.ServerHello;
-import cl.tesis.tls.handshake.TLSVersion;
+import tlsNew.constant.TLSVersion;
 
 import java.io.IOException;
 

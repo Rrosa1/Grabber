@@ -1,6 +1,9 @@
 package cl.tesis.tls.handshake;
 
-import cl.tesis.tls.TLSUtil;
+import tlsNew.constant.HandshakeType;
+import tlsNew.constant.TLSCipher;
+import tlsNew.constant.TLSVersion;
+import tlsNew.util.TLSUtil;
 
 public class ClientHello {
     private static final int RANDOM_SIZE = 32;
