@@ -10,25 +10,13 @@ import tlsNew.TLSHandshake;
 
 import java.security.cert.X509Certificate;
 
-public class POPTest extends TestCase{
+
+public class POPSTest extends TestCase {
     public static final String HOST = "64.64.18.121";
-    public static final int PORT = 110;
-    public POP3 pop;
-
-    public void setUp() throws Exception {
-        super.setUp();
-        pop = new POP3(HOST, PORT);
-    }
-
-    public void testPOPProtocol() throws Exception {
-        String start =  pop.startProtocol();
-        assertEquals("+OK Dovecot ready.\r\n", start);
-    }
+    public static final int PORT = 995;
 
     public void testHandshake() throws Exception {
-        pop.startProtocol();
-
-        TLSHandshake tlsHandshake =  new TLSHandshake(pop.getSocket(), StartTLS.POP3);
+        TLSHandshake tlsHandshake =  new TLSHandshake(HOST, PORT);
         tlsHandshake.connect();
         X509Certificate[] certs =  tlsHandshake.getChainCertificate();
 
@@ -39,7 +27,7 @@ public class POPTest extends TestCase{
 
     public void testAllTLSVersion() throws Exception {
         ScanTLSProtocols protocols = new ScanTLSProtocols(HOST, PORT);
-        ScanTLSProtocolsData version =  protocols.scanAllProtocols(StartTLS.POP3);
+        ScanTLSProtocolsData version =  protocols.scanAllProtocols();
 
         assertEquals(false, version.isSSL_30());
         assertEquals(true, version.isTLS_10());
@@ -48,8 +36,10 @@ public class POPTest extends TestCase{
     }
 
     public void testCipherSuite() throws Exception {
+        POP3 pop =  new POP3(HOST, PORT);
         TLS tls =  new TLS(pop.getSocket());
-        ScanCiphersSuites suites = tls.checkCipherSuites(StartTLS.POP3);
+        ScanCiphersSuites suites = tls.checkCipherSuites(null);
+
         assertEquals("TLS_RSA_WITH_RC4_128_SHA", suites.getMedium_ciphers());
         assertEquals("TLS_DHE_RSA_WITH_3DES_EDE_CBC_SHA", suites.getDes3_ciphers());
         assertEquals("TLS_DHE_RSA_WITH_AES_256_CBC_SHA", suites.getHigh_ciphers());

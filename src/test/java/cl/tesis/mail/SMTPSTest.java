@@ -11,33 +11,12 @@ import tlsNew.TLSHandshake;
 
 import java.security.cert.X509Certificate;
 
-
-public class SMTPTest extends TestCase{
+public class SMTPSTest extends TestCase{
     public static final String HOST = "192.80.24.4";
-    public static final int PORT = 25;
-    public SMTP smtp;
-
-    public void setUp() throws Exception {
-        super.setUp();
-        smtp = new SMTP(HOST, PORT);
-    }
-
-    public void testSMTPProtocol() throws Exception {
-        String start =  smtp.startProtocol();
-        assertEquals("220 dichato.dcc.uchile.cl ESMTP Postfix\r\n", start);
-
-        String help =  smtp.sendHELP();
-        assertEquals("502 5.5.2 Error: command not recognized\r\n", help);
-
-        String ehlo =  smtp.sendEHLO();
-        assertEquals("250-dichato.dcc.uchile.cl\r\n250-PIPELINING\r\n250-SIZE 120480000\r\n250-VRFY\r\n250-ETRN\r\n250-STARTTLS\r\n250-ENHANCEDSTATUSCODES\r\n250-8BITMIME\r\n250 DSN\r\n", ehlo);
-    }
+    public static final int PORT = 465;
 
     public void testHandshake() throws Exception {
-        smtp.startProtocol();
-        smtp.sendEHLO();
-
-        TLSHandshake tlsHandshake =  new TLSHandshake(smtp.getSocket(), StartTLS.SMTP);
+        TLSHandshake tlsHandshake =  new TLSHandshake(HOST, PORT);
         tlsHandshake.connect();
         X509Certificate[] certs = tlsHandshake.getChainCertificate();
 
@@ -48,7 +27,7 @@ public class SMTPTest extends TestCase{
 
     public void testAllTLSVersion() throws Exception {
         ScanTLSProtocols protocols =  new ScanTLSProtocols(HOST, PORT);
-        ScanTLSProtocolsData version = protocols.scanAllProtocols(StartTLS.SMTP);
+        ScanTLSProtocolsData version = protocols.scanAllProtocols();
 
         assertEquals(false, version.isSSL_30());
         assertEquals(true, version.isTLS_10());
@@ -57,8 +36,10 @@ public class SMTPTest extends TestCase{
     }
 
     public void testCipherSuite() throws Exception {
+        SMTP smtp = new SMTP(HOST, PORT);
         TLS tls =  new TLS(smtp.getSocket());
-        ScanCiphersSuites suites = tls.checkCipherSuites(StartTLS.SMTP);
+        ScanCiphersSuites suites = tls.checkCipherSuites(null);
+
         assertEquals("TLS_ECDH_ANON_WITH_AES_256_CBC_SHA", suites.getAnonymous_null_ciphers());
         assertEquals("TLS_DH_ANON_WITH_AES_256_CBC_SHA", suites.getAnonymous_dh_ciphers());
         assertEquals("TLS_DHE_RSA_WITH_SEED_CBC_SHA", suites.getMedium_ciphers());

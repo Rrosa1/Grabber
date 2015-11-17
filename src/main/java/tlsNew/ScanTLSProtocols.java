@@ -20,17 +20,9 @@ public class ScanTLSProtocols {
     private String host;
     private int port;
 
-    // SMTP, POP3, IMAP
-    private StartTLS start;
-
-    public ScanTLSProtocols(String host, int port, StartTLS start) {
+    public ScanTLSProtocols(String host, int port) {
         this.host = host;
         this.port = port;
-        this.start = start;
-    }
-
-    public ScanTLSProtocols(String host, int port) {
-        this(host, port, null);
     }
 
     public ScanTLSProtocolsData scanAllProtocols() {
@@ -43,7 +35,7 @@ public class ScanTLSProtocols {
         return scanTLSProtocolsData;
     }
 
-    public ScanTLSProtocolsData scanAllProtocolsStartTLS() {
+    public ScanTLSProtocolsData scanAllProtocols(StartTLS start) {
         ScanTLSProtocolsData scanTLSProtocolsData = new ScanTLSProtocolsData();
 
         for (TLSVersion tlsVersion : TLSVersion.values()) {

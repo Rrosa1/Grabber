@@ -161,8 +161,8 @@ public class TLSHandshake {
         HostCertificate h =  new HostCertificate(certs[0], false, certs);
         System.out.println(h.toJson());
 
-        ScanTLSProtocols protocols = new ScanTLSProtocols("192.80.24.4", 25, StartTLS.SMTP);
-        System.out.println(protocols.scanAllProtocolsStartTLS().toJson());
+        ScanTLSProtocols protocols = new ScanTLSProtocols("192.80.24.4", 25);
+        System.out.println(protocols.scanAllProtocols(StartTLS.SMTP).toJson());
     }
 
 }
