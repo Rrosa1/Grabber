@@ -48,7 +48,7 @@ public class CommandLine {
 
     private String[] probeModules = {"HTTPSCertificate", "HTTP", "HTTPS", "SSHVersion", "SMTP", "POP3", "IMAP", "FTP"};
     private String[] outputModules = {"CSV", "JSON"};
-    private String versionDetails = "v1.0a Fixed HTTP memory problem";
+    private String versionDetails = "v1.0a-Http memory fixes";
 
     public void parse(String[] args) {
         CmdLineParser parser = new CmdLineParser(this);
