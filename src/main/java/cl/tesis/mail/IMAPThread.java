@@ -3,19 +3,18 @@ package cl.tesis.mail;
 
 import cl.tesis.input.FileReader;
 import cl.tesis.output.FileWriter;
+import cl.tesis.tls.HostCertificate;
 import cl.tesis.tls.TLS;
-import cl.tesis.tls.exception.HandshakeException;
-import cl.tesis.tls.exception.HandshakeHeaderException;
 import cl.tesis.tls.exception.StartTLSException;
-import cl.tesis.tls.exception.TLSHeaderException;
-import cl.tesis.tls.handshake.TLSVersion;
+import tlsNew.ScanTLSProtocols;
+import tlsNew.TLSHandshake;
+import tlsNew.exception.SocketTLSHandshakeException;
+import tlsNew.exception.TLSConnectionException;
+import tlsNew.exception.TLSGetCertificateException;
+import tlsNew.exception.TLSHandshakeException;
 
 import java.io.IOException;
-import java.net.SocketTimeoutException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -54,39 +53,72 @@ public class IMAPThread extends Thread{
         while((columns = this.reader.nextLine()) != null) {
             IMAPData data = new IMAPData(columns[IP]);
             try {
-                IMAP imap = new IMAP(columns[IP]);
-
-                /* TLS Handshake */
-                TLS tls =  new TLS(imap.getSocket());
-                if (needStartTLS) {
+                if (needStartTLS) { // STARTTLS
+                    IMAP imap = new IMAP(columns[IP], this.port);
                     data.setStart(imap.startProtocol());
-                    data.setCertificate(tls.doProtocolHandshake(this.startTLS));
-                } else {
-                    data.setCertificate(tls.doHandshake());
+
+                    TLSHandshake tlsHandshake = new TLSHandshake(imap.getSocket(), this.startTLS);
+                    tlsHandshake.connect();
+                    X509Certificate[] certs = tlsHandshake.getChainCertificate();
+                    data.setCertificate(new HostCertificate(certs[0], true, certs));
+
+                    /* Check all SSL/TLS Protocols*/
+                    if (allProtocols) {
+                        ScanTLSProtocols protocols = new ScanTLSProtocols(columns[IP], port);
+                        data.setProtocols(protocols.scanAllProtocols(this.startTLS));
+                    }
+
+                    /* Check all Cipher Suites */
+                    if (allCiphersSuites) {
+                        TLS tls = new TLS(imap.getSocket());
+                        data.setCiphersSuites(tls.checkCipherSuites(this.startTLS));
+                    }
+
+                    /* Heartbleed test*/
+//                    if (heartbleed)
+//                        data.setHeartbleed(tls.heartbleedTest(this.startTLS, TLSVersion.TLS_12));
+
+                } else { // Secure Port
+                    TLSHandshake tlsHandshake = new TLSHandshake(columns[IP], port);
+                    tlsHandshake.connect();
+                    X509Certificate[] certs = tlsHandshake.getChainCertificate();
+                    data.setCertificate(new HostCertificate(certs[0], true, certs));
+
+                    /* Check all SSL/TLS Protocols*/
+                    if (allProtocols) {
+                        ScanTLSProtocols protocols = new ScanTLSProtocols(columns[IP], port);
+                        data.setProtocols(protocols.scanAllProtocols());
+                    }
+
+                    /* Check all Cipher Suites */
+                    if (allCiphersSuites) {
+                        IMAP imap = new IMAP(columns[IP], this.port);
+                        TLS tls = new TLS(imap.getSocket());
+                        data.setCiphersSuites(tls.checkCipherSuites(null));
+                    }
+
+                    /* Heartbleed test*/
+//                    if (heartbleed)
+//                        data.setHeartbleed(tls.heartbleedTest(this.startTLS, TLSVersion.TLS_12));
+
                 }
-
-
-                /* Check all SSL/TLS Protocols*/
-                if (allProtocols)
-                    data.setProtocols(tls.checkTLSVersions(this.startTLS));
-
-                /* Check all Cipher Suites */
-                if (allCiphersSuites)
-                    data.setCiphersSuites(tls.checkCipherSuites(this.startTLS));
-
-                /* Heartbleed test*/
-                if (heartbleed)
-                    data.setHeartbleed(tls.heartbleedTest(this.startTLS, TLSVersion.TLS_12));
-
-
-
-            } catch (StartTLSException | HandshakeException e) {
-                data.setError(e.getMessage());
+            } catch (SocketTLSHandshakeException | TLSConnectionException e) {
+                data.setError("Connection error");
+                logger.log(Level.INFO, "Connection error {0}", columns[IP]);
+            } catch (StartTLSException e) {
+                data.setError("Start Protocol error");
+                logger.log(Level.INFO, "Start Protocol error {0}", columns[IP]);
+            }  catch (TLSHandshakeException e) {
+                data.setError("Handshake error");
                 logger.log(Level.INFO, "Handshake error {0}", columns[IP]);
+            } catch (TLSGetCertificateException e) {
+                data.setError("Certificate get error");
+                logger.log(Level.INFO, "Certificate get error {0}", columns[IP]);
             } catch (IOException e) {
                 data.setError("Read or write socket error");
                 logger.log(Level.INFO, "Read or write over socket error {0}", columns[IP]);
             }
+
 
             this.writer.writeLine(data);
         }
