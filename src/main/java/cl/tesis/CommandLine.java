@@ -50,8 +50,6 @@ public class CommandLine {
     private String[] outputModules = {"CSV", "JSON"};
     private String versionDetails = "v1.0a Fixed HTTP memory problem";
 
-    private String versionDetails = "v1.0a-HTTP memory fixes";
-
     public void parse(String[] args) {
         CmdLineParser parser = new CmdLineParser(this);
 

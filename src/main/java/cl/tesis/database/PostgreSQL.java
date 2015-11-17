@@ -1,7 +1,7 @@
 package cl.tesis.database;
 
 
-import cl.tesis.tls.TLSUtil;
+import cl.tesis.tls.util.TLSUtil;
 
 import javax.net.SocketFactory;
 import java.io.BufferedReader;
