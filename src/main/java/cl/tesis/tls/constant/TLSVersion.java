@@ -1,12 +1,12 @@
-package cl.tesis.tls.handshake;
+package cl.tesis.tls.constant;
 
 import java.util.Arrays;
 
 public enum TLSVersion {
-    SSL_30("SSL 3.0", "0300", new byte[]{0x03, 0x00}),
-    TLS_10("TLS 1.0", "0301", new byte[]{0x03, 0x01}),
-    TLS_11("TLS 1.1", "0302", new byte[]{0x03, 0x02}),
-    TLS_12("TLS 1.2", "0303", new byte[]{0x03, 0x03});
+    SSL_30("SSLv3", "0300", new byte[]{0x03, 0x00}),
+    TLS_10("TLSv1", "0301", new byte[]{0x03, 0x01}),
+    TLS_11("TLSv1.1", "0302", new byte[]{0x03, 0x02}),
+    TLS_12("TLSv1.2", "0303", new byte[]{0x03, 0x03});
 
     private String name;
     private String stringVersion;

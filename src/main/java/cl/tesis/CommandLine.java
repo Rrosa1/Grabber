@@ -48,6 +48,7 @@ public class CommandLine {
 
     private String[] probeModules = {"HTTPSCertificate", "HTTP", "HTTPS", "SSHVersion", "SMTP", "POP3", "IMAP", "FTP", "MYSQL", "POSTGRESQL"};
     private String[] outputModules = {"CSV", "JSON"};
+    private String versionDetails = "v1.0a Fixed HTTP memory problem";
 
     private String versionDetails = "v1.0a-HTTP memory fixes";
 
@@ -71,7 +72,7 @@ public class CommandLine {
 
             System.exit(0);
         }
-        else if (listOutputModules) {
+        if (listOutputModules) {
             System.out.println("Output Modules:");
 
             for (String m : outputModules)

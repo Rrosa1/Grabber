@@ -1,17 +1,17 @@
 package cl.tesis.https;
 
 import cl.tesis.input.FileReader;
-import cl.tesis.mail.SMTP;
-import cl.tesis.mail.SMTPData;
-import cl.tesis.mail.StartTLS;
 import cl.tesis.output.FileWriter;
-import cl.tesis.tls.TLS;
-import cl.tesis.tls.exception.HandshakeException;
-import cl.tesis.tls.exception.StartTLSException;
-import cl.tesis.tls.handshake.TLSVersion;
+import cl.tesis.tls.Certificate;
+import cl.tesis.tls.ScanCipherSuites;
+import cl.tesis.tls.ScanTLSProtocols;
+import cl.tesis.tls.TLSHandshake;
+import cl.tesis.tls.exception.SocketTLSHandshakeException;
+import cl.tesis.tls.exception.TLSConnectionException;
+import cl.tesis.tls.exception.TLSGetCertificateException;
+import cl.tesis.tls.exception.TLSHandshakeException;
 
-import java.io.IOException;
-import java.net.Socket;
+import java.security.cert.X509Certificate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -44,28 +44,42 @@ public class HttpsCertificateThread extends Thread{
             HttpsCertificateData data =  new HttpsCertificateData(columns[IP]);
             try {
                 /* TLS Handshake*/
-                TLS tls =  new TLS(new Socket(columns[IP], this.port));
-                data.setCertificate(tls.doHandshake());
+                TLSHandshake tls =  new TLSHandshake(columns[IP], this.port);
+                tls.connect();
+                X509Certificate[] certs = tls.getChainCertificate();
 
+                data.setTLSProtocol(tls.getProtocol());
+                data.setCipherSuite(tls.getCipherSuite());
+                data.setChain(Certificate.parseCertificateChain(certs));
 
                 /* Check all SSL/TLS Protocols*/
-                if (allProtocols)
-                    data.setProtocols(tls.checkTLSVersions(null));
+                if (allProtocols) {
+                    ScanTLSProtocols scan = new ScanTLSProtocols(columns[IP], port);
+                    data.setProtocols(scan.scanAllProtocols());
+                }
 
                 /* Check all Cipher Suites */
-                if (allCiphersSuites)
-                    data.setCiphersSuites(tls.checkCipherSuites(null));
+                if (allCiphersSuites) {
+                    ScanCipherSuites cipherSuites = new ScanCipherSuites(columns[IP], port);
+                    data.setCiphersSuites(cipherSuites.scanAllCipherSuites());
+                }
 
-                /* Heartbleed test*/
-                if (heartbleed)
-                    data.setHeartbleed(tls.heartbleedTest(null, TLSVersion.TLS_12));
+//                /* Heartbleed test*/
+//                if (heartbleed)
+//                    data.setHeartbleed(tls.heartbleedTest(null, TLSVersion.TLS_12));
 
-            } catch (HandshakeException e) {
-                data.setError(e.getMessage());
+            } catch (SocketTLSHandshakeException e) {
+                data.setError("Create socket Error");
+                logger.log(Level.INFO, "Create socket error {0}", columns[IP]);
+            } catch (TLSConnectionException e) {
+                data.setError("Connection error");
+                logger.log(Level.INFO, "Connection error {0}", columns[IP]);
+            } catch (TLSHandshakeException e) {
+                data.setError("Handshake error");
                 logger.log(Level.INFO, "Handshake error {0}", columns[IP]);
-            }  catch (IOException e) {
-                data.setError("Read or write socket error");
-                logger.log(Level.INFO, "Read or write over socket error {0}", columns[IP]);
+            } catch (TLSGetCertificateException e) {
+                data.setError("Certificate error");
+                logger.log(Level.INFO, "Certificate error {0}", columns[IP]);
             }
 
             this.writer.writeLine(data);

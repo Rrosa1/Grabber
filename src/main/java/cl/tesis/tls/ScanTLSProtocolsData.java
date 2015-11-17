@@ -2,32 +2,32 @@ package cl.tesis.tls;
 
 
 import cl.tesis.output.JsonWritable;
-import cl.tesis.tls.handshake.TLSVersion;
+import cl.tesis.tls.constant.TLSVersion;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class ScanTLSVersion implements JsonWritable{
+public class ScanTLSProtocolsData implements JsonWritable{
     private boolean SSL_30;
     private boolean TLS_10;
     private boolean TLS_11;
     private boolean TLS_12;
 
-    public ScanTLSVersion() {
+    public ScanTLSProtocolsData() {
         super();
     }
 
     public void setTLSVersion(TLSVersion tls, boolean support) {
         switch (tls.getName()) {
-            case "SSL 3.0":
+            case "SSLv3":
                 SSL_30 = support;
                 break;
-            case "TLS 1.0":
+            case "TLSv1":
                 TLS_10 = support;
                 break;
-            case "TLS 1.1":
+            case "TLSv1.1":
                 TLS_11 = support;
                 break;
-            case "TLS 1.2":
+            case "TLSv1.2":
                 TLS_12 = support;
                 break;
         }

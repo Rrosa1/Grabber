@@ -2,10 +2,10 @@ package cl.tesis.https;
 
 import cl.tesis.output.CSVWritable;
 import cl.tesis.output.JsonWritable;
-import cl.tesis.tls.Heartbleed;
-import cl.tesis.tls.HostCertificate;
-import cl.tesis.tls.ScanCiphersSuites;
-import cl.tesis.tls.ScanTLSVersion;
+import cl.tesis.tls.Certificate;
+import cl.tesis.tls.HeartbleedData;
+import cl.tesis.tls.ScanCipherSuitesData;
+import cl.tesis.tls.ScanTLSProtocolsData;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -15,10 +15,12 @@ import java.util.List;
 public class HttpsCertificateData implements CSVWritable, JsonWritable{
     private String ip;
     private String error;
-    private HostCertificate certificate;
-    private Heartbleed heartbleed;
-    private ScanTLSVersion protocols;
-    private ScanCiphersSuites ciphersSuites;
+    private String tlsProtocol;
+    private String cipherSuite;
+    private Certificate[] chain;
+    private HeartbleedData heartbleed;
+    private ScanTLSProtocolsData protocols;
+    private ScanCipherSuitesData ciphersSuites;
 
     public HttpsCertificateData(String ip) {
         this.ip = ip;
@@ -28,22 +30,31 @@ public class HttpsCertificateData implements CSVWritable, JsonWritable{
         this.error = error;
     }
 
-    public void setCertificate(HostCertificate certificate) {
-        this.certificate = certificate;
+    public void setTLSProtocol(String tlsProtocol) {
+        this.tlsProtocol = tlsProtocol;
     }
 
-    public void setHeartbleed(Heartbleed heartbleed) {
+    public void setCipherSuite(String cipherSuite) {
+        this.cipherSuite = cipherSuite;
+    }
+
+    public void setChain(Certificate[] certificates) {
+        this.chain = certificates;
+    }
+
+    public void setHeartbleed(HeartbleedData heartbleed) {
         this.heartbleed = heartbleed;
     }
 
-    public void setProtocols(ScanTLSVersion protocols) {
+    public void setProtocols(ScanTLSProtocolsData protocols) {
         this.protocols = protocols;
     }
 
-    public void setCiphersSuites(ScanCiphersSuites ciphersSuites) {
+    public void setCiphersSuites(ScanCipherSuitesData ciphersSuites) {
         this.ciphersSuites = ciphersSuites;
     }
 
+    // TODO remove csvfilewriter
     @Override
     public List<String> getParameterList() {
         ArrayList<String> parameters = new ArrayList<>();

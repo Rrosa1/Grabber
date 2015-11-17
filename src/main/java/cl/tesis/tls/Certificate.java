@@ -4,7 +4,6 @@ import cl.tesis.output.CSVWritable;
 import cl.tesis.output.JsonWritable;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import sun.misc.BASE64Encoder;
 
 import javax.security.auth.x500.X500Principal;
 import javax.xml.bind.DatatypeConverter;
@@ -18,6 +17,7 @@ public class Certificate implements CSVWritable, JsonWritable {
     private static String BEGIN_CERT ="-----BEGIN CERTIFICATE-----";
     private static String END_CERT ="-----END CERTIFICATE-----";
 
+    private String certificateAuthority;
     private String signatureAlgorithm;
     private Date expiredTime;
     private String organizationName;
@@ -26,8 +26,10 @@ public class Certificate implements CSVWritable, JsonWritable {
     private String PemCert;
 
     public Certificate(X509Certificate x509Certificate) {
+        Map<String, String> issuerMap = parserX500Principal(x509Certificate.getIssuerX500Principal());
         Map<String, String> subjectMap = parserX500Principal(x509Certificate.getSubjectX500Principal());
 
+        this.certificateAuthority = issuerMap.get("CN");
         this.signatureAlgorithm = x509Certificate.getSigAlgName();
         this.expiredTime = x509Certificate.getNotAfter();
         this.organizationName = subjectMap.get("O");
@@ -79,6 +81,16 @@ public class Certificate implements CSVWritable, JsonWritable {
         return pemFormat;
     }
 
+    public static Certificate[] parseCertificateChain(X509Certificate[] certs) {
+        Certificate[] certificates =  new Certificate[certs.length];
+
+        for (int i = 0; i < certs.length ; i++) {
+            certificates[i] = new Certificate(certs[i]);
+        }
+
+        return certificates;
+    }
+
 
     @Override
     public List<String> getParameterList() {
@@ -124,6 +136,10 @@ public class Certificate implements CSVWritable, JsonWritable {
     public String toJson() {
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         return gson.toJson(this);
+    }
+
+    public String getCertificateAuthority() {
+        return certificateAuthority;
     }
 
     public String getSignatureAlgorithm() {

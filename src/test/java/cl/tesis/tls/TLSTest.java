@@ -1,29 +1,31 @@
 package cl.tesis.tls;
 
-import cl.tesis.tls.handshake.TLSVersion;
 import junit.framework.TestCase;
 
-import java.net.Socket;
+import java.security.cert.X509Certificate;
 
 public class TLSTest extends TestCase{
-    public TLS tls;
 
-    public void setUp() throws Exception {
-        super.setUp();
-        tls = new TLS(new Socket("192.80.24.4", 443));
-    }
+    public static final String HOST = "192.80.24.4";
+    public static final int PORT = 443;
 
     public void testHandshake() throws Exception {
-        HostCertificate certificate =  tls.doHandshake();
-        assertEquals(true, certificate.isValidation());
-        assertEquals("SHA256withRSA", certificate.getSignatureAlgorithm());
-        assertEquals("*.dcc.uchile.cl", certificate.getOrganizationURL());
-        assertEquals("2048", certificate.getKeyBits());
-        assertEquals("RapidSSL SHA256 CA - G4", certificate.getCertificateAuthority());
+        TLSHandshake tlsHandshake =  new TLSHandshake(HOST, PORT);
+        tlsHandshake.connect();
+        X509Certificate[] certs = tlsHandshake.getChainCertificate();
+        Certificate[] chain = Certificate.parseCertificateChain(certs);
+
+//        assertEquals(true, certificate.isValidation()); // Not implement yet
+        assertEquals("SHA256withRSA", chain[0].getSignatureAlgorithm());
+        assertEquals("*.dcc.uchile.cl", chain[0].getOrganizationURL());
+        assertEquals("2048", chain[0].getKeyBits());
+        assertEquals("RapidSSL SHA256 CA - G4", chain[0].getCertificateAuthority());
     }
 
     public void testTLSVersion() throws Exception {
-        ScanTLSVersion version =  tls.checkTLSVersions(null);
+        ScanTLSProtocols protocols =  new ScanTLSProtocols(HOST, PORT);
+        ScanTLSProtocolsData version = protocols.scanAllProtocols();
+
         assertEquals(false, version.isSSL_30());
         assertEquals(true, version.isTLS_10());
         assertEquals(true, version.isTLS_11());
@@ -31,13 +33,17 @@ public class TLSTest extends TestCase{
     }
 
     public void testCipherSuites() throws Exception {
-        ScanCiphersSuites suites = tls.checkCipherSuites(null);
+        ScanCipherSuites cipherSuites =  new ScanCipherSuites(HOST, PORT);
+        ScanCipherSuitesData suites = cipherSuites.scanAllCipherSuites();
+
         assertEquals("TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA", suites.getDes3_ciphers());
         assertEquals("TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA", suites.getHigh_ciphers());
     }
 
-    public void testHeartbeat() throws Exception {
-        Heartbleed heartbleed =  tls.heartbleedTest(null, TLSVersion.TLS_12);
-        assertEquals(true, heartbleed.isHeartbeat());
-    }
+//    public void testHeartbeat() throws Exception {
+//        ScanHeartbleed scanHeartbleed =  new ScanHeartbleed(HOST, PORT);
+//        HeartbleedData heartbleed = scanHeartbleed.hasHeartbleed();
+//
+//        assertEquals(true, heartbleed.isHeartbeat());
+//    }
 }
