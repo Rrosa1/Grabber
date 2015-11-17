@@ -2,7 +2,7 @@ package cl.tesis.https;
 
 import cl.tesis.input.FileReader;
 import cl.tesis.output.FileWriter;
-import cl.tesis.tls.HostCertificate;
+import tlsNew.Certificate;
 import tlsNew.ScanCipherSuites;
 import tlsNew.ScanTLSProtocols;
 import tlsNew.TLSHandshake;
@@ -50,7 +50,7 @@ public class HttpsCertificateThread extends Thread{
 
                 data.setTLSProtocol(tls.getProtocol());
                 data.setCipherSuite(tls.getCipherSuite());
-                data.setCertificate(new HostCertificate(certs[0], false, certs));
+                data.setChain(Certificate.parseCertificateChain(certs));
 
                 /* Check all SSL/TLS Protocols*/
                 if (allProtocols) {

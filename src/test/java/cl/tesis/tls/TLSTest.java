@@ -21,13 +21,13 @@ public class TLSTest extends TestCase{
         TLSHandshake tlsHandshake =  new TLSHandshake(HOST, PORT);
         tlsHandshake.connect();
         X509Certificate[] certs = tlsHandshake.getChainCertificate();
-        HostCertificate certificate =  new HostCertificate(certs[0], true, certs);
-//        HostCertificate certificate =  tls.doHandshake();
-        assertEquals(true, certificate.isValidation()); // Not implement yet
-        assertEquals("SHA256withRSA", certificate.getSignatureAlgorithm());
-        assertEquals("*.dcc.uchile.cl", certificate.getOrganizationURL());
-        assertEquals("2048", certificate.getKeyBits());
-        assertEquals("RapidSSL SHA256 CA - G4", certificate.getCertificateAuthority());
+        Certificate[] chain = Certificate.parseCertificateChain(certs);
+
+//        assertEquals(true, certificate.isValidation()); // Not implement yet
+        assertEquals("SHA256withRSA", chain[0].getSignatureAlgorithm());
+        assertEquals("*.dcc.uchile.cl", chain[0].getOrganizationURL());
+        assertEquals("2048", chain[0].getKeyBits());
+        assertEquals("RapidSSL SHA256 CA - G4", chain[0].getCertificateAuthority());
     }
 
     public void testTLSVersion() throws Exception {

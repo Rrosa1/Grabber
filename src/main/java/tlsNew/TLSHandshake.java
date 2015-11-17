@@ -4,7 +4,6 @@ package tlsNew;
 import cl.tesis.https.TrustAllCert;
 import cl.tesis.mail.SMTP;
 import cl.tesis.mail.StartTLS;
-import cl.tesis.tls.HostCertificate;
 import cl.tesis.tls.exception.StartTLSException;
 import tlsNew.constant.TLSVersion;
 import tlsNew.exception.SocketTLSHandshakeException;
@@ -158,8 +157,9 @@ public class TLSHandshake {
         TLSHandshake tls =  new TLSHandshake(socket, StartTLS.SMTP);
         tls.connect();
         X509Certificate[] certs = tls.getChainCertificate();
-        HostCertificate h =  new HostCertificate(certs[0], false, certs);
-        System.out.println(h.toJson());
+        Certificate[] h = Certificate.parseCertificateChain(certs);
+
+        System.out.println(h[0].toJson());
 
         ScanTLSProtocols protocols = new ScanTLSProtocols("192.80.24.4", 25);
         System.out.println(protocols.scanAllProtocols(StartTLS.SMTP).toJson());
