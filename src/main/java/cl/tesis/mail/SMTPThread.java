@@ -3,8 +3,8 @@ package cl.tesis.mail;
 import cl.tesis.input.FileReader;
 import cl.tesis.output.FileWriter;
 import cl.tesis.tls.HostCertificate;
-import cl.tesis.tls.TLS;
 import cl.tesis.tls.exception.StartTLSException;
+import tlsNew.ScanCipherSuites;
 import tlsNew.ScanTLSProtocols;
 import tlsNew.TLSHandshake;
 import tlsNew.exception.SocketTLSHandshakeException;
@@ -70,8 +70,8 @@ public class SMTPThread extends Thread{
 
                     /* Check all Cipher Suites */
                     if (allCiphersSuites) {
-                        TLS tls = new TLS(smtp.getSocket());
-                        data.setCiphersSuites(tls.checkCipherSuites(this.startTLS));
+                        ScanCipherSuites cipherSuites = new ScanCipherSuites(columns[IP], port);
+                        data.setCiphersSuites(cipherSuites.scanAllCipherSuites(this.startTLS));
                     }
 
                     /* Heartbleed test*/
@@ -92,9 +92,8 @@ public class SMTPThread extends Thread{
 
                     /* Check all Cipher Suites */
                     if (allCiphersSuites) {
-                        SMTP smtp = new SMTP(columns[IP], this.port);
-                        TLS tls = new TLS(smtp.getSocket());
-                        data.setCiphersSuites(tls.checkCipherSuites(null));
+                        ScanCipherSuites cipherSuites = new ScanCipherSuites(columns[IP], port);
+                        data.setCiphersSuites(cipherSuites.scanAllCipherSuites());
                     }
 
                     /* Heartbleed test*/

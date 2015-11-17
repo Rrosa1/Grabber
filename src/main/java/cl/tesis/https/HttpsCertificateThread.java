@@ -3,6 +3,7 @@ package cl.tesis.https;
 import cl.tesis.input.FileReader;
 import cl.tesis.output.FileWriter;
 import cl.tesis.tls.HostCertificate;
+import tlsNew.ScanCipherSuites;
 import tlsNew.ScanTLSProtocols;
 import tlsNew.TLSHandshake;
 import tlsNew.exception.SocketTLSHandshakeException;
@@ -57,21 +58,16 @@ public class HttpsCertificateThread extends Thread{
                     data.setProtocols(scan.scanAllProtocols());
                 }
 
-//                /* Check all Cipher Suites */
-//                if (allCiphersSuites)
-//                    data.setCiphersSuites(tls.checkCipherSuites(null));
-//
+                /* Check all Cipher Suites */
+                if (allCiphersSuites) {
+                    ScanCipherSuites cipherSuites = new ScanCipherSuites(columns[IP], port);
+                    data.setCiphersSuites(cipherSuites.scanAllCipherSuites());
+                }
+
 //                /* Heartbleed test*/
 //                if (heartbleed)
 //                    data.setHeartbleed(tls.heartbleedTest(null, TLSVersion.TLS_12));
 
-//            }
-//              catch (HandshakeException e) {
-//                data.setError(e.getMessage());
-//                logger.log(Level.INFO, "Handshake error {0}", columns[IP]);
-//            }  catch (IOException e) {
-//                data.setError("Read or write socket error");
-//                logger.log(Level.INFO, "Read or write over socket error {0}", columns[IP]);
             } catch (SocketTLSHandshakeException e) {
                 data.setError("Create socket Error");
                 logger.log(Level.INFO, "Create socket error {0}", columns[IP]);
