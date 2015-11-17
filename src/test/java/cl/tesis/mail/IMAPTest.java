@@ -1,7 +1,7 @@
 package cl.tesis.mail;
 
+import cl.tesis.tls.*;
 import junit.framework.TestCase;
-import tlsNew.*;
 
 import java.security.cert.X509Certificate;
 

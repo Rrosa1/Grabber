@@ -1,4 +1,4 @@
-package tlsNew.exception;
+package cl.tesis.tls.exception;
 
 
 public class TLSConnectionException extends Exception {

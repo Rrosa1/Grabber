@@ -1,4 +1,4 @@
-package tlsNew.exception;
+package cl.tesis.tls.exception;
 
 public class TLSGetCertificateException extends Exception {
 

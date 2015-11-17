@@ -1,10 +1,10 @@
 package cl.tesis.tls.handshake;
 
 
+import cl.tesis.tls.constant.ExtensionType;
 import cl.tesis.tls.exception.HandshakeHeaderException;
 import cl.tesis.tls.exception.TLSHeaderException;
-import tlsNew.constant.ExtensionType;
-import tlsNew.util.TLSUtil;
+import cl.tesis.tls.util.TLSUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;

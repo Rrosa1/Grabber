@@ -1,4 +1,4 @@
-package tlsNew.util;
+package cl.tesis.tls.util;
 
 import java.io.File;
 import java.io.FileInputStream;

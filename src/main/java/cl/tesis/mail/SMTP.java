@@ -1,16 +1,6 @@
 package cl.tesis.mail;
 
-import cl.tesis.tls.TLS;
-import cl.tesis.tls.exception.HandshakeException;
-import cl.tesis.tls.exception.HandshakeHeaderException;
-import cl.tesis.tls.exception.StartTLSException;
-import cl.tesis.tls.exception.TLSHeaderException;
-
-import java.io.*;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.cert.CertificateException;
+import java.io.IOException;
 
 public class SMTP extends Mail {
 

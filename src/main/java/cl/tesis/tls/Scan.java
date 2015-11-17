@@ -1,4 +1,4 @@
-package tlsNew;
+package cl.tesis.tls;
 
 import cl.tesis.mail.SMTP;
 import cl.tesis.mail.StartTLS;

@@ -1,15 +1,11 @@
-package tlsNew;
+package cl.tesis.tls;
 
 
 import cl.tesis.https.TrustAllCert;
 import cl.tesis.mail.SMTP;
 import cl.tesis.mail.StartTLS;
-import cl.tesis.tls.exception.StartTLSException;
-import tlsNew.constant.TLSVersion;
-import tlsNew.exception.SocketTLSHandshakeException;
-import tlsNew.exception.TLSConnectionException;
-import tlsNew.exception.TLSGetCertificateException;
-import tlsNew.exception.TLSHandshakeException;
+import cl.tesis.tls.constant.TLSVersion;
+import cl.tesis.tls.exception.*;
 
 import javax.net.ssl.*;
 import java.io.DataOutputStream;

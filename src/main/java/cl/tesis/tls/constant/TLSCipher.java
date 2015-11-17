@@ -1,4 +1,4 @@
-package tlsNew.constant;
+package cl.tesis.tls.constant;
 
 public enum TLSCipher {
     TEST(CipherSuites.TLS_DHE_RSA_WITH_AES_128_CBC_SHA.getStringValue() + CipherSuites.TLS_ECDHE_RSA_WITH_RC4_128_SHA.getStringValue() +

@@ -1,4 +1,4 @@
-package tlsNew.constant;
+package cl.tesis.tls.constant;
 
 
 import java.util.Arrays;

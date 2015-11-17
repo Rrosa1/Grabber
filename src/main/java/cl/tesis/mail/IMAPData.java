@@ -3,12 +3,12 @@ package cl.tesis.mail;
 
 import cl.tesis.output.CSVWritable;
 import cl.tesis.output.JsonWritable;
+import cl.tesis.tls.Certificate;
+import cl.tesis.tls.HeartbleedData;
+import cl.tesis.tls.ScanCipherSuitesData;
+import cl.tesis.tls.ScanTLSProtocolsData;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import tlsNew.Certificate;
-import tlsNew.HeartbleedData;
-import tlsNew.ScanCipherSuitesData;
-import tlsNew.ScanTLSProtocolsData;
 
 import java.util.ArrayList;
 import java.util.List;

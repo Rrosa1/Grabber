@@ -2,15 +2,11 @@ package cl.tesis.mail;
 
 import cl.tesis.input.FileReader;
 import cl.tesis.output.FileWriter;
-import cl.tesis.tls.exception.StartTLSException;
-import tlsNew.Certificate;
-import tlsNew.ScanCipherSuites;
-import tlsNew.ScanTLSProtocols;
-import tlsNew.TLSHandshake;
-import tlsNew.exception.SocketTLSHandshakeException;
-import tlsNew.exception.TLSConnectionException;
-import tlsNew.exception.TLSGetCertificateException;
-import tlsNew.exception.TLSHandshakeException;
+import cl.tesis.tls.Certificate;
+import cl.tesis.tls.ScanCipherSuites;
+import cl.tesis.tls.ScanTLSProtocols;
+import cl.tesis.tls.TLSHandshake;
+import cl.tesis.tls.exception.*;
 
 import java.io.IOException;
 import java.security.cert.X509Certificate;

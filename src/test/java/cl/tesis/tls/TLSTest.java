@@ -1,21 +1,13 @@
 package cl.tesis.tls;
 
 import junit.framework.TestCase;
-import tlsNew.*;
 
-import java.net.Socket;
 import java.security.cert.X509Certificate;
 
 public class TLSTest extends TestCase{
 
     public static final String HOST = "192.80.24.4";
     public static final int PORT = 443;
-    public TLS tls;
-
-    public void setUp() throws Exception {
-        super.setUp();
-        tls = new TLS(new Socket(HOST, PORT));
-    }
 
     public void testHandshake() throws Exception {
         TLSHandshake tlsHandshake =  new TLSHandshake(HOST, PORT);

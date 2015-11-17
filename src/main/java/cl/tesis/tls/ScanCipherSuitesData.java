@@ -1,10 +1,10 @@
-package tlsNew;
+package cl.tesis.tls;
 
 
 import cl.tesis.output.JsonWritable;
+import cl.tesis.tls.constant.TLSCipher;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import tlsNew.constant.TLSCipher;
 
 public class ScanCipherSuitesData implements JsonWritable{
     private String null_ciphers;

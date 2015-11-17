@@ -1,15 +1,15 @@
-package tlsNew;
+package cl.tesis.tls;
 
 
 import cl.tesis.mail.StartTLS;
+import cl.tesis.tls.constant.CipherSuites;
+import cl.tesis.tls.constant.TLSCipher;
+import cl.tesis.tls.constant.TLSVersion;
 import cl.tesis.tls.exception.HandshakeHeaderException;
 import cl.tesis.tls.exception.StartTLSException;
 import cl.tesis.tls.exception.TLSHeaderException;
 import cl.tesis.tls.handshake.ClientHello;
 import cl.tesis.tls.handshake.ServerHello;
-import tlsNew.constant.CipherSuites;
-import tlsNew.constant.TLSCipher;
-import tlsNew.constant.TLSVersion;
 
 import java.io.IOException;
 
