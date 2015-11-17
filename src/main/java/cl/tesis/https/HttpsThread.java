@@ -2,6 +2,8 @@ package cl.tesis.https;
 
 import cl.tesis.http.Http;
 import cl.tesis.http.HttpData;
+import cl.tesis.https.exception.HTTPSHeaderException;
+import cl.tesis.https.exception.HTTPSIndexException;
 import cl.tesis.input.FileReader;
 import cl.tesis.output.FileWriter;
 
@@ -37,7 +39,6 @@ public class HttpsThread extends  Thread{
                 Https connection = new Https(columns[IP], this.port);
                 data.setHeader(connection.getHeader());
                 data.setIndex(connection.getIndex());
-                connection.close();
                 logger.log(Level.INFO, "Completed scan of {0}", columns[IP]);
             } catch (IOException e) {
                 data.setError("Read or write socket error");
@@ -48,6 +49,12 @@ public class HttpsThread extends  Thread{
             } catch (KeyManagementException e) {
                 data.setError(e.getMessage());
                 logger.log(Level.INFO, "KeyManagementException {0}", columns[IP]);
+            } catch (HTTPSHeaderException e) {
+                data.setError("Get header error");
+                logger.log(Level.INFO, "Get header error {0}", columns[IP]);
+            } catch (HTTPSIndexException e) {
+                data.setError("Get index error");
+                logger.log(Level.INFO, "Get index error {0}", columns[IP]);
             }
             this.writer.writeLine(data);
             data.clear();
