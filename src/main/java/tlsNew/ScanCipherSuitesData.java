@@ -1,4 +1,4 @@
-package cl.tesis.tls;
+package tlsNew;
 
 
 import cl.tesis.output.JsonWritable;
@@ -6,7 +6,7 @@ import cl.tesis.tls.handshake.TLSCipher;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class ScanCiphersSuites implements JsonWritable{
+public class ScanCipherSuitesData implements JsonWritable{
     private String null_ciphers;
     private String anonymous_null_ciphers;
     private String anonymous_dh_ciphers;
@@ -16,7 +16,7 @@ public class ScanCiphersSuites implements JsonWritable{
     private String des3_ciphers;
     private String high_ciphers;
 
-    public ScanCiphersSuites() {
+    public ScanCipherSuitesData() {
         super();
     }
 

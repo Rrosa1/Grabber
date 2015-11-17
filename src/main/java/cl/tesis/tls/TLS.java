@@ -7,6 +7,7 @@ import cl.tesis.tls.exception.HandshakeHeaderException;
 import cl.tesis.tls.exception.StartTLSException;
 import cl.tesis.tls.exception.TLSHeaderException;
 import cl.tesis.tls.handshake.*;
+import tlsNew.ScanCipherSuitesData;
 import tlsNew.ScanTLSProtocolsData;
 
 import java.io.ByteArrayInputStream;
@@ -123,8 +124,8 @@ public class TLS {
         return scanTLSProtocolsData;
     }
 
-    public ScanCiphersSuites checkCipherSuites(StartTLS start) {
-        ScanCiphersSuites scanCiphersSuites = new ScanCiphersSuites();
+    public ScanCipherSuitesData checkCipherSuites(StartTLS start) {
+        ScanCipherSuitesData scanCipherSuitesData = new ScanCipherSuitesData();
         InetAddress address = this.socket.getInetAddress();
         ServerHello serverHello;
         int port = this.socket.getPort();
@@ -146,14 +147,14 @@ public class TLS {
                 this.sendAlertMessage();
 
             } catch (TLSHeaderException | HandshakeHeaderException | IOException e) {
-                scanCiphersSuites.setCipherSuite(cipher, null);
+                scanCipherSuitesData.setCipherSuite(cipher, null);
                 continue;
             }
 
-            scanCiphersSuites.setCipherSuite(cipher, CipherSuites.getNameByByte(serverHello.getCipherSuite()));
+            scanCipherSuitesData.setCipherSuite(cipher, CipherSuites.getNameByByte(serverHello.getCipherSuite()));
         }
 
-        return scanCiphersSuites;
+        return scanCipherSuitesData;
     }
 
     public Heartbleed heartbleedTest(StartTLS start, TLSVersion version) {

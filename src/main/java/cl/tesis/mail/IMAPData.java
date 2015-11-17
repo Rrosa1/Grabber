@@ -5,9 +5,9 @@ import cl.tesis.output.CSVWritable;
 import cl.tesis.output.JsonWritable;
 import cl.tesis.tls.Heartbleed;
 import cl.tesis.tls.HostCertificate;
-import cl.tesis.tls.ScanCiphersSuites;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import tlsNew.ScanCipherSuitesData;
 import tlsNew.ScanTLSProtocolsData;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ public class IMAPData implements CSVWritable, JsonWritable{
     private HostCertificate certificate;
     private Heartbleed heartbleed;
     private ScanTLSProtocolsData protocols;
-    private ScanCiphersSuites ciphersSuites;
+    private ScanCipherSuitesData ciphersSuites;
 
     public IMAPData(String ip) {
         this.ip = ip;
@@ -47,7 +47,7 @@ public class IMAPData implements CSVWritable, JsonWritable{
         this.protocols = protocols;
     }
 
-    public void setCiphersSuites(ScanCiphersSuites ciphersSuites) {
+    public void setCiphersSuites(ScanCipherSuitesData ciphersSuites) {
         this.ciphersSuites = ciphersSuites;
     }
 
