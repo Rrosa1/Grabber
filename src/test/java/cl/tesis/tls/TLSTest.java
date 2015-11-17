@@ -1,9 +1,7 @@
 package cl.tesis.tls;
 
 import junit.framework.TestCase;
-import tlsNew.ScanTLSProtocols;
-import tlsNew.ScanTLSProtocolsData;
-import tlsNew.TLSHandshake;
+import tlsNew.*;
 
 import java.net.Socket;
 import java.security.cert.X509Certificate;
@@ -43,7 +41,9 @@ public class TLSTest extends TestCase{
     }
 
     public void testCipherSuites() throws Exception {
-        ScanCiphersSuites suites = tls.checkCipherSuites(null);
+        ScanCipherSuites cipherSuites =  new ScanCipherSuites(HOST, PORT);
+        ScanCipherSuitesData suites = cipherSuites.scanAllCipherSuites();
+
         assertEquals("TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA", suites.getDes3_ciphers());
         assertEquals("TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA", suites.getHigh_ciphers());
     }

@@ -2,12 +2,8 @@ package cl.tesis.mail;
 
 
 import cl.tesis.tls.HostCertificate;
-import cl.tesis.tls.ScanCiphersSuites;
-import cl.tesis.tls.TLS;
 import junit.framework.TestCase;
-import tlsNew.ScanTLSProtocols;
-import tlsNew.ScanTLSProtocolsData;
-import tlsNew.TLSHandshake;
+import tlsNew.*;
 
 import java.security.cert.X509Certificate;
 
@@ -57,8 +53,9 @@ public class SMTPTest extends TestCase{
     }
 
     public void testCipherSuite() throws Exception {
-        TLS tls =  new TLS(smtp.getSocket());
-        ScanCiphersSuites suites = tls.checkCipherSuites(StartTLS.SMTP);
+        ScanCipherSuites cipherSuites = new ScanCipherSuites(HOST, PORT);
+        ScanCipherSuitesData suites = cipherSuites.scanAllCipherSuites(StartTLS.SMTP);
+
         assertEquals("TLS_ECDH_ANON_WITH_AES_256_CBC_SHA", suites.getAnonymous_null_ciphers());
         assertEquals("TLS_DH_ANON_WITH_AES_256_CBC_SHA", suites.getAnonymous_dh_ciphers());
         assertEquals("TLS_DHE_RSA_WITH_SEED_CBC_SHA", suites.getMedium_ciphers());

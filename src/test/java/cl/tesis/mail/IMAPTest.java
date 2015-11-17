@@ -1,12 +1,8 @@
 package cl.tesis.mail;
 
 import cl.tesis.tls.HostCertificate;
-import cl.tesis.tls.ScanCiphersSuites;
-import cl.tesis.tls.TLS;
 import junit.framework.TestCase;
-import tlsNew.ScanTLSProtocols;
-import tlsNew.ScanTLSProtocolsData;
-import tlsNew.TLSHandshake;
+import tlsNew.*;
 
 import java.security.cert.X509Certificate;
 
@@ -50,8 +46,9 @@ public class IMAPTest extends TestCase {
     }
 
     public void testCipherSuite() throws Exception {
-        TLS tls =  new TLS(imap.getSocket());
-        ScanCiphersSuites suites = tls.checkCipherSuites(StartTLS.IMAP);
+        ScanCipherSuites cipherSuites = new ScanCipherSuites(HOST, PORT);
+        ScanCipherSuitesData suites = cipherSuites.scanAllCipherSuites(StartTLS.IMAP);
+
         assertEquals("TLS_RSA_EXPORT_WITH_DES40_CBC_SHA", suites.getExport_40_ciphers());
         assertEquals("TLS_RSA_WITH_SEED_CBC_SHA", suites.getMedium_ciphers());
         assertEquals("TLS_RSA_WITH_3DES_EDE_CBC_SHA", suites.getDes3_ciphers());
