@@ -49,7 +49,9 @@ public class TLSTest extends TestCase{
     }
 
 //    public void testHeartbeat() throws Exception {
-//        Heartbleed heartbleed =  tls.heartbleedTest(null, TLSVersion.TLS_12);
+//        ScanHeartbleed scanHeartbleed =  new ScanHeartbleed(HOST, PORT);
+//        HeartbleedData heartbleed = scanHeartbleed.hasHeartbleed();
+//
 //        assertEquals(true, heartbleed.isHeartbeat());
 //    }
 }

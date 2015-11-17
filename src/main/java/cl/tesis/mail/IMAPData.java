@@ -3,10 +3,10 @@ package cl.tesis.mail;
 
 import cl.tesis.output.CSVWritable;
 import cl.tesis.output.JsonWritable;
-import cl.tesis.tls.Heartbleed;
 import cl.tesis.tls.HostCertificate;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import tlsNew.HeartbleedData;
 import tlsNew.ScanCipherSuitesData;
 import tlsNew.ScanTLSProtocolsData;
 
@@ -19,7 +19,7 @@ public class IMAPData implements CSVWritable, JsonWritable{
     private String error;
     private String start;
     private HostCertificate certificate;
-    private Heartbleed heartbleed;
+    private HeartbleedData heartbleed;
     private ScanTLSProtocolsData protocols;
     private ScanCipherSuitesData ciphersSuites;
 
@@ -39,7 +39,7 @@ public class IMAPData implements CSVWritable, JsonWritable{
         this.certificate = certificate;
     }
 
-    public void setHeartbleed(Heartbleed heartbleed) {
+    public void setHeartbleed(HeartbleedData heartbleed) {
         this.heartbleed = heartbleed;
     }
 

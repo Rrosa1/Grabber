@@ -1,15 +1,15 @@
-package cl.tesis.tls;
+package tlsNew;
 
 import cl.tesis.output.JsonWritable;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 
-public class Heartbleed implements JsonWritable {
+public class HeartbleedData implements JsonWritable {
     private boolean heartbeat;
 //    private boolean heartbleed;
 
-    public Heartbleed(boolean heartbeat) {
+    public HeartbleedData(boolean heartbeat) {
         this.heartbeat = heartbeat;
     }
 

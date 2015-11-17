@@ -7,6 +7,7 @@ import cl.tesis.tls.exception.HandshakeHeaderException;
 import cl.tesis.tls.exception.StartTLSException;
 import cl.tesis.tls.exception.TLSHeaderException;
 import cl.tesis.tls.handshake.*;
+import tlsNew.HeartbleedData;
 import tlsNew.ScanCipherSuitesData;
 import tlsNew.ScanTLSProtocolsData;
 
@@ -157,8 +158,8 @@ public class TLS {
         return scanCipherSuitesData;
     }
 
-    public Heartbleed heartbleedTest(StartTLS start, TLSVersion version) {
-        Heartbleed heartbleed;
+    public HeartbleedData heartbleedTest(StartTLS start, TLSVersion version) {
+        HeartbleedData heartbleed;
         try {
             InetAddress address = this.socket.getInetAddress();
             int port = this.socket.getPort();
@@ -173,9 +174,9 @@ public class TLS {
             this.in.read(buffer);
 
             ServerHello serverHello = new ServerHello(buffer);
-            heartbleed = new Heartbleed(serverHello.hasHeartbeat());
+            heartbleed = new HeartbleedData(serverHello.hasHeartbeat());
         } catch (TLSHeaderException | HandshakeHeaderException | IOException e) {
-            return new Heartbleed(false);
+            return new HeartbleedData(false);
         }
         return heartbleed;
     }
