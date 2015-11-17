@@ -43,6 +43,9 @@ public class CommandLine {
     @Option(name = "--list-output-modules", usage = "Print all output modules", required = false, help = true)
     private boolean listOutputModules;
 
+    @Option(name= "--version", usage = "Print version and exit", required = false, help = true)
+    private boolean version;
+
     private String[] probeModules = {"HTTPSCertificate", "HTTP", "HTTPS", "SSHVersion", "SMTP", "POP3", "IMAP", "FTP", "MYSQL", "POSTGRESQL"};
     private String[] outputModules = {"CSV", "JSON"};
 
@@ -74,6 +77,10 @@ public class CommandLine {
 
             System.exit(0);
         }
+        if (version) {
+            System.out.println("version: " + versionDetails);
+            System.exit(0);
+        }
 
     }
 
@@ -82,7 +89,7 @@ public class CommandLine {
     }
 
     private boolean infoArgs() {
-        return !(listProbeModules || listOutputModules);
+        return !(listProbeModules || listOutputModules || version);
     }
 
     public void required(CmdLineParser parser) throws CmdLineException {
