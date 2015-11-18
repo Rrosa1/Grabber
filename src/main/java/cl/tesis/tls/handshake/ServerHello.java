@@ -43,6 +43,8 @@ public class ServerHello {
         this.handshakeHeader = Arrays.copyOfRange(array, TLS_HEADER_LENGTH, TLS_HEADER_LENGTH + HANDSHAKE_HEADER_LENGTH);
         if (!checkHandshakeHeader())
             throw new HandshakeHeaderException("Error in Server Hello header");
+        if (TLS_HEADER_LENGTH + HANDSHAKE_HEADER_LENGTH >= tlsBodyLength + TLS_HEADER_LENGTH)
+            throw new HandshakeHeaderException("Error in Server Hello header");
         this.handshakeBody = Arrays.copyOfRange(array, TLS_HEADER_LENGTH + HANDSHAKE_HEADER_LENGTH, tlsBodyLength + TLS_HEADER_LENGTH);
 
         /* Parsing handshake body */
