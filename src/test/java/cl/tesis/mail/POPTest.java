@@ -46,8 +46,7 @@ public class POPTest extends TestCase{
         ScanCipherSuites cipherSuites = new ScanCipherSuites(HOST, PORT);
         ScanCipherSuitesData suites = cipherSuites.scanAllCipherSuites(StartTLS.POP3);
 
-        assertEquals("TLS_RSA_WITH_RC4_128_SHA", suites.getMedium_ciphers());
-        assertEquals("TLS_DHE_RSA_WITH_3DES_EDE_CBC_SHA", suites.getDes3_ciphers());
+        assertEquals("TLS_RSA_WITH_3DES_EDE_CBC_SHA", suites.getDes3_ciphers());
         assertEquals("TLS_DHE_RSA_WITH_AES_256_CBC_SHA", suites.getHigh_ciphers());
     }
 }
