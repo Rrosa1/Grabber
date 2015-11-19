@@ -1,5 +1,8 @@
 package cl.tesis.http;
 
+import cl.tesis.http.exception.HTTPConnectionException;
+import cl.tesis.http.exception.HTTPHeaderException;
+import cl.tesis.http.exception.HTTPIndexException;
 import cl.tesis.input.FileReader;
 import cl.tesis.output.FileWriter;
 
@@ -24,18 +27,28 @@ public class HttpThread extends Thread {
     @Override
     public void run() {
         String[] columns;
+        HttpData data = new HttpData();
 
         while((columns = this.reader.nextLine()) != null) {
-            HttpData response = new HttpData(columns[IP]);
             try {
+                data.setIp(columns[IP]);
                 Http connection = new Http(columns[IP], this.port);
-                response.setHeader(connection.getHeader());
-                response.setIndex(connection.getIndex());
-            } catch (IOException e) {
-                response.setError("Read or write socket error");
-                logger.log(Level.INFO, "IOException {0}", columns[IP]);
+                data.setHeader(connection.getHeader());
+                data.setIndex(connection.getIndex());
+                logger.log(Level.INFO, "Completed scan of {0}", columns[IP]);
+            } catch (HTTPConnectionException e) {
+                data.setError("Connection error");
+                logger.log(Level.INFO, "Connection error {0}", columns[IP]);
+            } catch (HTTPHeaderException e) {
+                data.setError("Get header error");
+                logger.log(Level.INFO, "Get header error {0}", columns[IP]);
+            } catch (HTTPIndexException e) {
+                data.setError("Get index error");
+                logger.log(Level.INFO, "Get index error {0}", columns[IP]);
             }
-            this.writer.writeLine(response);
+
+            this.writer.writeLine(data);
+            data.clear();
         }
     }
 }

@@ -2,10 +2,10 @@ package cl.tesis.mail;
 
 import cl.tesis.output.CSVWritable;
 import cl.tesis.output.JsonWritable;
-import cl.tesis.tls.HostCertificate;
-import cl.tesis.tls.Heartbleed;
-import cl.tesis.tls.ScanCiphersSuites;
-import cl.tesis.tls.ScanTLSVersion;
+import cl.tesis.tls.Certificate;
+import cl.tesis.tls.HeartbleedData;
+import cl.tesis.tls.ScanCipherSuitesData;
+import cl.tesis.tls.ScanTLSProtocolsData;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -19,10 +19,10 @@ public class SMTPData implements CSVWritable, JsonWritable{
     private String banner;
     private String help;
     private String ehlo;
-    private HostCertificate certificate;
-    private Heartbleed heartbleed;
-    private ScanTLSVersion protocols;
-    private ScanCiphersSuites ciphersSuites;
+    private Certificate[] chain;
+    private HeartbleedData heartbleed;
+    private ScanTLSProtocolsData protocols;
+    private ScanCipherSuitesData ciphersSuites;
 
     public SMTPData(String ip) {
         this.ip = ip;
@@ -48,19 +48,19 @@ public class SMTPData implements CSVWritable, JsonWritable{
         this.ehlo = ehlo;
     }
 
-    public void setCertificate(HostCertificate certificate) {
-        this.certificate = certificate;
+    public void setChain(Certificate[] certificates) {
+        this.chain = certificates;
     }
 
-    public void setHeartbleed(Heartbleed heartbleed) {
+    public void setHeartbleed(HeartbleedData heartbleed) {
         this.heartbleed = heartbleed;
     }
 
-    public void setProtocols(ScanTLSVersion protocols) {
+    public void setProtocols(ScanTLSProtocolsData protocols) {
         this.protocols = protocols;
     }
 
-    public void setCiphersSuites(ScanCiphersSuites ciphersSuites) {
+    public void setCiphersSuites(ScanCipherSuitesData ciphersSuites) {
         this.ciphersSuites = ciphersSuites;
     }
 

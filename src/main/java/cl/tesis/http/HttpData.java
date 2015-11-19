@@ -13,25 +13,22 @@ public class HttpData implements CSVWritable, JsonWritable{
 
     private String ip;
     private String error;
-    private String responseCode;
-    private String server;
-    private String domain;
+//    private String responseCode;
+//    private String server;
+//    private String domain;
 
     private Map<String, List<String>> header;
     private String index;
 
-    public HttpData(String ip) {
-        this.ip = ip;
+    public void clear() {
+        this.ip = null;
+        this.error = null;
+//        this.responseCode =  null;
+//        this.server = null;
+//        this.domain = null;
+        this.header = null;
+        this.index = null;
     }
-
-//    public HttpData(String ip, Map<String, List<String>> header, String index) {
-//        this.ip = ip;
-//        this.responseCode =  getKey(header, null);
-//        this.server = getKey(header, "Server");
-//        this.domain = this.parseDomain(header.get("Set-Cookie"));
-//        this.header = header;
-//        this.index = index;
-//    }
 
     private static String getKey(Map<String, List<String>> header, String key){
         List<String> values = header.get(key);
@@ -65,17 +62,17 @@ public class HttpData implements CSVWritable, JsonWritable{
         return error;
     }
 
-    public String getResponseCode() {
-        return responseCode;
-    }
-
-    public String getServer() {
-        return server;
-    }
-
-    public String getDomain() {
-        return domain;
-    }
+//    public String getResponseCode() {
+//        return responseCode;
+//    }
+//
+//    public String getServer() {
+//        return server;
+//    }
+//
+//    public String getDomain() {
+//        return domain;
+//    }
 
     public Map<String, List<String>> getHeader() {
         return header;
@@ -85,14 +82,18 @@ public class HttpData implements CSVWritable, JsonWritable{
         return index;
     }
 
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
     public void setError(String error) {
         this.error = error;
     }
 
     public void setHeader(Map<String, List<String>> header) {
-        this.responseCode =  getKey(header, null);
-        this.server = getKey(header, "Server");
-        this.domain = this.parseDomain(header.get("Set-Cookie"));
+//        this.responseCode =  getKey(header, null);
+//        this.server = getKey(header, "Server");
+//        this.domain = this.parseDomain(header.get("Set-Cookie"));
         this.header = header;
     }
 
@@ -106,9 +107,9 @@ public class HttpData implements CSVWritable, JsonWritable{
     public String toString() {
         return "HttpData{" +
                 "ip='" + ip + '\'' +
-                ", responseCode='" + responseCode + '\'' +
-                ", server='" + server + '\'' +
-                ", domain='" + domain + '\'' +
+//                ", responseCode='" + responseCode + '\'' +
+//                ", server='" + server + '\'' +
+//                ", domain='" + domain + '\'' +
                 ", header=" + header +
                 ", index='" + index + '\'' +
                 '}';
@@ -119,9 +120,9 @@ public class HttpData implements CSVWritable, JsonWritable{
         ArrayList<String> parameters = new ArrayList<>();
 
         parameters.add("ip");
-        parameters.add("response code");
-        parameters.add("server");
-        parameters.add("domain");
+//        parameters.add("response code");
+//        parameters.add("server");
+//        parameters.add("domain");
         parameters.add("header");
         parameters.add("index");
 
@@ -133,9 +134,9 @@ public class HttpData implements CSVWritable, JsonWritable{
         ArrayList<String> values =  new ArrayList<>();
 
         values.add(this.ip);
-        values.add(this.responseCode);
-        values.add(this.server);
-        values.add(this.domain);
+//        values.add(this.responseCode);
+//        values.add(this.server);
+//        values.add(this.domain);
         values.add(new GsonBuilder().disableHtmlEscaping().create().toJson(this.header));
         values.add(this.index);
 

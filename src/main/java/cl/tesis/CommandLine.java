@@ -43,8 +43,12 @@ public class CommandLine {
     @Option(name = "--list-output-modules", usage = "Print all output modules", required = false, help = true)
     private boolean listOutputModules;
 
+    @Option(name= "--version", usage = "Print version and exit", required = false, help = true)
+    private boolean version;
+
     private String[] probeModules = {"HTTPSCertificate", "HTTP", "HTTPS", "SSHVersion", "SMTP", "POP3", "IMAP", "FTP"};
     private String[] outputModules = {"CSV", "JSON"};
+    private String versionDetails = "v1.0a Fixed HTTP and HTTPS problem";
 
     public void parse(String[] args) {
         CmdLineParser parser = new CmdLineParser(this);
@@ -66,12 +70,16 @@ public class CommandLine {
 
             System.exit(0);
         }
-        else if (listOutputModules) {
+        if (listOutputModules) {
             System.out.println("Output Modules:");
 
             for (String m : outputModules)
                 System.out.println(m);
 
+            System.exit(0);
+        }
+        if (version) {
+            System.out.println("version: " + versionDetails);
             System.exit(0);
         }
 
@@ -82,7 +90,7 @@ public class CommandLine {
     }
 
     private boolean infoArgs() {
-        return !(listProbeModules || listOutputModules);
+        return !(listProbeModules || listOutputModules || version);
     }
 
     public void required(CmdLineParser parser) throws CmdLineException {

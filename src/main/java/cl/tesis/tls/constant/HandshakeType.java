@@ -1,4 +1,4 @@
-package cl.tesis.tls.handshake;
+package cl.tesis.tls.constant;
 
 public final class HandshakeType {
     public static final String HELLO_REQUEST = "00";

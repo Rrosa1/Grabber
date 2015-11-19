@@ -1,11 +1,15 @@
 package cl.tesis.https;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
 public class TrustAllCert implements X509TrustManager{
+    private static TrustManager[] trustManagers = null;
+    private static HostnameVerifier verifier = null;
 
     public TrustAllCert() {
     }
@@ -26,6 +30,20 @@ public class TrustAllCert implements X509TrustManager{
     }
 
     public static  TrustManager[] getManager(){
-        return new TrustManager[]{new TrustAllCert()};
+        if (trustManagers == null) {
+            trustManagers = new TrustManager[]{new TrustAllCert()};
+        }
+        return trustManagers;
+    }
+
+    public static HostnameVerifier getHostnameVerifier() {
+        if (verifier == null) {
+            verifier = new HostnameVerifier() {
+                public boolean verify(String hostname, SSLSession session) {
+                    return true;
+                }
+            };
+        }
+        return verifier;
     }
 }

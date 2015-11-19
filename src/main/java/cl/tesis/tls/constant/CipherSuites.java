@@ -1,4 +1,4 @@
-package cl.tesis.tls.handshake;
+package cl.tesis.tls.constant;
 
 import java.util.Arrays;
 

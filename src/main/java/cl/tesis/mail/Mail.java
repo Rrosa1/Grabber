@@ -24,7 +24,7 @@ public class Mail {
             this.out = new DataOutputStream(socket.getOutputStream());
             this.buffer = new byte[BUFFER_SIZE];
 
-            this.socket.setSoTimeout(TIMEOUT);
+            this.socket.setSoTimeout(TIMEOUT); // TODO Change timeout
         } catch (IOException e) {
             throw new ConnectionException("Can't create the connection");
         }

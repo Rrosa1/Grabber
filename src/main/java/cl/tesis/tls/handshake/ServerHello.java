@@ -1,9 +1,10 @@
 package cl.tesis.tls.handshake;
 
 
-import cl.tesis.tls.TLSUtil;
+import cl.tesis.tls.constant.ExtensionType;
 import cl.tesis.tls.exception.HandshakeHeaderException;
 import cl.tesis.tls.exception.TLSHeaderException;
+import cl.tesis.tls.util.TLSUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,6 +43,8 @@ public class ServerHello {
         this.handshakeHeader = Arrays.copyOfRange(array, TLS_HEADER_LENGTH, TLS_HEADER_LENGTH + HANDSHAKE_HEADER_LENGTH);
         if (!checkHandshakeHeader())
             throw new HandshakeHeaderException("Error in Server Hello header");
+        if (TLS_HEADER_LENGTH + HANDSHAKE_HEADER_LENGTH >= tlsBodyLength + TLS_HEADER_LENGTH)
+            throw new HandshakeHeaderException("Error in Server Hello header");
         this.handshakeBody = Arrays.copyOfRange(array, TLS_HEADER_LENGTH + HANDSHAKE_HEADER_LENGTH, tlsBodyLength + TLS_HEADER_LENGTH);
 
         /* Parsing handshake body */
@@ -55,14 +58,16 @@ public class ServerHello {
         /* Parsing Extensions*/
         this.extensions = null;
         this.extensionsNames = new ArrayList<>();
-        if (EXTENSION_LENGTH_START + sessionIdLenght < this.handshakeBody.length)
-        {
+        if (EXTENSION_LENGTH_START + sessionIdLenght < this.handshakeBody.length){
             int extensionLength =  TLSUtil.bytesToInt(this.handshakeBody[EXTENSION_LENGTH_START + sessionIdLenght], this.handshakeBody[EXTENSION_LENGTH_START + sessionIdLenght + 1]);
             this.extensions = Arrays.copyOfRange(this.handshakeBody, EXTENSION_START + sessionIdLenght, EXTENSION_START + sessionIdLenght + extensionLength);
 
             for (int i = 0; i < extensionLength ;) {
                 byte[] extensionType =  new byte[] {extensions[i], extensions[i+1]};
                 int extensionDataLenght = TLSUtil.bytesToInt(extensions[i+2], extensions[i+3]);
+                if (extensionDataLenght == 0){
+                    break;
+                }
                 extensionsNames.add(ExtensionType.getNameByByte(extensionType));
                 i += extensionDataLenght + 4;
             }
