@@ -41,7 +41,7 @@ public class SMTPTest extends TestCase{
         assertEquals("RapidSSL SHA256 CA - G4", chain[0].getCertificateAuthority());
     }
 
-    public void testAllTLSVersion() throws Exception {
+   public void testAllTLSVersion() throws Exception {
         ScanTLSProtocols protocols =  new ScanTLSProtocols(HOST, PORT);
         ScanTLSProtocolsData version = protocols.scanAllProtocols(StartTLS.SMTP);
 
@@ -49,7 +49,7 @@ public class SMTPTest extends TestCase{
         assertEquals(true, version.isTLS_10());
         assertEquals(true, version.isTLS_11());
         assertEquals(true, version.isTLS_12());
-    }
+   }
 
     public void testCipherSuite() throws Exception {
         ScanCipherSuites cipherSuites = new ScanCipherSuites(HOST, PORT);

@@ -45,17 +45,25 @@ public class SMTPThread extends Thread{
 
         while((columns = this.reader.nextLine()) != null) {
             SMTPData data =  new SMTPData(columns[IP]);
+
             try {
                 if (needStartTLS) { // STARTTLS
+
+                    /* SMTP StarTLS */
                     SMTP smtp = new SMTP(columns[IP], this.port);
                     data.setBanner(smtp.readBanner());
                     data.setHelp(smtp.sendHELP());
                     data.setEhlo(smtp.sendEHLO());
 
+                    /* Handshake */
                     TLSHandshake tlsHandshake = new TLSHandshake(smtp.getSocket(), this.startTLS);
                     tlsHandshake.connect();
                     X509Certificate[] certs = tlsHandshake.getChainCertificate();
                     data.setChain(Certificate.parseCertificateChain(certs));
+
+                    /* Close Connections*/
+                    smtp.close();
+                    tlsHandshake.close();
 
                     /* Check all SSL/TLS Protocols*/
                     if (allProtocols) {
@@ -69,15 +77,16 @@ public class SMTPThread extends Thread{
                         data.setCiphersSuites(cipherSuites.scanAllCipherSuites(this.startTLS));
                     }
 
-                    /* Heartbleed test*/
-//                    if (heartbleed)
-//                        data.setHeartbleed(tls.heartbleedTest(this.startTLS, TLSVersion.TLS_12));
-
                 } else { // Secure Port
+
+                    /* Handshake */
                     TLSHandshake tlsHandshake = new TLSHandshake(columns[IP], port);
                     tlsHandshake.connect();
                     X509Certificate[] certs = tlsHandshake.getChainCertificate();
                     data.setChain(Certificate.parseCertificateChain(certs));
+
+                    /* Close Connections */
+                    tlsHandshake.close();
 
                     /* Check all SSL/TLS Protocols*/
                     if (allProtocols) {
@@ -90,10 +99,6 @@ public class SMTPThread extends Thread{
                         ScanCipherSuites cipherSuites = new ScanCipherSuites(columns[IP], port);
                         data.setCiphersSuites(cipherSuites.scanAllCipherSuites());
                     }
-
-                    /* Heartbleed test*/
-//                    if (heartbleed)
-//                        data.setHeartbleed(tls.heartbleedTest(this.startTLS, TLSVersion.TLS_12));
 
                 }
             } catch (ConnectionException e) {
@@ -112,6 +117,12 @@ public class SMTPThread extends Thread{
                 data.setError("Certificate get error");
                 logger.log(Level.INFO, "Certificate get error {0}", columns[IP]);
             }
+//            finally {
+//                if (needStartTLS && smtp != null)
+//                    smtp.close();
+//                if (tlsHandshake !=null)
+//                    tlsHandshake.close();
+//            }
 
             this.writer.writeLine(data);
         }

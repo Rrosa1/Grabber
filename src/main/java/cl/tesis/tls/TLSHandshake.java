@@ -8,6 +8,7 @@ import cl.tesis.tls.constant.TLSVersion;
 import cl.tesis.tls.exception.*;
 
 import javax.net.ssl.*;
+import java.io.Closeable;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,7 +19,7 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
 
-public class TLSHandshake {
+public class TLSHandshake implements Closeable{
     private static final int MILLISECONDS = 1000;
     private static final int CONNECTION_TIMEOUT = 60 * MILLISECONDS; // 60 seg
     private static final int HANDSHAKE_TIMEOUT = 120 * MILLISECONDS; // 120 seg
@@ -59,6 +60,7 @@ public class TLSHandshake {
             this.provideSocket = true;
 
         } catch (NoSuchAlgorithmException | KeyManagementException | IOException e) {
+            e.printStackTrace();
             throw new SocketTLSHandshakeException();
         }
     }
@@ -111,11 +113,22 @@ public class TLSHandshake {
         return this.session.getCipherSuite();
     }
 
+    @Override
+    public void close() {
+        if (socket != null)
+            try{
+                socket.close();
+            } catch (IOException ignore) {
+            } finally { socket = null; }
+    }
+
     private void startProtocolHandshake(Socket socket, StartTLS start) throws StartTLSException {
         String response;
+        InputStream in;
+        DataOutputStream out;
         try {
-            InputStream in = socket.getInputStream();
-            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+            in = socket.getInputStream();
+            out = new DataOutputStream(socket.getOutputStream());
             byte[] buffer = new byte[2048];
             int readBytes;
 

@@ -52,11 +52,11 @@ public class ScanCipherSuites extends Scan {
             serverHello = new ServerHello(buffer);
 
         } catch (StartTLSException | TLSHeaderException | HandshakeHeaderException | IOException e) {
-            this.close();
             return null;
+        } finally {
+            this.close();
         }
 
-        this.close();
         return CipherSuites.getNameByByte(serverHello.getCipherSuite());
     }
 
