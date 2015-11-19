@@ -9,7 +9,6 @@ import cl.tesis.tls.ScanTLSProtocols;
 import cl.tesis.tls.TLSHandshake;
 import cl.tesis.tls.exception.*;
 
-import java.io.IOException;
 import java.security.cert.X509Certificate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -50,7 +49,7 @@ public class POP3Thread extends Thread{
             try {
                 if (needStartTLS) { // STARTTLS
                     POP3 pop = new POP3(columns[IP], this.port);
-                    data.setStart(pop.readBanner());
+                    data.setBanner(pop.readBanner());
 
                     /* Handshake */
                     TLSHandshake tlsHandshake = new TLSHandshake(pop.getSocket(), this.startTLS);
@@ -98,6 +97,9 @@ public class POP3Thread extends Thread{
 //                        data.setHeartbleed(tls.heartbleedTest(this.startTLS, TLSVersion.TLS_12));
 
                 }
+            } catch (ConnectionException e) {
+                data.setError(e.getMessage());
+                logger.log(Level.INFO, "Connection Exception {0},  {1}", new String[]{columns[IP], e.getMessage()});
             } catch (SocketTLSHandshakeException | TLSConnectionException e) {
                 data.setError("Connection error");
                 logger.log(Level.INFO, "Connection error {0}", columns[IP]);
@@ -110,12 +112,6 @@ public class POP3Thread extends Thread{
             } catch (TLSGetCertificateException e) {
                 data.setError("Certificate get error");
                 logger.log(Level.INFO, "Certificate get error {0}", columns[IP]);
-            } catch (IOException e) {
-                data.setError("Read or write socket error");
-                logger.log(Level.INFO, "Read or write over socket error {0}", columns[IP]);
-            } catch (ConnectionException e) {
-                data.setError(e.getMessage());
-                logger.log(Level.INFO, "Connection Exception {0},  {1}", new String[]{columns[IP], e.getMessage()});
             }
 
             this.writer.writeLine(data);

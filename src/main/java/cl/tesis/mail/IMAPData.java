@@ -17,7 +17,7 @@ public class IMAPData implements CSVWritable, JsonWritable{
 
     private String ip;
     private String error;
-    private String start;
+    private String banner;
     private Certificate[] chain;
     private HeartbleedData heartbleed;
     private ScanTLSProtocolsData protocols;
