@@ -47,16 +47,25 @@ public class POP3Thread extends Thread{
 
         while((columns = this.reader.nextLine()) != null) {
             POP3Data data =  new POP3Data(columns[IP]);
+            POP3 pop = null;
+            TLSHandshake tlsHandshake = null;
+
             try {
                 if (needStartTLS) { // STARTTLS
-                    POP3 pop = new POP3(columns[IP], this.port);
+
+                    /* POP3 StartTLS */
+                    pop = new POP3(columns[IP], this.port);
                     data.setBanner(pop.readBanner());
 
                     /* Handshake */
-                    TLSHandshake tlsHandshake = new TLSHandshake(pop, this.startTLS);
+                    tlsHandshake = new TLSHandshake(pop, this.startTLS);
                     tlsHandshake.connect();
                     X509Certificate[] certs = tlsHandshake.getChainCertificate();
                     data.setChain(Certificate.parseCertificateChain(certs));
+
+                    /* Close Connections */
+                    pop.close();
+                    tlsHandshake.close();
 
                     /* Check all SSL/TLS Protocols*/
                     if (allProtocols) {
@@ -70,16 +79,16 @@ public class POP3Thread extends Thread{
                         data.setCiphersSuites(cipherSuites.scanAllCipherSuites(this.startTLS));
                     }
 
-                    /* Heartbleed test*/
-//                    if (heartbleed)
-//                        data.setHeartbleed(tls.heartbleedTest(this.startTLS, TLSVersion.TLS_12));
-
                 } else { // Secure Port
+
                     /* Handshake */
-                    TLSHandshake tlsHandshake = new TLSHandshake(columns[IP], port);
+                    tlsHandshake = new TLSHandshake(columns[IP], port);
                     tlsHandshake.connect();
                     X509Certificate[] certs = tlsHandshake.getChainCertificate();
                     data.setChain(Certificate.parseCertificateChain(certs));
+
+                    /* Close Connections */
+                    tlsHandshake.close();
 
                     /* Check all SSL/TLS Protocols*/
                     if (allProtocols) {
@@ -92,10 +101,6 @@ public class POP3Thread extends Thread{
                         ScanCipherSuites cipherSuites = new ScanCipherSuites(columns[IP], port);
                         data.setCiphersSuites(cipherSuites.scanAllCipherSuites());
                     }
-
-                    /* Heartbleed test*/
-//                    if (heartbleed)
-//                        data.setHeartbleed(tls.heartbleedTest(this.startTLS, TLSVersion.TLS_12));
 
                 }
             } catch (ConnectionException e) {
@@ -113,6 +118,11 @@ public class POP3Thread extends Thread{
             } catch (TLSGetCertificateException e) {
                 data.setError("Certificate get error");
                 logger.log(Level.INFO, "Certificate get error {0}", columns[IP]);
+            } finally {
+                if (needStartTLS && pop != null)
+                    pop.close();
+                if (tlsHandshake !=null)
+                    tlsHandshake.close();
             }
 
             this.writer.writeLine(data);

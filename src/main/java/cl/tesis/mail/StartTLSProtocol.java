@@ -32,7 +32,6 @@ public class StartTLSProtocol implements Closeable{
             this.buffer = new byte[BUFFER_SIZE];
 
         } catch (IOException e) {
-            e.printStackTrace();
             throw new ConnectionException("Can't create the connection");
         }
     }

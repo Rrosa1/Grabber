@@ -76,12 +76,6 @@ public class ScanTLSProtocols {
         DataOutputStream out = null;
 
         try {
-//            socket = new Socket(host, port);
-//            socket.setSoTimeout(TIMEOUT);
-//            in = socket.getInputStream();
-//            out =  new DataOutputStream(socket.getOutputStream());
-//
-//            in.read(buffer);
             startTLSProtocol = new StartTLSProtocol(host, port);
             startTLSProtocol.readBanner();
 
@@ -89,7 +83,6 @@ public class ScanTLSProtocols {
             tls.connect();
 
         } catch (SocketTLSHandshakeException | ConnectionException | StartTLSException | TLSConnectionException e) {
-            e.printStackTrace();
             // TODO return null
             return false;
         } catch (TLSHandshakeException e) {
@@ -97,10 +90,6 @@ public class ScanTLSProtocols {
         }  finally {
             this.close(startTLSProtocol);
             this.close(tls);
-//            this.close(socket);
-//            this.close(in);
-//            this.close(out);
-//            this.close(tls);
         }
 
 

@@ -62,7 +62,6 @@ public class TLSHandshake implements Closeable{
             this.provideSocket = true;
 
         } catch (NoSuchAlgorithmException | KeyManagementException | IOException e) {
-            e.printStackTrace();
             throw new SocketTLSHandshakeException();
         }
     }

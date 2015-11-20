@@ -48,15 +48,24 @@ public class IMAPThread extends Thread{
 
         while((columns = this.reader.nextLine()) != null) {
             IMAPData data = new IMAPData(columns[IP]);
+            IMAP imap = null;
+            TLSHandshake tlsHandshake = null;
+
             try {
                 if (needStartTLS) { // STARTTLS
-                    IMAP imap = new IMAP(columns[IP], this.port);
+
+                    /* IMAP StartTLS */
+                    imap = new IMAP(columns[IP], this.port);
                     data.setBanner(imap.readBanner());
 
-                    TLSHandshake tlsHandshake = new TLSHandshake(imap, this.startTLS);
+                    tlsHandshake = new TLSHandshake(imap, this.startTLS);
                     tlsHandshake.connect();
                     X509Certificate[] certs = tlsHandshake.getChainCertificate();
                     data.setChain(Certificate.parseCertificateChain(certs));
+
+                    /* Close Connection */
+                    imap.close();
+                    tlsHandshake.close();
 
                     /* Check all SSL/TLS Protocols*/
                     if (allProtocols) {
@@ -70,15 +79,16 @@ public class IMAPThread extends Thread{
                         data.setCiphersSuites(cipherSuites.scanAllCipherSuites(this.startTLS));
                     }
 
-                    /* Heartbleed test*/
-//                    if (heartbleed)
-//                        data.setHeartbleed(tls.heartbleedTest(this.startTLS, TLSVersion.TLS_12));
-
                 } else { // Secure Port
-                    TLSHandshake tlsHandshake = new TLSHandshake(columns[IP], port);
+
+                    /* Handshake */
+                    tlsHandshake = new TLSHandshake(columns[IP], port);
                     tlsHandshake.connect();
                     X509Certificate[] certs = tlsHandshake.getChainCertificate();
                     data.setChain(Certificate.parseCertificateChain(certs));
+
+                    /* Close Connection */
+                    tlsHandshake.close();
 
                     /* Check all SSL/TLS Protocols*/
                     if (allProtocols) {
@@ -91,10 +101,6 @@ public class IMAPThread extends Thread{
                         ScanCipherSuites cipherSuites = new ScanCipherSuites(columns[IP], port);
                         data.setCiphersSuites(cipherSuites.scanAllCipherSuites());
                     }
-
-                    /* Heartbleed test*/
-//                    if (heartbleed)
-//                        data.setHeartbleed(tls.heartbleedTest(this.startTLS, TLSVersion.TLS_12));
 
                 }
             } catch (ConnectionException e) {
@@ -112,6 +118,11 @@ public class IMAPThread extends Thread{
             } catch (TLSGetCertificateException e) {
                 data.setError("Certificate get error");
                 logger.log(Level.INFO, "Certificate get error {0}", columns[IP]);
+            } finally {
+                if (needStartTLS && imap != null)
+                    imap.close();
+                if (tlsHandshake !=null)
+                    tlsHandshake.close();
             }
 
             this.writer.writeLine(data);

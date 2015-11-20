@@ -42,15 +42,19 @@ public class HttpsCertificateThread extends Thread{
 
         while((columns = this.reader.nextLine()) != null) {
             HttpsCertificateData data =  new HttpsCertificateData(columns[IP]);
+            TLSHandshake tls =  null;
             try {
                 /* TLS Handshake*/
-                TLSHandshake tls =  new TLSHandshake(columns[IP], this.port);
+                tls =  new TLSHandshake(columns[IP], this.port);
                 tls.connect();
                 X509Certificate[] certs = tls.getChainCertificate();
 
                 data.setTLSProtocol(tls.getProtocol());
                 data.setCipherSuite(tls.getCipherSuite());
                 data.setChain(Certificate.parseCertificateChain(certs));
+
+                /* Close Connections*/
+                tls.close();
 
                 /* Check all SSL/TLS Protocols*/
                 if (allProtocols) {
@@ -64,10 +68,6 @@ public class HttpsCertificateThread extends Thread{
                     data.setCiphersSuites(cipherSuites.scanAllCipherSuites());
                 }
 
-//                /* Heartbleed test*/
-//                if (heartbleed)
-//                    data.setHeartbleed(tls.heartbleedTest(null, TLSVersion.TLS_12));
-
             } catch (SocketTLSHandshakeException e) {
                 data.setError("Create socket Error");
                 logger.log(Level.INFO, "Create socket error {0}", columns[IP]);
@@ -80,6 +80,9 @@ public class HttpsCertificateThread extends Thread{
             } catch (TLSGetCertificateException e) {
                 data.setError("Certificate error");
                 logger.log(Level.INFO, "Certificate error {0}", columns[IP]);
+            } finally {
+                if (tls !=null)
+                    tls.close();
             }
 
             this.writer.writeLine(data);
