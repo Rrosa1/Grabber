@@ -2,6 +2,8 @@ package cl.tesis.tls;
 
 
 import cl.tesis.mail.StartTLS;
+import cl.tesis.mail.StartTLSProtocol;
+import cl.tesis.mail.exception.ConnectionException;
 import cl.tesis.tls.constant.TLSVersion;
 import cl.tesis.tls.exception.SocketTLSHandshakeException;
 import cl.tesis.tls.exception.StartTLSException;
@@ -67,32 +69,38 @@ public class ScanTLSProtocols {
     }
 
     private boolean scanProtocol(StartTLS start, TLSVersion version) {
+        StartTLSProtocol startTLSProtocol = null;
         TLSHandshake tls = null;
         Socket socket = null;
         InputStream in = null;
         DataOutputStream out = null;
 
         try {
-            socket = new Socket(host, port);
-            socket.setSoTimeout(TIMEOUT);
-            in = socket.getInputStream();
-            out =  new DataOutputStream(socket.getOutputStream());
+//            socket = new Socket(host, port);
+//            socket.setSoTimeout(TIMEOUT);
+//            in = socket.getInputStream();
+//            out =  new DataOutputStream(socket.getOutputStream());
+//
+//            in.read(buffer);
+            startTLSProtocol = new StartTLSProtocol(host, port);
+            startTLSProtocol.readBanner();
 
-            in.read(buffer);
-            tls =  new TLSHandshake(socket, start, version);
+            tls =  new TLSHandshake(startTLSProtocol, start, version);
             tls.connect();
 
-        } catch (SocketTLSHandshakeException | StartTLSException | TLSConnectionException | IOException e) {
+        } catch (SocketTLSHandshakeException | ConnectionException | StartTLSException | TLSConnectionException e) {
             e.printStackTrace();
             // TODO return null
             return false;
         } catch (TLSHandshakeException e) {
             return false;
-        } finally {
-            this.close(socket);
-            this.close(in);
-            this.close(out);
+        }  finally {
+            this.close(startTLSProtocol);
             this.close(tls);
+//            this.close(socket);
+//            this.close(in);
+//            this.close(out);
+//            this.close(tls);
         }
 
 

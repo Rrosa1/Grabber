@@ -53,7 +53,7 @@ public class POP3Thread extends Thread{
                     data.setBanner(pop.readBanner());
 
                     /* Handshake */
-                    TLSHandshake tlsHandshake = new TLSHandshake(pop.getSocket(), this.startTLS);
+                    TLSHandshake tlsHandshake = new TLSHandshake(pop, this.startTLS);
                     tlsHandshake.connect();
                     X509Certificate[] certs = tlsHandshake.getChainCertificate();
                     data.setChain(Certificate.parseCertificateChain(certs));

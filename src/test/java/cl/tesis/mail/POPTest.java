@@ -23,7 +23,7 @@ public class POPTest extends TestCase{
     public void testHandshake() throws Exception {
         pop.readBanner();
 
-        TLSHandshake tlsHandshake =  new TLSHandshake(pop.getSocket(), StartTLS.POP3);
+        TLSHandshake tlsHandshake =  new TLSHandshake(pop, StartTLS.POP3);
         tlsHandshake.connect();
         X509Certificate[] certs =  tlsHandshake.getChainCertificate();
 

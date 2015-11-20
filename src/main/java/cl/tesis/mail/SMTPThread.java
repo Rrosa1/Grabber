@@ -46,18 +46,20 @@ public class SMTPThread extends Thread{
 
         while((columns = this.reader.nextLine()) != null) {
             SMTPData data =  new SMTPData(columns[IP]);
+            SMTP smtp = null;
+            TLSHandshake tlsHandshake = null;
 
             try {
                 if (needStartTLS) { // STARTTLS
 
                     /* SMTP StarTLS */
-                    SMTP smtp = new SMTP(columns[IP], this.port);
+                    smtp = new SMTP(columns[IP], this.port);
                     data.setBanner(smtp.readBanner());
                     data.setHelp(smtp.sendHELP());
                     data.setEhlo(smtp.sendEHLO());
 
                     /* Handshake */
-                    TLSHandshake tlsHandshake = new TLSHandshake(smtp.getSocket(), this.startTLS);
+                    tlsHandshake = new TLSHandshake(smtp, this.startTLS);
                     tlsHandshake.connect();
                     X509Certificate[] certs = tlsHandshake.getChainCertificate();
                     data.setChain(Certificate.parseCertificateChain(certs));
@@ -81,7 +83,7 @@ public class SMTPThread extends Thread{
                 } else { // Secure Port
 
                     /* Handshake */
-                    TLSHandshake tlsHandshake = new TLSHandshake(columns[IP], port);
+                    tlsHandshake = new TLSHandshake(columns[IP], port);
                     tlsHandshake.connect();
                     X509Certificate[] certs = tlsHandshake.getChainCertificate();
                     data.setChain(Certificate.parseCertificateChain(certs));
@@ -117,13 +119,12 @@ public class SMTPThread extends Thread{
             } catch (TLSGetCertificateException e) {
                 data.setError("Certificate get error");
                 logger.log(Level.INFO, "Certificate get error {0}", columns[IP]);
+            } finally {
+                if (needStartTLS && smtp != null)
+                    smtp.close();
+                if (tlsHandshake !=null)
+                    tlsHandshake.close();
             }
-//            finally {
-//                if (needStartTLS && smtp != null)
-//                    smtp.close();
-//                if (tlsHandshake !=null)
-//                    tlsHandshake.close();
-//            }
 
             this.writer.writeLine(data);
         }

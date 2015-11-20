@@ -32,7 +32,7 @@ public class SMTPTest extends TestCase{
         smtp.readBanner();
         smtp.sendEHLO();
 
-        TLSHandshake tlsHandshake =  new TLSHandshake(smtp.getSocket(), StartTLS.SMTP);
+        TLSHandshake tlsHandshake =  new TLSHandshake(smtp, StartTLS.SMTP);
         tlsHandshake.connect();
         X509Certificate[] certs = tlsHandshake.getChainCertificate();
 

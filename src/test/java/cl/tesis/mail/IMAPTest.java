@@ -25,7 +25,7 @@ public class IMAPTest extends TestCase {
     public void testHandshake() throws Exception {
         imap.readBanner();
 
-        TLSHandshake tlsHandshake =  new TLSHandshake(imap.getSocket(), StartTLS.IMAP);
+        TLSHandshake tlsHandshake =  new TLSHandshake(imap, StartTLS.IMAP);
         tlsHandshake.connect();
         X509Certificate[] certs =  tlsHandshake.getChainCertificate();
 

@@ -53,7 +53,7 @@ public class IMAPThread extends Thread{
                     IMAP imap = new IMAP(columns[IP], this.port);
                     data.setBanner(imap.readBanner());
 
-                    TLSHandshake tlsHandshake = new TLSHandshake(imap.getSocket(), this.startTLS);
+                    TLSHandshake tlsHandshake = new TLSHandshake(imap, this.startTLS);
                     tlsHandshake.connect();
                     X509Certificate[] certs = tlsHandshake.getChainCertificate();
                     data.setChain(Certificate.parseCertificateChain(certs));
