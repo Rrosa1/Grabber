@@ -1,7 +1,7 @@
 package cl.tesis.mail;
 
 
-import java.io.IOException;
+import cl.tesis.mail.exception.ConnectionException;
 
 public class IMAP extends Mail{
 

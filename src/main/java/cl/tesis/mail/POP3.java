@@ -1,6 +1,8 @@
 package cl.tesis.mail;
 
 
+import cl.tesis.mail.exception.ConnectionException;
+
 import java.io.IOException;
 
 public class POP3 extends Mail{

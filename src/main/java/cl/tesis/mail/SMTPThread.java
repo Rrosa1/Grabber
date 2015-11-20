@@ -1,6 +1,7 @@
 package cl.tesis.mail;
 
 import cl.tesis.input.FileReader;
+import cl.tesis.mail.exception.ConnectionException;
 import cl.tesis.output.FileWriter;
 import cl.tesis.tls.Certificate;
 import cl.tesis.tls.ScanCipherSuites;

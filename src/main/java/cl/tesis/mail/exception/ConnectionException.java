@@ -1,4 +1,4 @@
-package cl.tesis.mail;
+package cl.tesis.mail.exception;
 
 
 public class ConnectionException extends Exception {

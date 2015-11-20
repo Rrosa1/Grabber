@@ -1,5 +1,7 @@
 package cl.tesis.mail;
 
+import cl.tesis.mail.exception.ConnectionException;
+
 import java.io.Closeable;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -17,7 +19,7 @@ public class Mail implements Closeable{
     protected DataOutputStream out;
     protected byte[] buffer;
 
-    public Mail(String host, int port) throws ConnectionException{
+    public Mail(String host, int port) throws ConnectionException {
         try {
             this.host = host;
             this.socket = new Socket(host, port);
