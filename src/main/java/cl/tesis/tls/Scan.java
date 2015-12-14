@@ -11,7 +11,7 @@ import java.net.Socket;
 
 
 public class Scan {
-    protected static final int BUFFER_SIZE = 2048;
+    protected static final int BUFFER_SIZE = 4096;
     private static final int MILLISECONDS = 1000;
     private static final int TIMEOUT = 60 * MILLISECONDS; // 60 seg
 
