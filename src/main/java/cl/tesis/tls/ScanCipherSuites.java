@@ -3,6 +3,7 @@ package cl.tesis.tls;
 
 import cl.tesis.mail.StartTLS;
 import cl.tesis.tls.constant.CipherSuites;
+import cl.tesis.tls.constant.ScanMode;
 import cl.tesis.tls.constant.TLSCipher;
 import cl.tesis.tls.constant.TLSVersion;
 import cl.tesis.tls.exception.HandshakeHeaderException;
@@ -30,6 +31,8 @@ public class ScanCipherSuites extends Scan {
     public ScanCipherSuitesData scanAllCipherSuites(StartTLS start) {
         ScanCipherSuitesData scanCipherSuitesData = new ScanCipherSuitesData();
         for (TLSCipher cipher : TLSCipher.values()) {
+            if (cipher.getScanMode() != ScanMode.Normal)
+                continue;
             scanCipherSuitesData.setCipherSuite(cipher, scanCipherSuite(cipher, start));
         }
         return scanCipherSuitesData;
