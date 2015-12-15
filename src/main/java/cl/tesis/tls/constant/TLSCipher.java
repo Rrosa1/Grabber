@@ -69,7 +69,11 @@ public enum TLSCipher {
             CipherSuites.TLS_ECDH_RSA_WITH_AES_128_CBC_SHA256.getStringValue() + CipherSuites.TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA256.getStringValue() +
             CipherSuites.TLS_ECDH_RSA_WITH_AES_128_CBC_SHA.getStringValue() + CipherSuites.TLS_RSA_WITH_AES_128_GCM_SHA256.getStringValue() +
             CipherSuites.TLS_RSA_WITH_AES_128_CBC_SHA256.getStringValue() + CipherSuites.TLS_RSA_WITH_AES_128_CBC_SHA.getStringValue() +
-            CipherSuites.TLS_RSA_WITH_CAMELLIA_128_CBC_SHA.getStringValue() + CipherSuites.TLS_PSK_WITH_AES_128_CBC_SHA.getStringValue());
+            CipherSuites.TLS_RSA_WITH_CAMELLIA_128_CBC_SHA.getStringValue() + CipherSuites.TLS_PSK_WITH_AES_128_CBC_SHA.getStringValue()),
+    FREAK(CipherSuites.TLS_RSA_EXPORT1024_WITH_DES_CBC_SHA.getStringValue() + CipherSuites.TLS_RSA_EXPORT1024_WITH_RC4_56_SHA.getStringValue() +
+            CipherSuites.TLS_DHE_RSA_EXPORT_WITH_DES40_CBC_SHA .getStringValue() + CipherSuites.TLS_DHE_RSA_EXPORT_WITH_DES40_CBC_SHA.getStringValue() +
+            CipherSuites.TLS_RSA_EXPORT_WITH_DES40_CBC_SHA.getStringValue() + CipherSuites.TLS_RSA_EXPORT_WITH_RC2_CBC_40_MD5.getStringValue() +
+            CipherSuites.TLS_RSA_EXPORT_WITH_RC4_40_MD5 .getStringValue());
 
 
     private String value;
