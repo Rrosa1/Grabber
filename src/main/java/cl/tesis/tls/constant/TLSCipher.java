@@ -1,11 +1,11 @@
 package cl.tesis.tls.constant;
 
 public enum TLSCipher {
-    TEST(CipherSuites.TLS_DHE_RSA_WITH_AES_128_CBC_SHA.getStringValue() + CipherSuites.TLS_ECDHE_RSA_WITH_RC4_128_SHA.getStringValue() +
-            CipherSuites.TLS_RSA_WITH_NULL_MD5.getStringValue() + CipherSuites.TLS_RSA_WITH_NULL_SHA.getStringValue() +
-            CipherSuites.TLS_RSA_WITH_NULL_SHA256.getStringValue() + CipherSuites.TLS_RSA_WITH_RC4_128_MD5.getStringValue() +
-            CipherSuites.TLS_RSA_WITH_RC4_128_SHA.getStringValue() + CipherSuites.TLS_RSA_WITH_3DES_EDE_CBC_SHA.getStringValue() +
-            CipherSuites.TLS_RSA_WITH_AES_128_CBC_SHA.getStringValue() + CipherSuites.TLS_RSA_WITH_AES_256_CBC_SHA.getStringValue()),
+//    TEST(CipherSuites.TLS_DHE_RSA_WITH_AES_128_CBC_SHA.getStringValue() + CipherSuites.TLS_ECDHE_RSA_WITH_RC4_128_SHA.getStringValue() +
+//            CipherSuites.TLS_RSA_WITH_NULL_MD5.getStringValue() + CipherSuites.TLS_RSA_WITH_NULL_SHA.getStringValue() +
+//            CipherSuites.TLS_RSA_WITH_NULL_SHA256.getStringValue() + CipherSuites.TLS_RSA_WITH_RC4_128_MD5.getStringValue() +
+//            CipherSuites.TLS_RSA_WITH_RC4_128_SHA.getStringValue() + CipherSuites.TLS_RSA_WITH_3DES_EDE_CBC_SHA.getStringValue() +
+//            CipherSuites.TLS_RSA_WITH_AES_128_CBC_SHA.getStringValue() + CipherSuites.TLS_RSA_WITH_AES_256_CBC_SHA.getStringValue()),
     NULL_CIPHERS(CipherSuites.TLS_ECDHE_RSA_WITH_NULL_SHA.getStringValue() + CipherSuites.TLS_ECDHE_ECDSA_WITH_NULL_SHA.getStringValue() +
             CipherSuites.TLS_ECDH_ANON_WITH_NULL_SHA.getStringValue() + CipherSuites.TLS_ECDH_RSA_WITH_NULL_SHA.getStringValue() +
             CipherSuites.TLS_ECDH_ECDSA_WITH_NULL_SHA.getStringValue() + CipherSuites.TLS_RSA_WITH_NULL_SHA256.getStringValue() +
