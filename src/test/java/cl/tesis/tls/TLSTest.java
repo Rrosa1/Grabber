@@ -38,12 +38,15 @@ public class TLSTest extends TestCase{
 
         assertEquals("TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA", suites.getDes3_ciphers());
         assertEquals("TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA", suites.getHigh_ciphers());
+        assertEquals(null, suites.getFreak());
+        assertEquals(null, suites.getLogjam());
+
     }
 
-//    public void testHeartbeat() throws Exception {
-//        ScanHeartbleed scanHeartbleed =  new ScanHeartbleed(HOST, PORT);
-//        HeartbleedData heartbleed = scanHeartbleed.hasHeartbleed();
-//
-//        assertEquals(true, heartbleed.isHeartbeat());
-//    }
+    public void testHeartbeat() throws Exception {
+        ScanHeartbleed scanHeartbleed =  new ScanHeartbleed(HOST, PORT);
+        HeartbleedData heartbleed = scanHeartbleed.hasHeartbleed();
+
+        assertEquals(true, heartbleed.isHeartbeat());
+    }
 }

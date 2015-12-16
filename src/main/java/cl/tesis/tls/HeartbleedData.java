@@ -27,6 +27,10 @@ public class HeartbleedData implements JsonWritable {
         return heartbeat;
     }
 
+    public boolean isHeartbleed() {
+        return heartbleed;
+    }
+
     @Override
     public String toString() {
         return "HeartbleedData{" +
