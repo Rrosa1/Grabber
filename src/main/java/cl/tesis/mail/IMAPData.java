@@ -19,7 +19,8 @@ public class IMAPData implements CSVWritable, JsonWritable{
     private String error;
     private String banner;
     private Certificate[] chain;
-    private HeartbleedData heartbleed;
+    private HeartbleedData heartbleedData;
+    private String beastCipher;
     private ScanTLSProtocolsData protocols;
     private ScanCipherSuitesData ciphersSuites;
 
@@ -39,8 +40,8 @@ public class IMAPData implements CSVWritable, JsonWritable{
         this.chain = certificates;
     }
 
-    public void setHeartbleed(HeartbleedData heartbleed) {
-        this.heartbleed = heartbleed;
+    public void setHeartbleedData(HeartbleedData heartbleedData) {
+        this.heartbleedData = heartbleedData;
     }
 
     public void setProtocols(ScanTLSProtocolsData protocols) {

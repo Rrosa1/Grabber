@@ -18,7 +18,8 @@ public class POP3Data implements JsonWritable, CSVWritable{
     private String error;
     private String banner;
     private Certificate[] chain;
-    private HeartbleedData heartbleed;
+    private HeartbleedData heartbleedData;
+    private String beastCipher;
     private ScanTLSProtocolsData protocols;
     private ScanCipherSuitesData ciphersSuites;
 
@@ -38,8 +39,12 @@ public class POP3Data implements JsonWritable, CSVWritable{
         this.chain = certificates;
     }
 
-    public void setHeartbleed(HeartbleedData heartbleed) {
-        this.heartbleed = heartbleed;
+    public void setHeartbleedData(HeartbleedData heartbleedData) {
+        this.heartbleedData = heartbleedData;
+    }
+
+    public void setBeastCipher(String beastCipher) {
+        this.beastCipher = beastCipher;
     }
 
     public void setProtocols(ScanTLSProtocolsData protocols) {

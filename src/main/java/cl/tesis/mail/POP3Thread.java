@@ -79,7 +79,7 @@ public class POP3Thread extends Thread{
                     /* Heartbleed */
                     if (heartbleed) {
                         ScanHeartbleed scanHeartbleed = new ScanHeartbleed(columns[IP], port);
-                        data.setHeartbleed(scanHeartbleed.hasHeartbleed(this.startTLS));
+                        data.setHeartbleedData(scanHeartbleed.hasHeartbleed(this.startTLS));
                     }
 
                 } else { // Secure Port
@@ -108,7 +108,7 @@ public class POP3Thread extends Thread{
                     /* Heartbleed */
                     if (heartbleed) {
                         ScanHeartbleed scanHeartbleed = new ScanHeartbleed(columns[IP], port);
-                        data.setHeartbleed(scanHeartbleed.hasHeartbleed());
+                        data.setHeartbleedData(scanHeartbleed.hasHeartbleed());
                     }
 
                 }

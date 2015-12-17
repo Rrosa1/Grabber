@@ -19,6 +19,7 @@ public class HttpsCertificateData implements CSVWritable, JsonWritable{
     private String cipherSuite;
     private Certificate[] chain;
     private HeartbleedData heartbleedData;
+    private String beastCipher;
     private ScanTLSProtocolsData protocols;
     private ScanCipherSuitesData ciphersSuites;
 
@@ -42,8 +43,8 @@ public class HttpsCertificateData implements CSVWritable, JsonWritable{
         this.chain = certificates;
     }
 
-    public void setHeartbleed(HeartbleedData heartbleed) {
-        this.heartbleedData = heartbleed;
+    public void setHeartbleedData(HeartbleedData heartbleedData) {
+        this.heartbleedData = heartbleedData;
     }
 
     public void setProtocols(ScanTLSProtocolsData protocols) {

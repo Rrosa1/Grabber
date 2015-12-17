@@ -68,7 +68,7 @@ public class HttpsCertificateThread extends Thread{
                 /* Heartbleed */
                 if (heartbleed) {
                     ScanHeartbleed scanHeartbleed = new ScanHeartbleed(columns[IP], port);
-                    data.setHeartbleed(scanHeartbleed.hasHeartbleed());
+                    data.setHeartbleedData(scanHeartbleed.hasHeartbleed());
                 }
 
 
