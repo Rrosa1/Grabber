@@ -3,10 +3,7 @@ package cl.tesis.mail;
 import cl.tesis.input.FileReader;
 import cl.tesis.mail.exception.ConnectionException;
 import cl.tesis.output.FileWriter;
-import cl.tesis.tls.Certificate;
-import cl.tesis.tls.ScanCipherSuites;
-import cl.tesis.tls.ScanTLSProtocols;
-import cl.tesis.tls.TLSHandshake;
+import cl.tesis.tls.*;
 import cl.tesis.tls.exception.*;
 
 import java.security.cert.X509Certificate;
@@ -80,6 +77,12 @@ public class SMTPThread extends Thread{
                         data.setCiphersSuites(cipherSuites.scanAllCipherSuites(this.startTLS));
                     }
 
+                    /* Heartbleed */
+                    if (heartbleed) {
+                        ScanHeartbleed scanHeartbleed = new ScanHeartbleed(columns[IP], port);
+                        data.setHeartbleed(scanHeartbleed.hasHeartbleed(this.startTLS));
+                    }
+
                 } else { // Secure Port
 
                     /* Handshake */
@@ -101,6 +104,12 @@ public class SMTPThread extends Thread{
                     if (allCiphersSuites) {
                         ScanCipherSuites cipherSuites = new ScanCipherSuites(columns[IP], port);
                         data.setCiphersSuites(cipherSuites.scanAllCipherSuites());
+                    }
+
+                    /* Heartbleed */
+                    if (heartbleed) {
+                        ScanHeartbleed scanHeartbleed = new ScanHeartbleed(columns[IP], port);
+                        data.setHeartbleed(scanHeartbleed.hasHeartbleed());
                     }
 
                 }

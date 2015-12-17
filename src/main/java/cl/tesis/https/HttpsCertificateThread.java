@@ -2,10 +2,7 @@ package cl.tesis.https;
 
 import cl.tesis.input.FileReader;
 import cl.tesis.output.FileWriter;
-import cl.tesis.tls.Certificate;
-import cl.tesis.tls.ScanCipherSuites;
-import cl.tesis.tls.ScanTLSProtocols;
-import cl.tesis.tls.TLSHandshake;
+import cl.tesis.tls.*;
 import cl.tesis.tls.exception.SocketTLSHandshakeException;
 import cl.tesis.tls.exception.TLSConnectionException;
 import cl.tesis.tls.exception.TLSGetCertificateException;
@@ -62,11 +59,19 @@ public class HttpsCertificateThread extends Thread{
                     data.setProtocols(scan.scanAllProtocols());
                 }
 
-                /* Check all Cipher Suites */
+                /* Check all Cipher Suites and some vulnerabilities */
                 if (allCiphersSuites) {
                     ScanCipherSuites cipherSuites = new ScanCipherSuites(columns[IP], port);
                     data.setCiphersSuites(cipherSuites.scanAllCipherSuites());
                 }
+
+                /* Heartbleed */
+                if (heartbleed) {
+                    ScanHeartbleed scanHeartbleed = new ScanHeartbleed(columns[IP], port);
+                    data.setHeartbleed(scanHeartbleed.hasHeartbleed());
+                }
+
+
 
             } catch (SocketTLSHandshakeException e) {
                 data.setError("Create socket Error");
