@@ -37,6 +37,10 @@ public class CommandLine {
     @Option(name = "--heartbleed", usage = "Test heartbleed", help =  true)
     private boolean heartbleed;
 
+    @Option(name = "--beast", usage = "Test beast", help =  true)
+    private boolean beast;
+
+
     @Option(name = "--list-probe-modules", usage = "Print all probe modules", required = false, help = true)
     private boolean listProbeModules;
 
@@ -137,6 +141,10 @@ public class CommandLine {
 
     public boolean isHeartbleed() {
         return heartbleed;
+    }
+
+    public boolean isBeast() {
+        return beast;
     }
 
     public static void main(String[] args) {

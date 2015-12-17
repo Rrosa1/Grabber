@@ -23,14 +23,18 @@ public class HttpsCertificateThread extends Thread{
     private boolean allProtocols;
     private boolean allCiphersSuites;
     private boolean heartbleed;
+    private boolean beast;
 
-    public HttpsCertificateThread(FileReader reader, FileWriter writer, int port, boolean allProtocols, boolean allCiphersSuites, boolean heartbleed) {
+
+    public HttpsCertificateThread(FileReader reader, FileWriter writer, int port, boolean allProtocols, boolean allCiphersSuites, boolean heartbleed, boolean beast) {
         this.reader = reader;
         this.writer = writer;
         this.port = port;
         this.allProtocols = allProtocols;
         this.allCiphersSuites = allCiphersSuites;
         this.heartbleed = heartbleed;
+        this.beast = beast;
+
     }
 
     @Override
@@ -69,6 +73,12 @@ public class HttpsCertificateThread extends Thread{
                 if (heartbleed) {
                     ScanHeartbleed scanHeartbleed = new ScanHeartbleed(columns[IP], port);
                     data.setHeartbleedData(scanHeartbleed.hasHeartbleed());
+                }
+
+                /* Beast */
+                if (beast) {
+                    ScanBeast scanBeast = new ScanBeast(columns[IP], port);
+                    data.setBeastCipher(scanBeast.hasBeast());
                 }
 
 

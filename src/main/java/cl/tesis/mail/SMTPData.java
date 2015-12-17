@@ -57,6 +57,10 @@ public class SMTPData implements CSVWritable, JsonWritable{
         this.heartbleedData = heartbleedData;
     }
 
+    public void setBeastCipher(String beastCipher) {
+        this.beastCipher = beastCipher;
+    }
+
     public void setProtocols(ScanTLSProtocolsData protocols) {
         this.protocols = protocols;
     }

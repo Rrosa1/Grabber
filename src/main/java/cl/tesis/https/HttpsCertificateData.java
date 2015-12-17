@@ -43,6 +43,10 @@ public class HttpsCertificateData implements CSVWritable, JsonWritable{
         this.chain = certificates;
     }
 
+    public void setBeastCipher(String beastCipher) {
+        this.beastCipher = beastCipher;
+    }
+
     public void setHeartbleedData(HeartbleedData heartbleedData) {
         this.heartbleedData = heartbleedData;
     }

@@ -23,9 +23,10 @@ public class IMAPThread extends Thread{
     private boolean allProtocols;
     private boolean allCiphersSuites;
     private boolean heartbleed;
+    private boolean beast;
 
 
-    public IMAPThread(FileReader reader, FileWriter writer, int port, boolean startTLS, boolean allProtocols, boolean allCiphersSuites, boolean heartbleed) {
+    public IMAPThread(FileReader reader, FileWriter writer, int port, boolean startTLS, boolean allProtocols, boolean allCiphersSuites, boolean heartbleed, boolean beast) {
         this.reader = reader;
         this.writer = writer;
         this.port = port;
@@ -33,6 +34,7 @@ public class IMAPThread extends Thread{
         this.allProtocols = allProtocols;
         this.allCiphersSuites = allCiphersSuites;
         this.heartbleed = heartbleed;
+        this.beast = beast;
 
         if (needStartTLS) {
             this.startTLS = StartTLS.IMAP;
@@ -82,6 +84,12 @@ public class IMAPThread extends Thread{
                         data.setHeartbleedData(scanHeartbleed.hasHeartbleed(this.startTLS));
                     }
 
+                    /* Beast */
+                    if (beast) {
+                        ScanBeast scanBeast = new ScanBeast(columns[IP], port);
+                        data.setBeastCipher(scanBeast.hasBeast(this.startTLS));
+                    }
+
                 } else { // Secure Port
 
                     /* Handshake */
@@ -109,6 +117,12 @@ public class IMAPThread extends Thread{
                     if (heartbleed) {
                         ScanHeartbleed scanHeartbleed = new ScanHeartbleed(columns[IP], port);
                         data.setHeartbleedData(scanHeartbleed.hasHeartbleed());
+                    }
+
+                    /* Beast */
+                    if (beast) {
+                        ScanBeast scanBeast = new ScanBeast(columns[IP], port);
+                        data.setBeastCipher(scanBeast.hasBeast());
                     }
 
                 }
