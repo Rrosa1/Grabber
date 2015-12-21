@@ -52,7 +52,7 @@ public class CommandLine {
 
     private String[] probeModules = {"HTTPSCertificate", "HTTP", "HTTPS", "SSHVersion", "SMTP", "POP3", "IMAP", "FTP"};
     private String[] outputModules = {"CSV", "JSON"};
-    private String versionDetails = "v1.1";
+    private String versionDetails = "v1.2";
 
     public void parse(String[] args) {
         CmdLineParser parser = new CmdLineParser(this);
