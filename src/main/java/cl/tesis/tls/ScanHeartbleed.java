@@ -58,6 +58,8 @@ public class ScanHeartbleed extends Scan{
             }
         } catch (StartTLSException | TLSHeaderException | HandshakeHeaderException | IOException e) {
             return data;
+        } finally {
+            this.close();
         }
         return data;
     }
@@ -81,11 +83,4 @@ public class ScanHeartbleed extends Scan{
         return "18" + tlsVersion.getStringVersion() + "0003014000";
     }
 
-    public static void main(String[] args) {
-//        String ip = "208.108.122.62";
-//        String ip = "190.12.17.202";
-        String ip = "151.237.159.220";
-        ScanHeartbleed s = new ScanHeartbleed(ip, 443);
-        System.out.println(s.hasHeartbleed());
-    }
 }

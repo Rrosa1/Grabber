@@ -51,14 +51,10 @@ public class ScanBeast extends Scan {
             serverHello = new ServerHello(buffer);
             return serverHello.getCipherSuite();
         } catch (StartTLSException | TLSHeaderException | HandshakeHeaderException | IOException e) {
-            e.printStackTrace();
+            return null;
+        } finally {
+            this.close();
         }
-        return null;
     }
 
-
-    public static void main(String[] args) {
-        ScanBeast s = new ScanBeast("172.17.68.37", 443);
-//        s.hasBeast(null, TLSVersion.TLS_10);
-    }
 }
