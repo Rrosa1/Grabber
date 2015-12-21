@@ -24,7 +24,14 @@ public class SSHConnection {
         return this.in.readLine();
     }
 
-    public void close() throws IOException {
-        this.socket.close();
+    public void close() {
+        if (socket != null) {
+            try {
+                socket.close();
+            } catch (IOException ignore){
+            } finally { socket = null; }
+
+
+        }
     }
 }
