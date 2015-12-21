@@ -81,8 +81,6 @@ public class HttpsCertificateThread extends Thread{
                     data.setBeastCipher(scanBeast.hasBeast());
                 }
 
-
-
             } catch (SocketTLSHandshakeException e) {
                 data.setError("Create socket Error");
                 logger.log(Level.INFO, "Create socket error {0}", columns[IP]);
