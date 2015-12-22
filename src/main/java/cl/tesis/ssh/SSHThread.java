@@ -32,7 +32,7 @@ public class SSHThread extends Thread {
             SSHData host = new SSHData(columns[IP]);
             try {
                 connection = new SSHConnection(columns[IP], this.port);
-                connection.close();
+                host.setResponse(connection.getSSHVersion());
             } catch (IOException e) {
                 host.setError("Read or write socket error");
                 logger.log(Level.INFO, "IOException {0}", columns[IP]);
