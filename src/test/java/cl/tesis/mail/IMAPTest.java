@@ -18,14 +18,14 @@ public class IMAPTest extends TestCase {
     }
 
    public void testIMAPProtocol() throws Exception {
-        String start =  imap.startProtocol();
+        String start =  imap.readBanner();
         assertEquals(true, start.contains(START_PROTOCOL));
     }
 
     public void testHandshake() throws Exception {
-        imap.startProtocol();
+        imap.readBanner();
 
-        TLSHandshake tlsHandshake =  new TLSHandshake(imap.getSocket(), StartTLS.IMAP);
+        TLSHandshake tlsHandshake =  new TLSHandshake(imap, StartTLS.IMAP);
         tlsHandshake.connect();
         X509Certificate[] certs =  tlsHandshake.getChainCertificate();
 

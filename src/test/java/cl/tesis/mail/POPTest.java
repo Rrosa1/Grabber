@@ -16,14 +16,14 @@ public class POPTest extends TestCase{
     }
 
     public void testPOPProtocol() throws Exception {
-        String start =  pop.startProtocol();
+        String start =  pop.readBanner();
         assertEquals("+OK Dovecot ready.\r\n", start);
     }
 
     public void testHandshake() throws Exception {
-        pop.startProtocol();
+        pop.readBanner();
 
-        TLSHandshake tlsHandshake =  new TLSHandshake(pop.getSocket(), StartTLS.POP3);
+        TLSHandshake tlsHandshake =  new TLSHandshake(pop, StartTLS.POP3);
         tlsHandshake.connect();
         X509Certificate[] certs =  tlsHandshake.getChainCertificate();
 
@@ -46,8 +46,7 @@ public class POPTest extends TestCase{
         ScanCipherSuites cipherSuites = new ScanCipherSuites(HOST, PORT);
         ScanCipherSuitesData suites = cipherSuites.scanAllCipherSuites(StartTLS.POP3);
 
-        assertEquals("TLS_RSA_WITH_RC4_128_SHA", suites.getMedium_ciphers());
-        assertEquals("TLS_DHE_RSA_WITH_3DES_EDE_CBC_SHA", suites.getDes3_ciphers());
+        assertEquals("TLS_RSA_WITH_3DES_EDE_CBC_SHA", suites.getDes3_ciphers());
         assertEquals("TLS_DHE_RSA_WITH_AES_256_CBC_SHA", suites.getHigh_ciphers());
     }
 }

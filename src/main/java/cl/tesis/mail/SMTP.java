@@ -1,5 +1,7 @@
 package cl.tesis.mail;
 
+import cl.tesis.mail.exception.ConnectionException;
+
 import java.io.IOException;
 
 public class SMTP extends Mail {
@@ -8,11 +10,11 @@ public class SMTP extends Mail {
     public static final String HELP = "HELP\r\n";
     public static final String EHLO = "EHLO example.cl\r\n";
 
-    public SMTP(String host, int port) throws IOException {
+    public SMTP(String host, int port) throws ConnectionException {
         super(host, port);
     }
 
-    public SMTP(String host) throws IOException {
+    public SMTP(String host) throws ConnectionException {
         this(host, DEFAULT_PORT);
     }
 

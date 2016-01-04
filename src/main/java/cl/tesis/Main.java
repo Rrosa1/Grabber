@@ -51,7 +51,7 @@ public class Main {
                     break;
                 case "HTTPSCertificate":
                     for (int i = 0; i < commandLine.getThreads(); i++) {
-                        Thread t = new HttpsCertificateThread(reader, writer, commandLine.getPort(), commandLine.isAllTLSProtocols(), commandLine.isAllCipherSuites(), commandLine.isHeartbleed());
+                        Thread t = new HttpsCertificateThread(reader, writer, commandLine.getPort(), commandLine.isAllTLSProtocols(), commandLine.isAllCipherSuites(), commandLine.isHeartbleed(), commandLine.isBeast());
                         t.start();
                         lista.add(t);
                     }
@@ -72,21 +72,21 @@ public class Main {
                     break;
                 case "SMTP":
                     for (int i = 0; i < commandLine.getThreads(); i++) {
-                        Thread t = new SMTPThread(reader, writer, commandLine.getPort(), commandLine.isStartTLS(), commandLine.isAllTLSProtocols(), commandLine.isAllCipherSuites(), commandLine.isHeartbleed());
+                        Thread t = new SMTPThread(reader, writer, commandLine.getPort(), commandLine.isStartTLS(), commandLine.isAllTLSProtocols(), commandLine.isAllCipherSuites(), commandLine.isHeartbleed(), commandLine.isBeast());
                         t.start();
                         lista.add(t);
                     }
                     break;
                 case "POP3":
                     for (int i = 0; i < commandLine.getThreads(); i++) {
-                        Thread t = new POP3Thread(reader, writer, commandLine.getPort(), commandLine.isStartTLS(), commandLine.isAllTLSProtocols(), commandLine.isAllCipherSuites(), commandLine.isHeartbleed());
+                        Thread t = new POP3Thread(reader, writer, commandLine.getPort(), commandLine.isStartTLS(), commandLine.isAllTLSProtocols(), commandLine.isAllCipherSuites(), commandLine.isHeartbleed(), commandLine.isBeast());
                         t.start();
                         lista.add(t);
                     }
                     break;
                 case "IMAP":
                     for (int i = 0; i < commandLine.getThreads(); i++) {
-                        Thread t = new IMAPThread(reader, writer, commandLine.getPort(), commandLine.isStartTLS(), commandLine.isAllTLSProtocols(), commandLine.isAllCipherSuites(), commandLine.isHeartbleed());
+                        Thread t = new IMAPThread(reader, writer, commandLine.getPort(), commandLine.isStartTLS(), commandLine.isAllTLSProtocols(), commandLine.isAllCipherSuites(), commandLine.isHeartbleed(), commandLine.isBeast());
                         t.start();
                         lista.add(t);
                     }

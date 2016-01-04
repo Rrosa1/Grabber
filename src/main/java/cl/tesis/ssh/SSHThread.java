@@ -28,13 +28,18 @@ public class SSHThread extends Thread {
         String[] columns;
 
         while((columns = this.reader.nextLine()) != null) {
+            SSHConnection connection  = null;
             SSHData host = new SSHData(columns[IP]);
             try {
-                SSHConnection connection = new SSHConnection(columns[IP], this.port);
-                connection.close();
+                connection = new SSHConnection(columns[IP], this.port);
+                host.setResponse(connection.getSSHVersion());
             } catch (IOException e) {
                 host.setError("Read or write socket error");
                 logger.log(Level.INFO, "IOException {0}", columns[IP]);
+            } finally {
+                if (connection != null) {
+                    connection.close();
+                }
             }
             this.writer.writeLine(host);
         }

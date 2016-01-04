@@ -2,10 +2,7 @@ package cl.tesis.https;
 
 import cl.tesis.input.FileReader;
 import cl.tesis.output.FileWriter;
-import cl.tesis.tls.Certificate;
-import cl.tesis.tls.ScanCipherSuites;
-import cl.tesis.tls.ScanTLSProtocols;
-import cl.tesis.tls.TLSHandshake;
+import cl.tesis.tls.*;
 import cl.tesis.tls.exception.SocketTLSHandshakeException;
 import cl.tesis.tls.exception.TLSConnectionException;
 import cl.tesis.tls.exception.TLSGetCertificateException;
@@ -26,14 +23,18 @@ public class HttpsCertificateThread extends Thread{
     private boolean allProtocols;
     private boolean allCiphersSuites;
     private boolean heartbleed;
+    private boolean beast;
 
-    public HttpsCertificateThread(FileReader reader, FileWriter writer, int port, boolean allProtocols, boolean allCiphersSuites, boolean heartbleed) {
+
+    public HttpsCertificateThread(FileReader reader, FileWriter writer, int port, boolean allProtocols, boolean allCiphersSuites, boolean heartbleed, boolean beast) {
         this.reader = reader;
         this.writer = writer;
         this.port = port;
         this.allProtocols = allProtocols;
         this.allCiphersSuites = allCiphersSuites;
         this.heartbleed = heartbleed;
+        this.beast = beast;
+
     }
 
     @Override
@@ -42,9 +43,10 @@ public class HttpsCertificateThread extends Thread{
 
         while((columns = this.reader.nextLine()) != null) {
             HttpsCertificateData data =  new HttpsCertificateData(columns[IP]);
+            TLSHandshake tls =  null;
             try {
                 /* TLS Handshake*/
-                TLSHandshake tls =  new TLSHandshake(columns[IP], this.port);
+                tls =  new TLSHandshake(columns[IP], this.port);
                 tls.connect();
                 X509Certificate[] certs = tls.getChainCertificate();
 
@@ -52,21 +54,32 @@ public class HttpsCertificateThread extends Thread{
                 data.setCipherSuite(tls.getCipherSuite());
                 data.setChain(Certificate.parseCertificateChain(certs));
 
+                /* Close Connections*/
+                tls.close();
+
                 /* Check all SSL/TLS Protocols*/
                 if (allProtocols) {
                     ScanTLSProtocols scan = new ScanTLSProtocols(columns[IP], port);
                     data.setProtocols(scan.scanAllProtocols());
                 }
 
-                /* Check all Cipher Suites */
+                /* Check all Cipher Suites and some vulnerabilities */
                 if (allCiphersSuites) {
                     ScanCipherSuites cipherSuites = new ScanCipherSuites(columns[IP], port);
                     data.setCiphersSuites(cipherSuites.scanAllCipherSuites());
                 }
 
-//                /* Heartbleed test*/
-//                if (heartbleed)
-//                    data.setHeartbleed(tls.heartbleedTest(null, TLSVersion.TLS_12));
+                /* Heartbleed */
+                if (heartbleed) {
+                    ScanHeartbleed scanHeartbleed = new ScanHeartbleed(columns[IP], port);
+                    data.setHeartbleedData(scanHeartbleed.hasHeartbleed());
+                }
+
+                /* Beast */
+                if (beast) {
+                    ScanBeast scanBeast = new ScanBeast(columns[IP], port);
+                    data.setBeastCipher(scanBeast.hasBeast());
+                }
 
             } catch (SocketTLSHandshakeException e) {
                 data.setError("Create socket Error");
@@ -80,6 +93,9 @@ public class HttpsCertificateThread extends Thread{
             } catch (TLSGetCertificateException e) {
                 data.setError("Certificate error");
                 logger.log(Level.INFO, "Certificate error {0}", columns[IP]);
+            } finally {
+                if (tls !=null)
+                    tls.close();
             }
 
             this.writer.writeLine(data);

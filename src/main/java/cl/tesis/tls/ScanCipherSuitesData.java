@@ -15,6 +15,8 @@ public class ScanCipherSuitesData implements JsonWritable{
     private String medium_ciphers;
     private String des3_ciphers;
     private String high_ciphers;
+    private String freak;
+    private String logjam;
 
     public ScanCipherSuitesData() {
         super();
@@ -45,6 +47,12 @@ public class ScanCipherSuitesData implements JsonWritable{
                 break;
             case HIGH_CIPHERS:
                 high_ciphers = cipher;
+                break;
+            case FREAK:
+                freak = cipher;
+                break;
+            case LOGJAM:
+                logjam = cipher;
                 break;
         }
     }
@@ -79,6 +87,14 @@ public class ScanCipherSuitesData implements JsonWritable{
 
     public String getHigh_ciphers() {
         return high_ciphers;
+    }
+
+    public String getLogjam() {
+        return logjam;
+    }
+
+    public String getFreak() {
+        return freak;
     }
 
     @Override

@@ -37,6 +37,9 @@ public class CommandLine {
     @Option(name = "--heartbleed", usage = "Test heartbleed", help =  true)
     private boolean heartbleed;
 
+    @Option(name = "--beast", usage = "Test beast", help =  true)
+    private boolean beast;
+    
     @Option(name = "--list-probe-modules", usage = "Print all probe modules", required = false, help = true)
     private boolean listProbeModules;
 
@@ -48,7 +51,7 @@ public class CommandLine {
 
     private String[] probeModules = {"HTTPSCertificate", "HTTP", "HTTPS", "SSHVersion", "SMTP", "POP3", "IMAP", "FTP", "MYSQL", "POSTGRESQL"};
     private String[] outputModules = {"CSV", "JSON"};
-    private String versionDetails = "v1.0a Fixed HTTP memory problem";
+    private String versionDetails = "v1.2";
 
     public void parse(String[] args) {
         CmdLineParser parser = new CmdLineParser(this);

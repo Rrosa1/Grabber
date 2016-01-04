@@ -4,10 +4,12 @@ package cl.tesis.tls;
 import cl.tesis.https.TrustAllCert;
 import cl.tesis.mail.SMTP;
 import cl.tesis.mail.StartTLS;
+import cl.tesis.mail.StartTLSProtocol;
 import cl.tesis.tls.constant.TLSVersion;
 import cl.tesis.tls.exception.*;
 
 import javax.net.ssl.*;
+import java.io.Closeable;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,7 +20,7 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
 
-public class TLSHandshake {
+public class TLSHandshake implements Closeable{
     private static final int MILLISECONDS = 1000;
     private static final int CONNECTION_TIMEOUT = 60 * MILLISECONDS; // 60 seg
     private static final int HANDSHAKE_TIMEOUT = 120 * MILLISECONDS; // 120 seg
@@ -45,10 +47,11 @@ public class TLSHandshake {
         }
     }
 
-    public TLSHandshake(Socket socket, StartTLS start, TLSVersion protocolVersion) throws SocketTLSHandshakeException, StartTLSException {
+    public TLSHandshake(StartTLSProtocol startTLSProtocol, StartTLS start, TLSVersion protocolVersion) throws SocketTLSHandshakeException, StartTLSException {
         try {
             // StartTLS
-            startProtocolHandshake(socket, start);
+            Socket socket =  startTLSProtocol.getSocket();
+            startProtocolHandshake(startTLSProtocol, start);
 
             // Wrap plain Socket
             SSLContext sslContext =  SSLContext.getInstance(protocolVersion.getName());
@@ -67,8 +70,8 @@ public class TLSHandshake {
         this(host, port, TLSVersion.TLS_12);
     }
 
-    public TLSHandshake(Socket socket,StartTLS start) throws SocketTLSHandshakeException, StartTLSException {
-        this(socket, start, TLSVersion.TLS_12);
+    public TLSHandshake(StartTLSProtocol startTLSProtocol, StartTLS start) throws SocketTLSHandshakeException, StartTLSException {
+        this(startTLSProtocol, start, TLSVersion.TLS_12);
     }
 
     public void connect() throws TLSHandshakeException, TLSConnectionException {
@@ -111,12 +114,21 @@ public class TLSHandshake {
         return this.session.getCipherSuite();
     }
 
-    private void startProtocolHandshake(Socket socket, StartTLS start) throws StartTLSException {
+    @Override
+    public void close() {
+        if (socket != null)
+            try{
+                socket.close();
+            } catch (IOException ignore) {
+            } finally { socket = null; }
+    }
+
+    private void startProtocolHandshake(StartTLSProtocol startTLSProtocol, StartTLS start) throws StartTLSException {
         String response;
+        InputStream in = startTLSProtocol.getIn();
+        DataOutputStream out = startTLSProtocol.getOut();
+        byte[] buffer = startTLSProtocol.getBuffer();
         try {
-            InputStream in = socket.getInputStream();
-            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-            byte[] buffer = new byte[2048];
             int readBytes;
 
             if (start == StartTLS.SMTP) {
@@ -138,27 +150,6 @@ public class TLSHandshake {
         } catch (IOException e) {
             throw new StartTLSException();
         }
-    }
-
-    public static void main(String[] args) throws SocketTLSHandshakeException, IOException, TLSHandshakeException, TLSGetCertificateException, TLSConnectionException, StartTLSException {
-        Socket socket =  new Socket ("192.80.24.4", 25);
-        InputStream in = socket.getInputStream();
-        DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-
-        byte[] buffer =  new byte[2048];
-        int readBytes = in.read(buffer);
-
-        System.out.println(new String(buffer, 0, readBytes));
-
-        TLSHandshake tls =  new TLSHandshake(socket, StartTLS.SMTP);
-        tls.connect();
-        X509Certificate[] certs = tls.getChainCertificate();
-        Certificate[] h = Certificate.parseCertificateChain(certs);
-
-        System.out.println(h[0].toJson());
-
-        ScanTLSProtocols protocols = new ScanTLSProtocols("192.80.24.4", 25);
-        System.out.println(protocols.scanAllProtocols(StartTLS.SMTP).toJson());
     }
 
 }

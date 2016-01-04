@@ -17,9 +17,10 @@ public class IMAPData implements CSVWritable, JsonWritable{
 
     private String ip;
     private String error;
-    private String start;
+    private String banner;
     private Certificate[] chain;
-    private HeartbleedData heartbleed;
+    private HeartbleedData heartbleedData;
+    private String beastCipher;
     private ScanTLSProtocolsData protocols;
     private ScanCipherSuitesData ciphersSuites;
 
@@ -31,16 +32,20 @@ public class IMAPData implements CSVWritable, JsonWritable{
         this.error = error;
     }
 
-    public void setStart(String start) {
-        this.start = start;
+    public void setBanner(String banner) {
+        this.banner = banner;
     }
 
     public void setChain(Certificate[] certificates) {
         this.chain = certificates;
     }
 
-    public void setHeartbleed(HeartbleedData heartbleed) {
-        this.heartbleed = heartbleed;
+    public void setHeartbleedData(HeartbleedData heartbleedData) {
+        this.heartbleedData = heartbleedData;
+    }
+
+    public void setBeastCipher(String beastCipher) {
+        this.beastCipher = beastCipher;
     }
 
     public void setProtocols(ScanTLSProtocolsData protocols) {
@@ -56,7 +61,7 @@ public class IMAPData implements CSVWritable, JsonWritable{
         ArrayList<String> parameters = new ArrayList<>();
 
         parameters.add("ip");
-        parameters.add("start");
+        parameters.add("banner");
 
         return parameters;
     }
@@ -66,7 +71,7 @@ public class IMAPData implements CSVWritable, JsonWritable{
         ArrayList<String> values =  new ArrayList<>();
 
         values.add(this.ip);
-        values.add(this.start);
+        values.add(this.banner);
 
         return values;
     }

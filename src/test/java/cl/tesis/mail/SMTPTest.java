@@ -18,7 +18,7 @@ public class SMTPTest extends TestCase{
     }
 
     public void testSMTPProtocol() throws Exception {
-        String start =  smtp.startProtocol();
+        String start =  smtp.readBanner();
         assertEquals("220 dichato.dcc.uchile.cl ESMTP Postfix\r\n", start);
 
         String help =  smtp.sendHELP();
@@ -29,10 +29,10 @@ public class SMTPTest extends TestCase{
     }
 
     public void testHandshake() throws Exception {
-        smtp.startProtocol();
+        smtp.readBanner();
         smtp.sendEHLO();
 
-        TLSHandshake tlsHandshake =  new TLSHandshake(smtp.getSocket(), StartTLS.SMTP);
+        TLSHandshake tlsHandshake =  new TLSHandshake(smtp, StartTLS.SMTP);
         tlsHandshake.connect();
         X509Certificate[] certs = tlsHandshake.getChainCertificate();
 
@@ -41,7 +41,7 @@ public class SMTPTest extends TestCase{
         assertEquals("RapidSSL SHA256 CA - G4", chain[0].getCertificateAuthority());
     }
 
-    public void testAllTLSVersion() throws Exception {
+   public void testAllTLSVersion() throws Exception {
         ScanTLSProtocols protocols =  new ScanTLSProtocols(HOST, PORT);
         ScanTLSProtocolsData version = protocols.scanAllProtocols(StartTLS.SMTP);
 
@@ -49,7 +49,7 @@ public class SMTPTest extends TestCase{
         assertEquals(true, version.isTLS_10());
         assertEquals(true, version.isTLS_11());
         assertEquals(true, version.isTLS_12());
-    }
+   }
 
     public void testCipherSuite() throws Exception {
         ScanCipherSuites cipherSuites = new ScanCipherSuites(HOST, PORT);
@@ -60,5 +60,12 @@ public class SMTPTest extends TestCase{
         assertEquals("TLS_DHE_RSA_WITH_SEED_CBC_SHA", suites.getMedium_ciphers());
         assertEquals("TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA", suites.getDes3_ciphers());
         assertEquals("TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA", suites.getHigh_ciphers());
+    }
+
+    public void testHeartbeat() throws Exception {
+        ScanHeartbleed scanHeartbleed =  new ScanHeartbleed(HOST, PORT);
+        HeartbleedData heartbleed = scanHeartbleed.hasHeartbleed(StartTLS.SMTP);
+
+        assertEquals(true, heartbleed.isHeartbeat());
     }
 }
