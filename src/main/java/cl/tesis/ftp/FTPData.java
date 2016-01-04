@@ -3,17 +3,27 @@ package cl.tesis.ftp;
 
 import cl.tesis.output.CSVWritable;
 import cl.tesis.output.JsonWritable;
+import cl.tesis.tls.Certificate;
+import cl.tesis.tls.HeartbleedData;
+import cl.tesis.tls.ScanCipherSuitesData;
+import cl.tesis.tls.ScanTLSProtocolsData;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FTPData implements CSVWritable, JsonWritable{
     private String ip;
     private String error;
-    private String response;
+    private String banner;
+    private String help;
+    private String ehlo;
+    private Certificate[] chain;
+    private HeartbleedData heartbleedData;
+    private String beastCipher;
+    private ScanTLSProtocolsData protocols;
+    private ScanCipherSuitesData ciphersSuites;
 
     public FTPData(String ip) {
         this.ip = ip;
@@ -23,8 +33,36 @@ public class FTPData implements CSVWritable, JsonWritable{
         this.error = error;
     }
 
-    public void setResponse(String response) {
-        this.response = response;
+    public void setBanner(String banner) {
+        this.banner = banner;
+    }
+
+    public void setHelp(String help) {
+        this.help = help;
+    }
+
+    public void setEhlo(String ehlo) {
+        this.ehlo = ehlo;
+    }
+
+    public void setChain(Certificate[] certificates) {
+        this.chain = certificates;
+    }
+
+    public void setHeartbleedData(HeartbleedData heartbleedData) {
+        this.heartbleedData = heartbleedData;
+    }
+
+    public void setBeastCipher(String beastCipher) {
+        this.beastCipher = beastCipher;
+    }
+
+    public void setProtocols(ScanTLSProtocolsData protocols) {
+        this.protocols = protocols;
+    }
+
+    public void setCiphersSuites(ScanCipherSuitesData ciphersSuites) {
+        this.ciphersSuites = ciphersSuites;
     }
 
     @Override
@@ -32,7 +70,7 @@ public class FTPData implements CSVWritable, JsonWritable{
         ArrayList<String> parameters = new ArrayList<>();
 
         parameters.add("ip");
-        parameters.add("response");
+        parameters.add("banner");
 
         return parameters;
     }
@@ -42,7 +80,7 @@ public class FTPData implements CSVWritable, JsonWritable{
         ArrayList<String> values = new ArrayList<>();
 
         values.add(this.ip);
-        values.add(this.response);
+        values.add(this.banner);
 
         return values;
     }

@@ -3,7 +3,8 @@ package cl.tesis.mail;
 public enum StartTLS {
     SMTP("SMTP", "STARTTLS\r\n", "220"),
     POP3("POP3", "STLS\r\n", "+OK"),
-    IMAP("IMAP", "a001 STARTTLS\r\n", "OK");
+    IMAP("IMAP", "a001 STARTTLS\r\n", "OK"),
+    FTP("FTP", "AUTH TLS\r\n", "234");
 
     private final String protocol;
     private final String message;

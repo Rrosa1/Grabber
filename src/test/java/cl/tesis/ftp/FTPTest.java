@@ -4,15 +4,16 @@ package cl.tesis.ftp;
 import junit.framework.TestCase;
 
 public class FTPTest extends TestCase{
-    private FTP connection;
+    private FTP ftp;
 
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        connection = new FTP("66.39.21.217", 21);
+        ftp = new FTP("54.208.159.183", 21);
     }
 
     public void testSSHVersion() throws Exception {
-        assertEquals("220 qs3309.pair.com NcFTPd Server (licensed copy) ready.", connection.getVersion());
+        assertEquals(true, ftp.getVersion().contains("220---------- Welcome to Pure-FTPd [privsep] [TLS] ----------"));
     }
+
 }

@@ -1,30 +1,35 @@
 package cl.tesis.ftp;
 
 
-import javax.net.SocketFactory;
-import java.io.BufferedReader;
+import cl.tesis.mail.StartTLSProtocol;
+import cl.tesis.mail.exception.ConnectionException;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.Socket;
 
-public class FTP {
-    private static final int TIMEOUT = 60000;
-    private static SocketFactory socketFactory = SocketFactory.getDefault();
+public class FTP  extends StartTLSProtocol{
+    private static final int DEFAULT_PORT = 21;
 
-    private Socket socket;
-    private BufferedReader in;
+    public FTP(String host, int port) throws ConnectionException {
+        super(host, port);
+    }
 
-    public FTP(String ip, int port) throws IOException {
-        this.socket = socketFactory.createSocket(ip, port);
-        this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        socket.setSoTimeout(TIMEOUT);
+    public FTP(String host) throws ConnectionException {
+        this(host, DEFAULT_PORT);
     }
 
     public String getVersion() throws IOException {
-        return this.in.readLine();
+        String ret;
+        try {
+            int readBytes = in.read(buffer);
+            if (readBytes <= 0)
+                return null;
+
+            ret = new String(buffer, 0, readBytes);
+        } catch (IOException e) {
+            return null;
+        }
+
+        return ret;
     }
 
-    public void close() throws IOException {
-        this.socket.close();
-    }
 }

@@ -1,11 +1,10 @@
 package cl.tesis.ftp;
 
 import cl.tesis.input.FileReader;
+import cl.tesis.mail.exception.ConnectionException;
 import cl.tesis.output.FileWriter;
-import cl.tesis.ssh.SSHConnection;
-import cl.tesis.ssh.SSHData;
+import cl.tesis.tls.TLSHandshake;
 
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,6 +21,7 @@ public class FTPThread extends Thread{
         this.reader = reader;
         this.writer = writer;
         this.port = port;
+
     }
 
     @Override
@@ -29,14 +29,19 @@ public class FTPThread extends Thread{
         String[] columns;
 
         while((columns = this.reader.nextLine()) != null) {
-            FTPData data = new FTPData(columns[IP]);
+            FTPData data =  new FTPData(columns[IP]);
+            FTP ftp = null;
+            TLSHandshake tlsHandshake = null;
+
             try {
-                FTP connection = new FTP(columns[IP], this.port);
-                connection.close();
-            } catch (IOException e) {
-                data.setError("Read or write socket error");
-                logger.log(Level.INFO, "IOException {0}", columns[IP]);
-            }
+                /* SMTP StarTLS */
+                ftp = new FTP(columns[IP], this.port);
+                data.setBanner(ftp.readBanner());
+            } catch (ConnectionException e) {
+                data.setError(e.getMessage());
+                logger.log(Level.INFO, "Connection Exception {0},  {1}", new String[]{columns[IP], e.getMessage()});
+           }
+
             this.writer.writeLine(data);
         }
     }
