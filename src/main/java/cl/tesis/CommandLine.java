@@ -39,8 +39,7 @@ public class CommandLine {
 
     @Option(name = "--beast", usage = "Test beast", help =  true)
     private boolean beast;
-
-
+    
     @Option(name = "--list-probe-modules", usage = "Print all probe modules", required = false, help = true)
     private boolean listProbeModules;
 
@@ -50,7 +49,7 @@ public class CommandLine {
     @Option(name= "--version", usage = "Print version and exit", required = false, help = true)
     private boolean version;
 
-    private String[] probeModules = {"HTTPSCertificate", "HTTP", "HTTPS", "SSHVersion", "SMTP", "POP3", "IMAP", "FTP"};
+    private String[] probeModules = {"HTTPSCertificate", "HTTP", "HTTPS", "SSHVersion", "SMTP", "POP3", "IMAP", "FTP", "MYSQL", "POSTGRESQL"};
     private String[] outputModules = {"CSV", "JSON"};
     private String versionDetails = "v1.2b Added FTP support";
 
