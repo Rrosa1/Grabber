@@ -142,6 +142,10 @@ public class CommandLine {
         return heartbleed;
     }
 
+    public boolean isBeast() {
+        return beast;
+    }
+
     public static void main(String[] args) {
         new CommandLine().parse(args);
     }
