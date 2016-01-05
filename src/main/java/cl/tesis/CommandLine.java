@@ -51,7 +51,7 @@ public class CommandLine {
 
     private String[] probeModules = {"HTTPSCertificate", "HTTP", "HTTPS", "SSHVersion", "SMTP", "POP3", "IMAP", "FTP", "MYSQL", "POSTGRESQL"};
     private String[] outputModules = {"CSV", "JSON"};
-    private String versionDetails = "v1.2b Added FTP support";
+    private String versionDetails = "v1.3 Database and FTP support";
 
     public void parse(String[] args) {
         CmdLineParser parser = new CmdLineParser(this);
