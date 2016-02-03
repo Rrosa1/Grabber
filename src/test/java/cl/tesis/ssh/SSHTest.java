@@ -13,6 +13,6 @@ public class SSHTest extends TestCase{
     }
 
     public void testSSHVersion() throws Exception {
-        assertEquals("SSH-2.0-OpenSSH_7.1p1-hpn14v9", connection.getSSHVersion());
+        assertEquals(true, connection.getSSHVersion().contains("SSH-2.0-OpenSSH"));
     }
 }
