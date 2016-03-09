@@ -39,6 +39,9 @@ public class CommandLine {
 
     @Option(name = "--beast", usage = "Test beast", help =  true)
     private boolean beast;
+
+    @Option(name = "--scriptFile", usage = "Load packet from the file", required = false, help= true)
+    private String scriptFile;
     
     @Option(name = "--list-probe-modules", usage = "Print all probe modules", required = false, help = true)
     private boolean listProbeModules;
@@ -49,7 +52,7 @@ public class CommandLine {
     @Option(name= "--version", usage = "Print version and exit", required = false, help = true)
     private boolean version;
 
-    private String[] probeModules = {"HTTPSCertificate", "HTTP", "HTTPS", "SSHVersion", "SMTP", "POP3", "IMAP", "FTP", "MYSQL", "POSTGRESQL"};
+    private String[] probeModules = {"HTTPSCertificate", "HTTP", "HTTPS", "SSHVersion", "SMTP", "POP3", "IMAP", "FTP", "MYSQL", "POSTGRESQL", "SCRIPT"};
     private String[] outputModules = {"JSON"};
     private String versionDetails = "v1.3.1 Database and FTP support, without CSV Output support";
 
@@ -144,6 +147,10 @@ public class CommandLine {
 
     public boolean isBeast() {
         return beast;
+    }
+
+    public String getScriptFile() {
+        return scriptFile;
     }
 
     public static void main(String[] args) {
