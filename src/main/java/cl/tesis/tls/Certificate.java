@@ -1,6 +1,5 @@
 package cl.tesis.tls;
 
-import cl.tesis.output.CSVWritable;
 import cl.tesis.output.JsonWritable;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -9,11 +8,13 @@ import javax.security.auth.x500.X500Principal;
 import javax.xml.bind.DatatypeConverter;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Certificate implements CSVWritable, JsonWritable {
+public class Certificate implements JsonWritable {
     private static String BEGIN_CERT ="-----BEGIN CERTIFICATE-----";
     private static String END_CERT ="-----END CERTIFICATE-----";
 
@@ -89,35 +90,6 @@ public class Certificate implements CSVWritable, JsonWritable {
         }
 
         return certificates;
-    }
-
-
-    @Override
-    public List<String> getParameterList() {
-        ArrayList<String> parameters = new ArrayList<>();
-
-        parameters.add("Signature Algorithm");
-        parameters.add("Expired Time");
-        parameters.add("Organization Name");
-        parameters.add("Organization URL");
-        parameters.add("Key Bits");
-        parameters.add("PEM Certificate");
-
-        return parameters;
-    }
-
-    @Override
-    public List<String> getValueList() {
-        ArrayList<String> values = new ArrayList<>();
-
-        values.add(this.signatureAlgorithm);
-        values.add(this.expiredTime.toString());
-        values.add(this.organizationName);
-        values.add(this.organizationURL);
-        values.add(this.keyBits + "");
-        values.add(this.PemCert);
-
-        return values;
     }
 
     @Override

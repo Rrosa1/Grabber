@@ -1,14 +1,10 @@
 package cl.tesis.ssh;
 
-import cl.tesis.output.CSVWritable;
 import cl.tesis.output.JsonWritable;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class SSHData implements CSVWritable, JsonWritable{
+public class SSHData implements JsonWritable{
 
     private String ip;
     private String error;
@@ -32,26 +28,6 @@ public class SSHData implements CSVWritable, JsonWritable{
                 "ip='" + ip + '\'' +
                 ", response='" + response + '\'' +
                 '}';
-    }
-
-    @Override
-    public List<String> getParameterList() {
-        ArrayList<String> parameters = new ArrayList<>();
-
-        parameters.add("ip");
-        parameters.add("response");
-
-        return parameters;
-    }
-
-    @Override
-    public List<String> getValueList() {
-        ArrayList<String> values = new ArrayList<>();
-
-        values.add(this.ip);
-        values.add(this.response);
-
-        return values;
     }
 
     @Override

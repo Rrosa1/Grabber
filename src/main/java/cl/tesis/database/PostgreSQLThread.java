@@ -2,7 +2,6 @@ package cl.tesis.database;
 
 import cl.tesis.input.FileReader;
 import cl.tesis.output.FileWriter;
-import cl.tesis.ssh.SSHConnection;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -30,6 +29,7 @@ public class PostgreSQLThread extends Thread {
             PostgreSQLData data = new PostgreSQLData(columns[IP]);
             try {
                 PostgreSQL connection = new PostgreSQL(columns[IP], this.port);
+                // TODO save the get version value using set response method
                 connection.close();
             } catch (IOException e) {
                 data.setError("Read or write socket error");

@@ -1,6 +1,5 @@
 package cl.tesis.mail;
 
-import cl.tesis.output.CSVWritable;
 import cl.tesis.output.JsonWritable;
 import cl.tesis.tls.Certificate;
 import cl.tesis.tls.HeartbleedData;
@@ -9,10 +8,7 @@ import cl.tesis.tls.ScanTLSProtocolsData;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class POP3Data implements JsonWritable, CSVWritable{
+public class POP3Data implements JsonWritable{
 
     private String ip;
     private String error;
@@ -53,26 +49,6 @@ public class POP3Data implements JsonWritable, CSVWritable{
 
     public void setCiphersSuites(ScanCipherSuitesData ciphersSuites) {
         this.ciphersSuites = ciphersSuites;
-    }
-
-    @Override
-    public List<String> getParameterList() {
-        ArrayList<String> parameters = new ArrayList<>();
-
-        parameters.add("ip");
-        parameters.add("banner");
-
-        return parameters;
-    }
-
-    @Override
-    public List<String> getValueList() {
-        ArrayList<String> values =  new ArrayList<>();
-
-        values.add(this.ip);
-        values.add(this.banner);
-
-        return values;
     }
 
     @Override
