@@ -16,7 +16,6 @@ public class IMAPSTest extends TestCase {
         X509Certificate[] certs =  tlsHandshake.getChainCertificate();
 
         Certificate[] chain = Certificate.parseCertificateChain(certs);
-//        assertEquals(true, hostCertificate.isValidation()); // TODO Implement validation
         assertEquals("RapidSSL SHA256 CA - G4", chain[0].getCertificateAuthority());
     }
 
@@ -34,7 +33,6 @@ public class IMAPSTest extends TestCase {
         ScanCipherSuites cipherSuites = new ScanCipherSuites(HOST, PORT);
         ScanCipherSuitesData suites = cipherSuites.scanAllCipherSuites();
 
-        assertEquals("TLS_RSA_EXPORT_WITH_DES40_CBC_SHA", suites.getExport_40_ciphers());
         assertEquals("TLS_RSA_WITH_SEED_CBC_SHA", suites.getMedium_ciphers());
         assertEquals("TLS_RSA_WITH_3DES_EDE_CBC_SHA", suites.getDes3_ciphers());
         assertEquals("TLS_RSA_WITH_AES_256_CBC_SHA", suites.getHigh_ciphers());
