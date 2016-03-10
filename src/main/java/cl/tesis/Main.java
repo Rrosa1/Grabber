@@ -12,8 +12,11 @@ import cl.tesis.mail.POP3Thread;
 import cl.tesis.mail.SMTPThread;
 import cl.tesis.output.FileWriter;
 import cl.tesis.output.FileWriterFactory;
+import cl.tesis.script.PacketParserScript;
+import cl.tesis.script.ScriptingThread;
 import cl.tesis.ssh.SSHThread;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -112,6 +115,15 @@ public class Main {
                         lista.add(t);
                     }
                     break;
+                case "SCRIPT":
+                    BufferedReader bufferedReader = new BufferedReader(new java.io.FileReader(commandLine.getScriptFile()));
+                    PacketParserScript packetParser = new PacketParserScript(bufferedReader);
+                    ArrayList<String> packets = packetParser.parse();
+                    for (int i = 0; i < commandLine.getThreads(); i++) {
+                        Thread t = new ScriptingThread(reader, writer, commandLine.getPort(), packets);
+                        t.start();
+                        lista.add(t);
+                    }
                 default:
                     logger.info("Probe module not found");
                     System.exit(0);

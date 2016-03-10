@@ -40,7 +40,7 @@ public class CommandLine {
     @Option(name = "--beast", usage = "Test beast", help =  true)
     private boolean beast;
 
-    @Option(name = "--scriptFile", usage = "Load packet from the file", required = false, help= true)
+    @Option(name = "--scriptFile", usage = "Load packet from the file", metaVar = "File", required = false, help= true)
     private String scriptFile;
     
     @Option(name = "--list-probe-modules", usage = "Print all probe modules", required = false, help = true)
@@ -92,7 +92,7 @@ public class CommandLine {
     }
 
     private boolean runningArgs() {
-        return getInput() == null || getOutput() == null || getModule() == null || getPort() == 0;
+        return getInput() == null || getOutput() == null || getModule() == null || getPort() == 0 || ( getModule() == "SCRIPT" && getScriptFile() == null );
     }
 
     private boolean infoArgs() {

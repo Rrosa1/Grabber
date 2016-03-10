@@ -18,10 +18,11 @@ public class ScriptingThread extends Thread{
     private int port;
     private ArrayList<String> packets;
 
-    public ScriptingThread(FileReader reader, FileWriter writer, int port) {
+    public ScriptingThread(FileReader reader, FileWriter writer, int port, ArrayList<String> packets) {
         this.reader = reader;
         this.writer = writer;
         this.port = port;
+        this.packets = packets;
 
     }
 
