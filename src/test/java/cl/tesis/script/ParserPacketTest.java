@@ -6,7 +6,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-public class FileOpen extends TestCase{
+public class ParserPacketTest extends TestCase{
 
     public void testName() throws Exception {
         assertNotNull("Test file missing",getClass().getResource("/one_packet.txt"));
