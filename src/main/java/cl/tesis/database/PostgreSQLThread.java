@@ -27,13 +27,17 @@ public class PostgreSQLThread extends Thread {
 
         while((columns = this.reader.nextLine()) != null) {
             PostgreSQLData data = new PostgreSQLData(columns[IP]);
+            PostgreSQL connection = null;
             try {
-                PostgreSQL connection = new PostgreSQL(columns[IP], this.port);
-                // TODO save the get version value using set response method
-                connection.close();
+                connection = new PostgreSQL(columns[IP], this.port);
+                data.setResponse(connection.getResponse());
             } catch (IOException e) {
                 data.setError("Read or write socket error");
                 logger.log(Level.INFO, "IOException {0}", columns[IP]);
+            } finally {
+                if (connection != null)
+                    connection.close();
+
             }
             this.writer.writeLine(data);
         }

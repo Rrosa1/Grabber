@@ -13,7 +13,7 @@ public class PostgreSQLTest extends TestCase{
     }
 
     public void testVersion() throws Exception {
-        String response =  postgreSQL.getVersion();
+        String response =  postgreSQL.getResponse();
         assertEquals(true, response.contains("unsupported frontend protocol 512.83: server supports 1.0 to 3.0"));
     }
 }

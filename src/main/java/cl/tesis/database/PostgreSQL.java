@@ -32,17 +32,21 @@ public class PostgreSQL {
         socket.setSoTimeout(TIMEOUT);
     }
 
-    public String getVersion() throws IOException {
+    public String getResponse() throws IOException {
         out.write(TLSUtil.hexStringToByteArray(LOGIN_PACKET));
         return this.in.readLine();
     }
 
-    public void close() throws IOException {
-        this.socket.close();
+    public void close() {
+        if (socket != null)
+            try{
+                socket.close();
+            } catch (IOException ignore) {
+            } finally { socket = null; }
     }
 
     public static void main(String[] args) throws IOException {
         PostgreSQL postgreSQL = new PostgreSQL("85.128.247.214", 5432);
-        System.out.printf(postgreSQL.getVersion());
+        System.out.printf(postgreSQL.getResponse());
     }
 }
