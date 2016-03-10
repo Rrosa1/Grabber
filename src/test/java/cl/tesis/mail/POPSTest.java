@@ -16,7 +16,6 @@ public class POPSTest extends TestCase {
         X509Certificate[] certs =  tlsHandshake.getChainCertificate();
 
         Certificate[] chain = Certificate.parseCertificateChain(certs);
-//        assertEquals(true, hostCertificate.isValidation()); // TODO Implement validation
         assertEquals("Go Daddy Secure Certificate Authority - G2", chain[0].getCertificateAuthority());
     }
 

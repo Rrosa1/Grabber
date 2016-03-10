@@ -37,7 +37,6 @@ public class SMTPTest extends TestCase{
         X509Certificate[] certs = tlsHandshake.getChainCertificate();
 
         Certificate[] chain = Certificate.parseCertificateChain(certs);
-//        assertEquals(true, hostCertificate.isValidation()); // TODO Implement validation
         assertEquals("RapidSSL SHA256 CA - G4", chain[0].getCertificateAuthority());
     }
 
