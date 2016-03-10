@@ -6,23 +6,23 @@ Programa que permite realizar un análisis en profundidad de la Ips detectadas c
 Modo de uso:
 ```sh
 > java -jar Grabber_v1.3.jar --help
- --allCipherSuites           : Test 10 groups of cipher suites (default: false)
- --allTLSProtocols           : Test SSLv3.0, TLSv1.0, TLSv1.1, TLSv1.2
-                               (default: false)
- --beast                     : Test beast (default: false)
- --heartbleed                : Test heartbleed (default: false)
- --list-output-modules       : Print all output modules (default: false)
- --list-probe-modules        : Print all probe modules (default: false)
- --startTLS                  : Start a TLS connection in non secure port
-                               (default: false)
- --version                   : Print version and exit (default: false)
- -i (--input) File           : Input file
- -m (--module) String        : Set the probe module
- -o (--output) File          : Output file
- -om (--outputModule) String : Output file format (default: JSON)
- -p (--port) Int             : Port to scan
- -t (--threads) Int          : Threads used to send probes (default: 1)
-
+  --allCipherSuites           : Test 10 groups of cipher suites (default: false)
+  --allTLSProtocols           : Test SSLv3.0, TLSv1.0, TLSv1.1, TLSv1.2
+                                (default: false)
+  --beast                     : Test beast (default: false)
+  --heartbleed                : Test heartbleed (default: false)
+  --list-output-modules       : Print all output modules (default: false)
+  --list-probe-modules        : Print all probe modules (default: false)
+  --scriptFile File           : Load packet from the file
+  --startTLS                  : Start a TLS connection in non secure port
+                                (default: false)
+  --version                   : Print version and exit (default: false)
+  -i (--input) File           : Input file
+  -m (--module) String        : Set the probe module
+  -o (--output) File          : Output file
+  -om (--outputModule) String : Output file format (default: JSON)
+  -p (--port) Int             : Port to scan
+  -t (--threads) Int          : Threads used to send probes (default: 1)
 ```
 
 ## Instalación
