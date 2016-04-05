@@ -20,7 +20,7 @@ public class SSHConnection {
         socket.setSoTimeout(TIMEOUT);
     }
 
-    public String getSSHVersion() throws IOException {
+    public String getBanner() throws IOException {
         return this.in.readLine();
     }
 

@@ -8,7 +8,7 @@ public class SSHData implements JsonWritable{
 
     private String ip;
     private String error;
-    private String response;
+    private String banner;
 
     public SSHData(String ip) {
         this.ip = ip;
@@ -18,15 +18,15 @@ public class SSHData implements JsonWritable{
         this.error = error;
     }
 
-    public void setResponse(String response) {
-        this.response = response;
+    public void setBanner(String banner) {
+        this.banner = banner;
     }
 
     @Override
     public String toString() {
         return "SSHData{" +
                 "ip='" + ip + '\'' +
-                ", response='" + response + '\'' +
+                ", banner='" + banner + '\'' +
                 '}';
     }
 
