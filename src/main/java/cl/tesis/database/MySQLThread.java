@@ -2,8 +2,6 @@ package cl.tesis.database;
 
 import cl.tesis.input.FileReader;
 import cl.tesis.output.FileWriter;
-import cl.tesis.ssh.SSHConnection;
-import cl.tesis.ssh.SSHData;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -30,13 +28,19 @@ public class MySQLThread extends  Thread{
 
         while((columns = this.reader.nextLine()) != null) {
             MySQLData data = new MySQLData(columns[IP]);
+            MySQL connection = null;
             try {
-                MySQL connection = new MySQL(columns[IP], this.port);
+                connection = new MySQL(columns[IP], this.port);
+                data.setResponse(connection.getResponse());
                 connection.close();
             } catch (IOException e) {
                 data.setError("Read or write socket error");
                 logger.log(Level.INFO, "IOException {0}", columns[IP]);
+            }finally {
+                if (connection != null)
+                    connection.close();
             }
+
             this.writer.writeLine(data);
         }
     }

@@ -20,11 +20,15 @@ public class MySQL {
         socket.setSoTimeout(TIMEOUT);
     }
 
-    public String getVersion() throws IOException {
+    public String getResponse() throws IOException {
         return this.in.readLine();
     }
 
-    public void close() throws IOException {
-        this.socket.close();
+    public void close() {
+        if (socket != null)
+            try{
+                socket.close();
+            } catch (IOException ignore) {
+            } finally { socket = null; }
     }
 }

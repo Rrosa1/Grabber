@@ -13,6 +13,6 @@ public class MySQLTest extends TestCase{
     }
 
     public void testVersion() throws Exception {
-        assertEquals(true, mySQL.getVersion().contains("is not allowed to connect to this MySQL server"));
+        assertEquals(true, mySQL.getResponse().contains("is not allowed to connect to this MySQL server"));
     }
 }
